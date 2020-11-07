@@ -1,0 +1,143 @@
+@import '../abstracts/variables';
+
+@font-face {
+  font-family: 'Averta';
+  font-weight: bold;
+  src: url('../../assets/fonts/Averta-Bold.otf') format('opentype')
+}
+
+@font-face {
+  font-family: 'Averta';
+  font-weight: normal;
+  src: url('../../assets/fonts/Averta.otf') format('opentype')
+}
+
+@font-face {
+  font-family: 'Myriad';
+  font-weight: bold;
+  src: url('../../assets/fonts/MYRIADPRO-BOLD.woff') format('woff')
+}
+
+@font-face {
+  font-family: 'Myriad';
+  font-weight: 500;
+  src: url('../../assets/fonts/MYRIADPRO-BOLD.woff') format('woff')
+}
+
+@font-face {
+  font-family: 'Myriad';
+  font-weight: normal;
+  src: url('../../assets/fonts/MYRIADPRO-REGULAR.woff') format('woff')
+}
+
+@font-face {
+  font-family: 'Myriad';
+  font-weight: 100;
+  src: url('../../assets/fonts/MyriadPro-Light.woff') format('woff')
+}
+
+p, b, div {
+  font-size: 16px;
+  margin: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-weight: bold;
+}
+
+h1 {
+  font-size: 48px;
+  margin: 15px 0;
+}
+
+h2 {
+  font-size: 40px;
+  margin: 15px 0;
+}
+
+h3 {
+  font-size: 36px;
+  margin: 15px 0;
+}
+
+h4 {
+  font-size: 24px;
+  margin: 15px 0;
+}
+
+h5 {
+  font-size: 20px;
+  margin: 15px 0;
+}
+
+a {
+  text-decoration: none;
+  color: white;
+}
+
+.help-text {
+  font-size: 100%;
+}
+
+.text-size-md {
+  font-size: 14px;
+}
+
+.text-red {
+  color: $red_color
+}
+
+.text-green {
+  color: $green_color;
+}
+
+.text-light-grey {
+  color: $primary_light_color;
+}
+
+.text-white {
+  color: white;
+}
+
+.text-gray {
+  color: $gray
+}
+
+.text-primary-green{
+  color: $primary_green
+}
+
+.text-orange {
+  color: $orange
+}
+
+.text-geekblue {
+  color: #adc6ff;
+}
+
+.text-wrap {
+  word-wrap: break-word;
+}
+
+@media only screen and (max-width: 576px) {
+  h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+  }
+
+  h1 {
+    font-size: 40px;
+  }
+
+  h2 {
+    font-size: 36px;
+  }
+
+  h3 {
+    font-size: 20px;
+  }
+
+  h4 {
+    font-size: 18px;
+  }
+}

@@ -1,0 +1,158 @@
+@import "../abstracts/variables";
+
+.container {
+    @include containerWidth;
+    margin: 0 auto;
+}
+
+
+.container-1 {
+    width: 121rem;
+    margin: 0 auto;
+}
+
+@media only screen and (max-width: 1024px) {
+
+    .container {
+        @include containerWidth1024;
+    }
+    .container-1 {
+        width: 110rem;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+
+    .container {
+        @include containerWidth768;
+    }
+    .container-1 {
+        width: 90rem;
+    }
+}
+
+@media only screen and (max-width: 540px) {
+
+    .container {
+        @include containerWidth540;
+    }
+    .container-1 {
+        width: 67rem;
+    }
+}
+
+@media only screen and (max-width: 425px) {
+
+    .container {
+        @include containerWidth425;
+    }
+    .container-1 {
+        width: 52rem;
+    }
+}
+
+@media only screen and (max-width: 375px) {
+
+    .container {
+        @include containerWidth375;
+    }
+    .container-1 {
+        @include containerWidth375;
+    }
+}
+
+@media only screen and (max-width: 320px) {
+
+    .container {
+        @include containerWidth320;
+    }
+    .container-1 {
+        @include containerWidth320;
+    }
+}
+
+.text {
+    &-right {
+        text-align: right;
+    }
+    &-center {
+        text-align: center;
+    }
+    &-left {
+        text-align: left;
+    }
+}
+
+.reset-margin {
+    margin: 0;
+}
+
+.margin {
+    &-top {
+        &-xm {
+            margin-top: 1rem;
+        }
+        &-sm {
+            margin-top: 2rem;
+        }
+        &-md {
+            margin-top: 3.5rem;
+        }
+        &-lg {
+            margin-top: 5.5rem;
+        }
+    }
+
+    &-bottom {
+        &-xm {
+            margin-bottom: 1rem;
+        }
+        &-sm {
+            margin-bottom: 2rem;
+        }
+        &-md {
+            margin-bottom: 3.5rem;
+        }
+        &-lg {
+            margin-bottom: 5.5rem;
+        }
+    }
+}
+
+.padding {
+    &-sm {
+        padding: 1rem;
+    }
+    &-left {
+        &-sm {
+            padding-left: 2rem;
+        }
+    }
+}
+
+.w {
+    &-100 {
+        width: 100%;
+    }
+}
+
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
+
+.title-header {
+    padding-left: 45px;
+    @include backgroundGradient;
+    display: flex;
+    align-items: center;
+    color: $light_text_color;
+    font-weight: bold;
+    font-size: 2.4rem;
+    border-radius: 1rem 1rem 0 0;
+}

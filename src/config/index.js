@@ -1,0 +1,9 @@
+export const API_URL       = 'https://api.jac.vn/api/'
+export const LIMIT_PRODUCT = 6
+export const LIMIT_NEWEST_POST = 3
+export const NEWS_POST_CATEGORY = 2
+export const TYPE_BANNER = 'BANNER'
+export const TYPE_CONTACT = 'CONTACT'
+export const TYPE_ABOUT_US = 'ABOUT_US'
+export const TYPE_SERVICE_SOS = 'SERVICE_SOS'
+export const TYPE_LOGO_CUSTOMER = 'LOGO_CUSTOMER'

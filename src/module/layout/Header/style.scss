@@ -1,0 +1,42 @@
+@import "../../../styles/abstracts/variables";
+@import "../../../styles/abstracts/mixins";
+
+.header {
+   & ul.ant-menu {
+     background: transparent;
+   }
+
+  & .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+    color: $primary_color;
+    background: #D8D8D8;
+  }
+
+  & .ant-menu-item:hover, & .ant-menu-submenu-title:hover{
+    background: lighten($light_gray, 5%);
+    color: lighten($primary_color, 5%);
+  }
+
+  & .ant-menu-submenu-selected {
+    color: lighten($primary_color, 5%);
+  }
+
+  & .ant-menu-inline .ant-menu-item::after {
+    border-color: $primary_color;
+  }
+
+  & .ant-menu-inline .ant-menu-item,
+  & .ant-menu-inline .ant-menu-submenu-title,
+  & .ant-menu-inline .ant-menu-item:not(:last-child)
+  {
+    margin: 0;
+  }
+
+  & .ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title,
+  & .ant-menu-inline > .ant-menu-item,
+  & .ant-menu-sub.ant-menu-inline > .ant-menu-item,
+  & .ant-menu-inline .ant-menu-submenu-title{
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+    height: auto;
+  }
+}

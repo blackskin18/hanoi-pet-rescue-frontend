@@ -1,0 +1,9 @@
+@import "../../../styles/abstracts/variables";
+
+.filter-row {
+  margin-bottom: 2.5rem;
+}
+
+.count-case {
+  background: lighten($primary_color, 50%);
+}
