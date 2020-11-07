@@ -16,7 +16,7 @@ function getBase64(file) {
 
 const ListCase = () => {
 
-  const [previewVisible, setPreviewVisible]=  useState(false)
+  const [previewVisible, setPreviewVisible]=  useState(false);
   const [previewImage, setPreviewImage] = useState('');
   const [previewTitle, setPreviewTitle] = useState('');
 

@@ -1,4 +1,4 @@
-export const API_URL       = 'https://api.jac.vn/api/'
+export const API_URL       = 'http://localhost:8000/api/'
 export const LIMIT_PRODUCT = 6
 export const LIMIT_NEWEST_POST = 3
 export const NEWS_POST_CATEGORY = 2
