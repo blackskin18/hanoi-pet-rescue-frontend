@@ -2,7 +2,8 @@ import {API_URL} from '../config'
 import axios from 'axios'
 
 const API     = {
-  CREATE_CASE: API_URL + 'cases'
+  CREATE_CASE: API_URL + 'cases',
+  GET_CASES: API_URL + 'cases'
 }
 
 const createCase = async (data, images) => {
@@ -24,7 +25,20 @@ const createCase = async (data, images) => {
   }
 }
 
+const getCases = async (type = '', limit = '') => {
+  try {
+    let response = await axios.get(API.GET_CASES, {
+      params: {type, limit}
+    });
+    console.log(response.data)
+    return response.data;
+  } catch (error) {
+    return error.response;
+  }
+}
+
 export default {
-  createCase
+  createCase,
+  getCases
 }
 
