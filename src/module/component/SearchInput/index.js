@@ -28,7 +28,7 @@ export const SearchText = (props) => {
       >
         Search
       </Button>
-      <Button onClick={() => props.handleReset(props.clearFilters)} size="small" style={{width: 90}}>
+      <Button onClick={() => props.handleReset(props.clearFilters, props.dataIndex)} size="small" style={{width: 90}}>
         Reset
       </Button>
     </Space>
@@ -45,7 +45,7 @@ export const SearchPlace = (props) => {
       value={props.selectedKeys[0]}
       onChange={e => props.setSelectedKeys(e.target.value ? [e.target.value] : [])}
       onPressEnter={() => props.handleSearch(props.selectedKeys, props.confirm, props.dataIndex)}
-      style={{width: 188, marginBottom: 8, display: 'block'}}
+      style={{width: 188, marginBottom: 8, display: 'block'}}f
     />
     <Space>
       <Button
@@ -57,7 +57,7 @@ export const SearchPlace = (props) => {
       >
         Search
       </Button>
-      <Button onClick={() => props.handleReset(props.clearFilters)} size="small" style={{width: 90}}>
+      <Button onClick={() => props.handleReset(props.clearFilters, props.dataIndex)} size="small" style={{width: 90}}>
         Reset
       </Button>
     </Space>
@@ -86,7 +86,7 @@ export const SearchDateRange = (props) => {
       >
         Search
       </Button>
-      <Button onClick={() => props.handleReset(props.clearFilters)} size="small" style={{width: 90}}>
+      <Button onClick={() => props.handleReset(props.clearFilters, props.dataIndex)} size="small" style={{width: 90}}>
         Reset
       </Button>
     </Space>
@@ -124,7 +124,7 @@ export const SearchStatus = (props) => {
       >
         Search
       </Button>
-      <Button onClick={() => props.handleReset(props.clearFilters)} size="small" style={{width: 90}}>
+      <Button onClick={() => props.handleReset(props.clearFilters, props.dataIndex)} size="small" style={{width: 90}}>
         Reset
       </Button>
     </Space>

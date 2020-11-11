@@ -25,10 +25,15 @@ const createCase = async (data, images) => {
   }
 }
 
-const getCases = async (type = '', limit = '') => {
+const getCases = async (searchParams, page,  limit = '', type = '') => {
   try {
     let response = await axios.get(API.GET_CASES, {
-      params: {type, limit}
+      params: {
+        type,
+        limit,
+        ...searchParams,
+        page: page
+      }
     });
     console.log(response.data)
     return response.data;
