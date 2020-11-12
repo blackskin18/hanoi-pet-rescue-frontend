@@ -1,10 +1,12 @@
 import React, {useState, useEffect}                                    from 'react'
 import './style.scss'
-import {Row, Col, Divider, Table, Image, Space, Input, Button, Select} from 'antd';
+import {Tag, Space, Input, Button, Select, DatePicker} from 'antd';
 import {SearchOutlined}                                                from '@ant-design/icons';
 import {getStatus}                                                     from '../../../service/StatusService';
 
-const {Option} = Select;
+const { RangePicker } = DatePicker;
+const dateFormat = 'DD/MM/YYYY';
+
 
 export const SearchText = (props) => {
   return <div style={{padding: 8}}>
@@ -45,7 +47,7 @@ export const SearchPlace = (props) => {
       value={props.selectedKeys[0]}
       onChange={e => props.setSelectedKeys(e.target.value ? [e.target.value] : [])}
       onPressEnter={() => props.handleSearch(props.selectedKeys, props.confirm, props.dataIndex)}
-      style={{width: 188, marginBottom: 8, display: 'block'}}f
+      style={{width: 188, marginBottom: 8, display: 'block'}}
     />
     <Space>
       <Button
@@ -66,16 +68,16 @@ export const SearchPlace = (props) => {
 
 export const SearchDateRange = (props) => {
   return <div style={{padding: 8}}>
-    <Input
-      ref={node => {
-        // this.searchInput = node;
-      }}
-      placeholder={`Search ${props.dataIndex}`}
-      value={props.selectedKeys[0]}
-      onChange={e => props.setSelectedKeys(e.target.value ? [e.target.value] : [])}
-      onPressEnter={() => props.handleSearch(props.selectedKeys, props.confirm, props.dataIndex)}
-      style={{width: 188, marginBottom: 8, display: 'block'}}
-    />
+    <div>
+      <RangePicker
+          style={{marginBottom: 8}}
+          // defaultValue={[moment('2015/01/01', dateFormat), moment('2015/01/01', dateFormat)]}
+          format={dateFormat}
+          onPressEnter={() => props.handleSearch(props.selectedKeys, props.confirm, props.dataIndex)}
+          value={props.selectedKeys[0]}
+          onChange={e => props.setSelectedKeys(e ? [e] : [])}
+      />
+    </div>
     <Space>
       <Button
         type="primary"
@@ -97,22 +99,34 @@ export const SearchStatus = (props) => {
   const [statuses, setStatuses] = useState(null)
   useEffect(() => {
     const getStatusData = async () => {
-      let response = await getStatus()
-      setStatuses(response.data)
+      let statusData = await getStatus()
+      setStatuses(statusData)
     }
     getStatusData()
   }, [])
 
-  return <div style={{padding: 8}}>
+  const tagRender = (props) => {
+    const { label, value, closable, onClose } = props;
+
+    return (
+        <Tag closable={closable} onClose={onClose} style={{ marginRight: 3 }}>
+          {label}
+        </Tag>
+    );
+  }
+
+  return <div style={{padding: 8, width: '250px'}}>
     <Select
+      mode="multiple"
+      showArrow
+      tagRender={tagRender}
       className="w-100"
       placeholder="chọn trạng thái"
       value={props.selectedKeys[0]}
       onChange={(e) => props.setSelectedKeys(e ? [e] : [])}
+      options={statuses}
+      style={{width: '100%'}}
     >
-      {statuses ? statuses.map((element) => {
-        return <Option value={element.id} key={element.id}>{element.name}</Option>
-      }) : ''}
     </Select>
     <Space>
       <Button

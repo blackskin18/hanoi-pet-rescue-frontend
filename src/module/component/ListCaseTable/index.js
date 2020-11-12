@@ -1,6 +1,6 @@
 import React, {useState, useEffect}                                    from 'react'
 import './style.scss'
-import {Row, Col, Divider, Table, Image, Space, Input, Button, Select} from 'antd';
+import {Row, Col, Table, Image, Select} from 'antd';
 import {SearchOutlined}                                                from '@ant-design/icons';
 import CaseService                                                     from "../../../service/CaseService";
 import {SearchStatus, SearchText, SearchDateRange, SearchPlace}        from '../../component/SearchInput/index';
@@ -19,19 +19,35 @@ const ListCaseTable = (props) => {
     getCaseData()
   }, [])
 
-  const getCaseData = async (search = {}, page = 1) => {
+  const getCaseData = async (search = {}, page = null, size = null) => {
+    if(!page) page = currentPage
     if(!search) search = searchParams
-    let response = await CaseService.getCases(search, page, limit, props.type)
+    if(!size) size = limit
+    let response = await CaseService.getCases(search, page, size, props.type)
     setListCase(response.data.cases)
     setTotal(response.data.total)
+    moveToTop()
+  }
+
+  const moveToTop = () => {
+      let y = document.documentElement.scrollTop
+      var int = setInterval(function() {
+        window.scrollTo(0, y);
+        y -= 50;
+        if (y <= 0){
+          window.scrollTo(0, 0);
+          clearInterval(int);
+        }
+      }, 10);
   }
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm()
     setSearchParam({
       ...searchParams,
       [dataIndex]: selectedKeys[0]
     })
-    getCaseData({...searchParams,[dataIndex]: selectedKeys[0]})
+    getCaseData({...searchParams,[dataIndex]: selectedKeys[0]}, 1)
   }
 
   const handleReset = (clearFilters, dataIndex) => {
@@ -40,8 +56,7 @@ const ListCaseTable = (props) => {
     setSearchParam({
       ...searchParams
     })
-    getCaseData({...searchParams})
-    console.log(clearFilters, dataIndex)
+    getCaseData({...searchParams}, 1)
   }
 
   const getColumnSearchProps = dataIndex => ({
@@ -178,7 +193,6 @@ const ListCaseTable = (props) => {
           </Col>
         </Row>
       </Col>
-
     </Row>
     <div className="list-case-table">
       <Table
@@ -188,6 +202,7 @@ const ListCaseTable = (props) => {
           total: total, defaultCurrent: 1,defaultPageSize:20, showSizeChanger: true, showQuickJumper: true, pageSize: limit,
           onShowSizeChange: (e, pageSize) => setLimit(pageSize),
           onChange: (page, size) => {
+            console.log(page, size)
             getCaseData(null, page, size)
             setCurrentPage(page)
           }

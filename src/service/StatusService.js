@@ -8,7 +8,16 @@ const API     = {
 export const getStatus = async () => {
   try {
     let response = await axios.get(API.GET_STATUS);
-    return response.data;
+    let data = response.data.data;
+    let result = []
+    for(let i in data) {
+      result.push({
+        text: data[i].id,
+        value: data[i].name
+      })
+    }
+
+    return result
   } catch (error) {
     return error.response;
   }
