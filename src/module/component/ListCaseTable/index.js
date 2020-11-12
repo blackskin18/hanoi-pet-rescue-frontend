@@ -12,12 +12,11 @@ const ListCaseTable = (props) => {
   const [currentPage, setCurrentPage] = useState(1)
   const [limit, setLimit] = useState(20)
   const [total, setTotal] = useState(null)
-
   const [listCase, setListCase] = useState([])
 
   useEffect( () => {
     getCaseData()
-  }, [])
+  }, [props.type])
 
   const getCaseData = async (search = {}, page = null, size = null) => {
     if(!page) page = currentPage

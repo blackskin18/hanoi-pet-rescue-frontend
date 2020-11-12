@@ -53,10 +53,10 @@ const Header = () => {
 
           </Menu.Item>
           <SubMenu key="sub1" icon={<MailOutlined />} title="Danh sách case">
-            <Menu.Item key="2">Tất cả</Menu.Item>
-            <Menu.Item key="3">Chó</Menu.Item>
-            <Menu.Item key="4">Mèo</Menu.Item>
-            <Menu.Item key="5">Loài khác</Menu.Item>
+            <Menu.Item key="2"><Link to="/list-case">Tất cả</Link></Menu.Item>
+            <Menu.Item key="3"><Link to="/list-case/1">Chó</Link></Menu.Item>
+            <Menu.Item key="4"><Link to="/list-case/2">Mèo</Link></Menu.Item>
+            <Menu.Item key="5"><Link to="/list-case/3">Loài khác</Link></Menu.Item>
           </SubMenu>
           <Menu.Item key="6" icon={<PieChartOutlined />}>
             Danh sách phòng khám

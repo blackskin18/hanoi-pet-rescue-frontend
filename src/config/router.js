@@ -9,11 +9,11 @@ export default [
     page: Home
   },
   {
-    path: '/list-case',
+    path: '/list-case/:type?',
     page: ListCase
   },
   {
-    path: '/create-case',
+    path: '/create-case/',
     page: CreateCase
   },
   {
