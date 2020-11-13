@@ -68,6 +68,7 @@ const ListCaseTable = (props) => {
             selectedKeys={selectedKeys}
             confirm={confirm}
             clearFilters={clearFilters}
+            type={props.type}
             dataIndex={dataIndex}
             handleSearch={handleSearch}
             handleReset={handleReset}/>
@@ -201,7 +202,6 @@ const ListCaseTable = (props) => {
           total: total, defaultCurrent: 1,defaultPageSize:20, showSizeChanger: true, showQuickJumper: true, pageSize: limit,
           onShowSizeChange: (e, pageSize) => setLimit(pageSize),
           onChange: (page, size) => {
-            console.log(page, size)
             getCaseData(null, page, size)
             setCurrentPage(page)
           }

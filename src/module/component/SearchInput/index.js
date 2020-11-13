@@ -9,6 +9,10 @@ const dateFormat = 'DD/MM/YYYY';
 
 
 export const SearchText = (props) => {
+  useEffect( () => {
+    props.clearFilters()
+  }, [props.type])
+
   return <div style={{padding: 8}}>
     <Input
       ref={node => {
@@ -38,6 +42,10 @@ export const SearchText = (props) => {
 }
 
 export const SearchPlace = (props) => {
+  useEffect( () => {
+    props.clearFilters()
+  }, [props.type])
+
   return <div style={{padding: 8}}>
     <Input
       ref={node => {
@@ -67,6 +75,10 @@ export const SearchPlace = (props) => {
 }
 
 export const SearchDateRange = (props) => {
+  useEffect( () => {
+    props.clearFilters()
+  }, [props.type])
+
   return <div style={{padding: 8}}>
     <div>
       <RangePicker
@@ -104,6 +116,10 @@ export const SearchStatus = (props) => {
     }
     getStatusData()
   }, [])
+
+  useEffect( () => {
+    props.clearFilters()
+  }, [props.type])
 
   const tagRender = (props) => {
     const { label, value, closable, onClose } = props;

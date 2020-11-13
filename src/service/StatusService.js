@@ -12,10 +12,11 @@ export const getStatus = async () => {
     let result = []
     for(let i in data) {
       result.push({
-        text: data[i].id,
-        value: data[i].name
+        label: data[i].name,
+        value: data[i].id
       })
     }
+    console.log(result)
 
     return result
   } catch (error) {
