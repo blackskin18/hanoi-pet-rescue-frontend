@@ -54,9 +54,13 @@ const Header = () => {
             <Menu.Item key="4"><Link to="/list-case/2">Mèo</Link></Menu.Item>
             <Menu.Item key="5"><Link to="/list-case/3">Loài khác</Link></Menu.Item>
           </SubMenu>
-          <Menu.Item key="6" icon={<PieChartOutlined />}>
-            Danh sách phòng khám
-          </Menu.Item>
+          <SubMenu key="sub3" icon={<MailOutlined />} title="Địa điểm">
+            <Menu.Item key="2"><Link to="/create-place">Tạo địa điểm</Link></Menu.Item>
+            <Menu.Item key="3"><Link to="/places/1">Phòng khám</Link></Menu.Item>
+            <Menu.Item key="4"><Link to="/places/2">Nhà chung</Link></Menu.Item>
+            <Menu.Item key="5"><Link to="/places/3">Nhà Foster</Link></Menu.Item>
+            <Menu.Item key="5"><Link to="/places/4">Nhà chủ nuôi mới</Link></Menu.Item>
+          </SubMenu>
           <SubMenu key="sub2" icon={<AppstoreOutlined />} title="Nhóm chuyên môn">
             <Menu.Item key="7">Điều phối, cứu hộ, y tế</Menu.Item>
             <Menu.Item key="8">Tình nguyện viên</Menu.Item>

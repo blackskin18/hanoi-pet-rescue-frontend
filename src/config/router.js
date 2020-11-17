@@ -22,7 +22,7 @@ export default [
     page: CreatePlace
   },
   {
-    path: '/places',
+    path: '/places/:type?',
     page: ListPlace
   },
   {
