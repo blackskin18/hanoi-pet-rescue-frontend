@@ -1,13 +1,9 @@
 import React, {useEffect, useState}               from 'react';
 import { Row, Col, Menu, Dropdown, Button}        from 'antd';
-import {Link, useParams, useLocation, useHistory} from "react-router-dom";
+import {Link , useHistory} from "react-router-dom";
 import {
   AppstoreOutlined,
-  MenuUnfoldOutlined,
-  MenuFoldOutlined,
   PieChartOutlined,
-  DesktopOutlined,
-  ContainerOutlined,
   UserOutlined,
   MailOutlined,
 }                                                 from '@ant-design/icons';

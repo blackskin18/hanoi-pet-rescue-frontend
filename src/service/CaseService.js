@@ -27,11 +27,18 @@ const createCase = async (data, images) => {
 
 const getCases = async (searchParams, page,  limit = '', type = '') => {
   try {
+    let filterDate = {}
+    if(searchParams.receive_date) {
+      filterDate.receive_date_start = searchParams.receive_date[0].format('YYYY/MM/DD')
+      filterDate.receive_date_end = searchParams.receive_date[1].format('YYYY/MM/DD')
+    }
+
     let response = await axios.get(API.GET_CASES, {
       params: {
         type,
         limit,
         ...searchParams,
+        ...filterDate,
         page: page
       }
     });

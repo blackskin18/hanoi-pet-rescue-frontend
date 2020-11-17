@@ -2,6 +2,7 @@ import Home        from '../module/page/Home'
 import ListCase    from '../module/page/ListCase'
 import CreatePlace from '../module/page/CreatePlace'
 import CreateCase  from '../module/page/CreateCase'
+import ListPlace   from '../module/page/ListPlace'
 
 export default [
   {
@@ -19,6 +20,10 @@ export default [
   {
     path: '/create-place',
     page: CreatePlace
+  },
+  {
+    path: '/places',
+    page: ListPlace
   },
   {
     path: '/',

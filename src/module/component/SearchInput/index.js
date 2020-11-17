@@ -3,15 +3,16 @@ import './style.scss'
 import {Tag, Space, Input, Button, Select, DatePicker} from 'antd';
 import {SearchOutlined}                                                from '@ant-design/icons';
 import {getStatus}                                                     from '../../../service/StatusService';
+import moment from 'moment';
 
 const { RangePicker } = DatePicker;
-const dateFormat = 'DD/MM/YYYY';
+const dateFormat = 'YYYY/MM/DD';
 
 
 export const SearchText = (props) => {
-  useEffect( () => {
-    props.clearFilters()
-  }, [props.type])
+  // useEffect( () => {
+  //   props.clearFilters()
+  // }, [props.type])
 
   return <div style={{padding: 8}}>
     <Input
@@ -42,9 +43,9 @@ export const SearchText = (props) => {
 }
 
 export const SearchPlace = (props) => {
-  useEffect( () => {
-    props.clearFilters()
-  }, [props.type])
+  // useEffect( () => {
+  //   props.clearFilters()
+  // }, [props.type])
 
   return <div style={{padding: 8}}>
     <Input
@@ -75,9 +76,9 @@ export const SearchPlace = (props) => {
 }
 
 export const SearchDateRange = (props) => {
-  useEffect( () => {
-    props.clearFilters()
-  }, [props.type])
+  // useEffect( () => {
+  //   props.clearFilters()
+  // }, [props.type])
 
   return <div style={{padding: 8}}>
     <div>

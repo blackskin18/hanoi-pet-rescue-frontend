@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react'
 import './style.scss'
-import {Row, Col, Divider, Table, Tag, Space, Input, Button, Select, Modal, Upload, DatePicker} from 'antd';
+import {Row, Col, Divider, Input, Button, Select} from 'antd';
+import PlaceService from "../../../service/PlaceService";
+
 
 const {Option} = Select;
 const PLACE_TYPE = {
@@ -13,10 +15,10 @@ const PLACE_TYPE = {
 
 const ListCase = () => {
   const [dataInsert, setDataInsert] = useState({});
-
+  const [rootHospitals, setRootHospitals] = useState([]);
 
   const createPlace = function () {
-    console.log(dataInsert)
+    PlaceService.createPlace(dataInsert)
   }
 
   const editDataInsert = function (key, value) {
@@ -26,6 +28,15 @@ const ListCase = () => {
     }
     setDataInsert(data)
   }
+
+  const getRootHospitals = async () => {
+    let hospital = await PlaceService.getRootHospitals()
+    setRootHospitals(hospital.data)
+  }
+
+  useEffect(() => {
+    getRootHospitals()
+  }, [])
 
   return (<div className="home-page">
     <Divider orientation="left">
@@ -53,10 +64,13 @@ const ListCase = () => {
                 Thuộc bệnh viện
               </Col>
               <Col span={20}>
-                <Input
-                  placeholder="Chọn phòng khám"
-                  onChange={(e) => editDataInsert('parent_hospital', e.target.value)}
-                />
+                <Select onChange={(e) => editDataInsert('parent_id', e)} style={{width: "100%"}}>
+                  {
+                    rootHospitals.map((hospital, key) => {
+                      return <Option value={hospital.id} key={key}>{hospital.name}</Option>
+                    })
+                  }
+                </Select>
                 <p className="text-red">nếu bạn đang tạo chi nhánh của một phòng khám thì hãy chọn phòng khám mà chi
                   nhánh này thuộc về</p>
               </Col>
