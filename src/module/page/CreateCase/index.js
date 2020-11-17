@@ -36,6 +36,8 @@ const ListCase = () => {
   const [fosterName, setFosterName]         = useState('');
   const [fosterPhone, setFosterPhone]       = useState('');
   const [fosterAddress, setFosterAddress]   = useState('');
+  const [placeType, setPlaceType]           = useState('');
+  const [placeId, setPlaceId]               = useState('');
 
   const handleCancelPreview = () => setPreviewVisible(false);
   const handlePreviewImages = async file => {
@@ -52,8 +54,8 @@ const ListCase = () => {
 
   const handleCreateCase = () => {
     let data = {
-      'code': code,
-      'name': name,
+      'code'         : code,
+      'name'         : name,
       'description'  : description,
       'status'       : status,
       'type'         : type,
@@ -143,7 +145,7 @@ const ListCase = () => {
             <Row>
               <Col span={8} className="padding-left-sm">Loài</Col>
               <Col span={16}>
-                <Select className="w-100" placeholder="Chọn Loài" value={type} onChange={(e) => setType(e) }>
+                <Select className="w-100" placeholder="Chọn Loài" value={type} onChange={(e) => setType(e)}>
                   <Option value={1}>Chó</Option>
                   <Option value={2}>Mèo</Option>
                   <Option value={3}>Khác</Option>
@@ -170,10 +172,14 @@ const ListCase = () => {
             Nơi ở hiện tại
           </Col>
           <Col span={20}>
-            <Select className="w-100" placeholder="Chọn nơi ở hiện tại">
-              <Option value={1}>Chó</Option>
-              <Option value={2}>Mèo</Option>
-              <Option value={3}>Khác</Option>
+            <Select className="w-100"
+                    placeholder="Chọn nơi ở hiện tại"
+                    onChange={(e) => setPlaceType(e)} style={{width: "100%"}}>
+              <Option value="" key="0"></Option>
+              <Option value={1} key="1">Phòng Phám</Option>
+              <Option value={2} key="2">Nhà chung</Option>
+              <Option value={3} key="3">Nhà Foster</Option>
+              <Option value={4} key="4">Nhà Chủ nuôi mới</Option>
             </Select>
           </Col>
         </Row>
@@ -182,7 +188,7 @@ const ListCase = () => {
             Trạng thái
           </Col>
           <Col span={20}>
-            <Select className="w-100" placeholder="chọn trạng thái" value={status} onChange={(e) => setStatus(e) }>
+            <Select className="w-100" placeholder="chọn trạng thái" value={status} onChange={(e) => setStatus(e)}>
               <Option value={1}>Đang cứu hộ</Option>
               <Option value={2}>Sẵn sàng tìm chủ</Option>
               <Option value={3}>Đã đăng tìm chủ</Option>
@@ -230,7 +236,7 @@ const ListCase = () => {
               placeholder="Nhập ghi chú"
               autoSize={{minRows: 2, maxRows: 6}}
               value={note}
-              onChange={(e) =>setNote(e.target.value)}
+              onChange={(e) => setNote(e.target.value)}
             />
           </Col>
         </Row>
