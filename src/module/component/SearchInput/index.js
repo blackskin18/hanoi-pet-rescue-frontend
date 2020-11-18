@@ -3,7 +3,6 @@ import './style.scss'
 import {Tag, Space, Input, Button, Select, DatePicker} from 'antd';
 import {SearchOutlined}                                                from '@ant-design/icons';
 import {getStatus}                                                     from '../../../service/StatusService';
-import moment from 'moment';
 
 const { RangePicker } = DatePicker;
 const dateFormat = 'YYYY/MM/DD';

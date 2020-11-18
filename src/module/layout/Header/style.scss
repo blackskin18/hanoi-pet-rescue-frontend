@@ -2,6 +2,9 @@
 @import "../../../styles/abstracts/mixins";
 
 .header {
+  display: flex;
+  flex-direction: column;
+
    & ul.ant-menu {
      background: transparent;
    }
@@ -38,5 +41,29 @@
     padding-top: .5rem;
     padding-bottom: .5rem;
     height: auto;
+  }
+}
+
+.logout {
+  &-box {
+    flex: 1;
+    position: relative;
+
+    & a {
+      color: $primary_color;
+      position: absolute;
+      bottom: 5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      text-decoration: underline;
+      transition: .1s;
+
+      &:hover {
+        transform: translate(-50%, -2px);
+      }
+      &:active {
+        transform: translate(-50%, 0px);
+      }
+    }
   }
 }

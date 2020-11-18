@@ -1,0 +1,198 @@
+@import "../../../styles/abstracts/variables";
+@import "../../../styles/abstracts/animation";
+
+
+.login,
+.register {
+  &-logo-box {
+    padding-top: 150px;
+    text-align: center;
+
+    &>.logo-img {
+      animation-name: moveInLeft;
+      animation-duration: 1s;
+      animation-timing-function: ease-out;
+    }
+  }
+
+  &-background {
+    height: 100vh
+  }
+
+  &-box {
+    margin: 20px auto;
+    max-width: 310px;
+
+    &--header {
+      &>h3 {
+        padding: 0;
+        color: $primary_green;
+        animation-name: moveInRight;
+        animation-duration: 1s;
+        animation-timing-function: ease-out;
+      }
+    }
+
+    &--body {
+      margin-top: 50px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      //padding: 0 55px;
+    }
+  }
+
+  &-button {
+    height: 38px;
+    color: #fff;
+    border-radius: 30px;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 5px 80px;
+    -webkit-transition: all .3s;
+    transition: all .3s;
+    border: 2px solid hsla(0, 0%, 100%, .57);
+    align-items: center;
+    margin-bottom: 10px;
+    background: linear-gradient(211deg, #8BC249, #23A455);
+    position: relative;
+    animation: moveInBottom 0.5s ease-out 0.5s;
+    animation-fill-mode: backwards;
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, .2);
+    }
+
+    &::after {
+      content: '';
+      display: inline-block;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      background: $primary_green;
+      top: 0;
+      left: 0;
+      border-radius: 100px;
+      z-index: -1;
+      transition: all .4s;
+    }
+
+    &:hover::after {
+      transform: scaleX(1.4) scaleY(1.6);
+      opacity: 0;
+    }
+
+  }
+}
+
+.login__dont-have-acc {
+  color: $primary_green;
+  font-size: 14px;
+  animation: moveInBottom 0.5s ease-out 0.5s;
+  animation-fill-mode: backwards;
+}
+
+.link-register {
+  color: $primary_green;
+  text-decoration: underline;
+  font-weight: bold;
+  animation: moveInBottom 0.5s ease-out 0.5s;
+  animation-fill-mode: backwards;
+
+  &:hover {
+    transform: translateY(-2px);
+    color: $primary_green
+  }
+}
+
+.register {
+  &-input {
+    width: 100%;
+    margin-bottom: 20px;
+    animation-name: moveInRight;
+    animation-duration: 1s;
+    animation-timing-function: ease-out;
+
+    &>input {
+      background: $light_gray_2;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2px 20px;
+      height: 30px;
+
+      &::placeholder {
+        color: $gray;
+        font-family: Avenir;
+        font-size: 12px;
+        line-height: 2.2;
+        display: flex;
+      }
+
+      &:hover {
+        border: 1px solid $primary_green;
+      }
+
+      &:active {
+        border: 1px solid $primary_green;
+      }
+
+      &:focus {
+        border: 1px solid $primary_green;
+        box-shadow: 0px 0px 2px $primary_green;
+      }
+    }
+
+    &>span {
+      border-radius: 10px;
+      padding: 7px;
+    }
+  }
+
+  &-description {
+    margin-bottom: 10px;
+    animation: moveInBottom 0.5s ease-out 0.5s;
+    animation-fill-mode: backwards;
+  }
+
+}
+
+@media only screen and (max-width: 576px) {
+
+  .login,
+  .register {
+    &--body {
+      margin-top: 100px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  .logo-img {
+    height: 60px;
+  }
+}
+
+@media only screen and (min-width: 576px) {
+
+  .login,
+  .register {
+    &--body {
+      margin-top: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      //padding: 0 55px;
+    }
+  }
+
+  .logo-img {
+    height: 100px;
+  }
+}

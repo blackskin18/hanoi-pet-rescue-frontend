@@ -3,11 +3,16 @@ import ListCase    from '../module/page/ListCase'
 import CreatePlace from '../module/page/CreatePlace'
 import CreateCase  from '../module/page/CreateCase'
 import ListPlace   from '../module/page/ListPlace'
+import Login   from '../module/page/Login/login'
 
 export default [
   {
     path: '/home',
     page: Home
+  },
+  {
+    path: '/login',
+    page: Login
   },
   {
     path: '/list-case/:type?',
