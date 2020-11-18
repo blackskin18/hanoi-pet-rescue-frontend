@@ -18,7 +18,7 @@ const ListPlace = () => {
         {type === '4' && ' Chủ nuôi mới'}
       </h4>
     </Divider>
-    {type === 1 ?
+    {type === '1' ?
       <HospitalTable type={type}/>
       :
       <PlaceTable type={type}/>

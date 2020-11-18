@@ -20,6 +20,7 @@ const ListCaseTable = (props) => {
     if (!page) page = currentPage
     if (!search) search = searchParams
     let response = await PlaceService.getPlaces(search, page, 1)
+    console.log(response)
     setListHospitals(response.data.places)
     setTotal(response.data.total)
     moveToTop()
@@ -99,16 +100,28 @@ const ListCaseTable = (props) => {
       ...getColumnSearchProps('director_name'),
     },
     {
-      title: 'Điện thoại',
+      title: 'Địa chỉ',
+      dataIndex: 'address',
+      key: 'address',
+      ...getColumnSearchProps('address'),
+    },
+    {
+      title: 'Hotline',
       dataIndex: 'phone',
       key: 'phone',
       ...getColumnSearchProps('phone'),
     },
     {
-      title: 'Địa chỉ',
-      dataIndex: 'address',
-      key: 'address',
-      ...getColumnSearchProps('address'),
+      title: 'Người phụ trách',
+      dataIndex: 'director_name',
+      key: 'director_name',
+      ...getColumnSearchProps('director_name'),
+    },
+    {
+      title: 'Ghi chú',
+      dataIndex: 'note',
+      key: 'note',
+      ...getColumnSearchProps('note'),
     },
     {
       title: 'Hành động',
@@ -116,7 +129,6 @@ const ListCaseTable = (props) => {
       key: 'action',
       render: () => {
         return <Space size="middle">
-          <Link to="">Chi tiết</Link>
           <Link to="">Sửa</Link>
           <Link to="">Xóa</Link>
         </Space>

@@ -13,10 +13,12 @@ import {
 import './style.scss'
 import "antd/dist/antd.css";
 import logo                                 from "../../../assets/images/POC2.svg"
+import {useAuth}                            from "../../../hooks/auth";
 
 const {SubMenu} = Menu
 
 const Header = () => {
+  useAuth();
   const [name, setName] = useState('');
   const history = useHistory()
 
@@ -65,9 +67,10 @@ const Header = () => {
             <Menu.Item key="sub3-5"><Link to="/places/4">Nhà chủ nuôi mới</Link></Menu.Item>
           </SubMenu>
           <SubMenu key="sub2" icon={<TeamOutlined />} title="Nhóm chuyên môn">
-            <Menu.Item key="sub2-7">Điều phối, cứu hộ, y tế</Menu.Item>
-            <Menu.Item key="sub2-8">Tình nguyện viên</Menu.Item>
-            <Menu.Item key="sub2-9">Foster</Menu.Item>
+            <Menu.Item key="sub2-1">Tạo nhóm chuyên môn</Menu.Item>
+            <Menu.Item key="sub2-2">Điều phối, cứu hộ, y tế</Menu.Item>
+            <Menu.Item key="sub2-3">Tình nguyện viên</Menu.Item>
+            <Menu.Item key="sub2-4">Foster</Menu.Item>
           </SubMenu>
           <Menu.Item key="10" icon={<PieChartOutlined/>}>
             Thư viện ảnh

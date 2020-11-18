@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from 'react'
+import React, {useState, useEffect} from 'react'
 import './style.scss'
-import { Table, Space}                      from 'antd';
-import { SearchOutlined }             from '@ant-design/icons';
-import PlaceService                   from "../../../service/PlaceService";
-import { SearchText }                 from '../../component/SearchInput/index';
-import {Link , useHistory} from "react-router-dom";
+import {Table, Space}               from 'antd';
+import {SearchOutlined}             from '@ant-design/icons';
+import PlaceService                 from "../../../service/PlaceService";
+import {SearchText}                 from '../../component/SearchInput/index';
+import {Link, useHistory}           from "react-router-dom";
+import {PLACE_TYPE}                 from "../../../config";
 
 const ListCaseTable = (props) => {
   const [searchParams, setSearchParam] = useState({})
-  const [currentPage, setCurrentPage] = useState(1)
-  const [total, setTotal] = useState(null)
-  const [listPlaces, setListPlaces] = useState([])
+  const [currentPage, setCurrentPage]  = useState(1)
+  const [total, setTotal]              = useState(null)
+  const [listPlaces, setListPlaces]    = useState([])
 
   useEffect(() => {
     getPlaceData()
@@ -26,7 +27,7 @@ const ListCaseTable = (props) => {
   }
 
   const moveToTop = () => {
-    let y = document.documentElement.scrollTop
+    let y   = document.documentElement.scrollTop
     var int = setInterval(function () {
       window.scrollTo(0, y);
       y -= 50;
@@ -64,41 +65,73 @@ const ListCaseTable = (props) => {
       dataIndex={dataIndex}
       handleSearch={handleSearch}
       handleReset={handleReset}/>,
-    filterIcon: filtered => <SearchOutlined style={{color: filtered ? '#1890ff' : undefined}}/>,
+    filterIcon    : filtered => <SearchOutlined style={{color: filtered ? '#1890ff' : undefined}}/>,
   });
 
   const columns = [
     {
-      title: 'Tên',
+      title    : 'Tên',
       dataIndex: 'name',
-      key: 'name',
+      key      : 'name',
       ...getColumnSearchProps('director_name'),
     },
     {
-      title: 'Địa chỉ',
+      title    : 'Địa chỉ',
       dataIndex: 'address',
-      key: 'address',
+      key      : 'address',
       ...getColumnSearchProps('address'),
     },
     {
-      title: 'Điện thoại',
+      title    : 'Hotline',
       dataIndex: 'phone',
-      key: 'phone',
+      key      : 'phone',
       ...getColumnSearchProps('phone'),
     },
-    {
-      title: 'Hành động',
-      dataIndex: 'action',
-      key: 'action',
-      render: () => {
-        return <Space size="middle">
-          <Link to="">Chi tiết</Link>
-          <Link to="">Sửa</Link>
-          <Link to="">Xóa</Link>
-        </Space>
-      }
-    },
   ];
+
+
+  if (PLACE_TYPE.FOSTER !== props.type) {
+    columns.push(
+      {
+        title    : 'Người phụ trách',
+        dataIndex: 'director_name',
+        key      : 'director_name',
+        ...getColumnSearchProps('director_name'),
+      }
+    )
+
+    columns.push(
+      {
+        title    : 'Ghi chú',
+        dataIndex: 'note',
+        key      : 'note',
+        ...getColumnSearchProps('note'),
+      }
+    )
+    columns.push(
+      {
+        title    : 'Hành động',
+        dataIndex: 'action',
+        key      : 'action',
+        render   : () => {
+          return <Space size="middle">
+            <Link to="">Sửa</Link>
+            <Link to="">Xóa</Link>
+          </Space>
+        }
+      }
+    )
+  } else {
+    columns.push(
+      {
+        title    : 'Ghi chú',
+        dataIndex: 'note',
+        key      : 'note',
+        ...getColumnSearchProps('note'),
+      }
+    )
+  }
+
 
   return (<div>
     <div className="list-case-table">
@@ -106,7 +139,7 @@ const ListCaseTable = (props) => {
         columns={columns}
         dataSource={listPlaces}
         pagination={{
-          total: total, defaultCurrent: 1, defaultPageSize: 20, showQuickJumper: true, showSizeChanger: false,
+          total   : total, defaultCurrent: 1, defaultPageSize: 20, showQuickJumper: true, showSizeChanger: false,
           onChange: (page, size) => {
             getPlaceData(null, page, size)
             setCurrentPage(page)

@@ -7,3 +7,9 @@ export const TYPE_CONTACT = 'CONTACT'
 export const TYPE_ABOUT_US = 'ABOUT_US'
 export const TYPE_SERVICE_SOS = 'SERVICE_SOS'
 export const TYPE_LOGO_CUSTOMER = 'LOGO_CUSTOMER'
+export const PLACE_TYPE = {
+  HOSPITAL: '1',
+  COMMON_HOME: '2',
+  FOSTER: '3',
+  OWNER: '4',
+}

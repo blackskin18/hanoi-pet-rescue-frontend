@@ -17,10 +17,8 @@ export function useAuth () {
     }
 
     let success = await AuthService.verifyToken()
-    if (success) {
-    }
-    if (!success || (success)) {
-      history.push('/login')
+    if (!success) {
+        history.push('/login')
     }
   }
 }
