@@ -3,6 +3,8 @@ import './style.scss'
 import {Row, Col, Divider, Input, Button, Select, Modal, Upload, DatePicker} from 'antd';
 import {PlusOutlined}                                                        from '@ant-design/icons';
 import CaseService                                                           from '../../../service/CaseService';
+import {PLACE_TYPE}                                                          from "../../../config";
+import PlaceService                                                          from "../../../service/PlaceService";
 
 const {Option}   = Select;
 const {TextArea} = Input;
@@ -22,22 +24,21 @@ const ListCase = () => {
   const [previewImage, setPreviewImage]     = useState('');
   const [previewTitle, setPreviewTitle]     = useState('');
   const [images, setImages]                 = useState([]);
-  const [code, setCode]                     = useState('');
-  const [name, setName]                     = useState('');
-  const [description, setDescription]       = useState('');
-  const [type, setType]                     = useState(null);
-  const [status, setStatus]                 = useState(null);
-  const [place, setPlace]                   = useState('');
-  const [ageYear, setAgeYear]               = useState('');
-  const [ageMonth, setAgeMonth]             = useState('');
-  const [note, setNote]                     = useState('');
-  const [receiveDate, setReceiveDate]       = useState('');
-  const [receivePlace, setReceivePlace]     = useState('');
-  const [fosterName, setFosterName]         = useState('');
-  const [fosterPhone, setFosterPhone]       = useState('');
-  const [fosterAddress, setFosterAddress]   = useState('');
-  const [placeType, setPlaceType]           = useState('');
-  const [placeId, setPlaceId]               = useState('');
+  const [placeId, setPlaceId]               = useState(null);
+  // const [placeType, setPlaceType]           = useState(null);
+  const [placeToChoose, setPlaceToChoose]   = useState([]);
+  const [dataInsert, setDataInsert]         = useState({});
+
+
+  useEffect(() => {
+    getPlaceSelect()
+  }, [dataInsert.place_type])
+
+  const getPlaceSelect = async () => {
+    let response = await PlaceService.getPlaces({}, '', dataInsert.place_type)
+    setPlaceToChoose(response.data.places)
+    setPlaceId(null)
+  }
 
   const handleCancelPreview = () => setPreviewVisible(false);
   const handlePreviewImages = async file => {
@@ -53,21 +54,19 @@ const ListCase = () => {
   const handleChangeImages = ({fileList}) => setImages(fileList)
 
   const handleCreateCase = () => {
-    let data = {
-      'code'         : code,
-      'name'         : name,
-      'description'  : description,
-      'status'       : status,
-      'type'         : type,
-      'receice_place': receivePlace,
-      'receive_date' : receiveDate,
-      'place'        : place,
-      'age_year'     : ageYear,
-      'age_month'    : ageMonth,
-      'note'         : note
+    var data = {
+      ...dataInsert,
+      place_id: placeId
     }
-
     CaseService.createCase(data, images)
+  }
+
+  const editDataInsert = function (key, value) {
+    let data = {
+      ...dataInsert,
+      [key]: value
+    }
+    setDataInsert(data)
   }
 
   const uploadButton = (
@@ -97,7 +96,7 @@ const ListCase = () => {
         <Row>
           <Col offset={8} span={2}>CODE</Col>
           <Col span={6}>
-            <Input addonBefore="20CM" value={code} onChange={(e) => setCode(e.target.value)}/>
+            <Input addonBefore="20CM" value={dataInsert.code} onChange={(e) => editDataInsert('code', e.target.value)}/>
           </Col>
         </Row>
         <Row>
@@ -109,8 +108,8 @@ const ListCase = () => {
                   placeholder={"Chọn Ngày"}
                   width="100%"
                   className="w-100"
-                  value={receiveDate}
-                  onChange={(e) => setReceiveDate(e)}/>
+                  value={dataInsert.receive_date}
+                  onChange={(e) => editDataInsert('receive_date', e)}/>
               </Col>
             </Row>
           </Col>
@@ -121,8 +120,8 @@ const ListCase = () => {
                 <Input
                   placeholder="Nhập nơi nhận"
                   className="w-100"
-                  value={receivePlace}
-                  onChange={(e) => setReceivePlace(e.target.value)}/>
+                  value={dataInsert.receive_place}
+                  onChange={(e) => editDataInsert('receive_place', e.target.value)}/>
               </Col>
             </Row>
           </Col>
@@ -136,8 +135,8 @@ const ListCase = () => {
                   placeholder="Nhập tên"
                   width="100%"
                   className="w-100"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}/>
+                  value={dataInsert.name}
+                  onChange={(e) => editDataInsert('name', e.target.value)}/>
               </Col>
             </Row>
           </Col>
@@ -145,7 +144,8 @@ const ListCase = () => {
             <Row>
               <Col span={8} className="padding-left-sm">Loài</Col>
               <Col span={16}>
-                <Select className="w-100" placeholder="Chọn Loài" value={type} onChange={(e) => setType(e)}>
+                <Select className="w-100" placeholder="Chọn Loài" value={dataInsert.type}
+                        onChange={(e) => editDataInsert('type', e)}>
                   <Option value={1}>Chó</Option>
                   <Option value={2}>Mèo</Option>
                   <Option value={3}>Khác</Option>
@@ -162,8 +162,8 @@ const ListCase = () => {
             <TextArea
               placeholder="Nhập mô tả"
               autoSize={{minRows: 2, maxRows: 6}}
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              value={dataInsert.description}
+              onChange={(e) => editDataInsert('description', e.target.value)}
             />
           </Col>
         </Row>
@@ -174,8 +174,9 @@ const ListCase = () => {
           <Col span={20}>
             <Select className="w-100"
                     placeholder="Chọn nơi ở hiện tại"
-                    onChange={(e) => setPlaceType(e)} style={{width: "100%"}}>
-              <Option value="" key="0"></Option>
+                    value={dataInsert.place_type}
+                    onChange={(e) => editDataInsert('place_type', e)} style={{width: "100%"}}>
+              <Option value="" key="0" disabled>Chọn nơi ở hiện tại</Option>
               <Option value={1} key="1">Phòng Phám</Option>
               <Option value={2} key="2">Nhà chung</Option>
               <Option value={3} key="3">Nhà Foster</Option>
@@ -183,12 +184,32 @@ const ListCase = () => {
             </Select>
           </Col>
         </Row>
+        {
+          placeToChoose.length > 0 &&
+          <Row>
+            <Col span={4}>
+            </Col>
+            <Col span={20}>
+              <Select className="w-100"
+                      placeholder="Chọn nơi ở hiện tại"
+                      value={placeId}
+                      onChange={(e) => setPlaceId(e)} style={{width: "100%"}}>
+                {
+                  placeToChoose.map(function (place, key) {
+                    return <Option value={place.id} key={key}>{place.name}</Option>
+                  })
+                }
+              </Select>
+            </Col>
+          </Row>
+        }
         <Row>
           <Col span={4}>
             Trạng thái
           </Col>
           <Col span={20}>
-            <Select className="w-100" placeholder="chọn trạng thái" value={status} onChange={(e) => setStatus(e)}>
+            <Select className="w-100" placeholder="chọn trạng thái" value={dataInsert.status}
+                    onChange={(e) => editDataInsert('status', e)}>
               <Option value={1}>Đang cứu hộ</Option>
               <Option value={2}>Sẵn sàng tìm chủ</Option>
               <Option value={3}>Đã đăng tìm chủ</Option>
@@ -207,22 +228,22 @@ const ListCase = () => {
               <Col span={5}>
                 <Input
                   placeholder="Nhập tên chủ nuôi"
-                  value={fosterName}
-                  onChange={(e) => setFosterName(e.target.value)}/>
+                  value={dataInsert.foster_name}
+                  onChange={(e) => editDataInsert('foster_name', e.target.value)}/>
               </Col>
               <Col span={3} className="padding-left-sm">ĐT:</Col>
               <Col span={5}>
                 <Input
                   placeholder="Nhập sđt chủ nuôi"
-                  value={fosterPhone}
-                  onChange={(e) => setFosterPhone(e.target.value)}/>
+                  value={dataInsert.foster_phone}
+                  onChange={(e) => editDataInsert('foster_phone', e.target.value)}/>
               </Col>
               <Col span={3} className="padding-left-sm">Đ/C:</Col>
               <Col span={5}>
                 <Input
                   placeholder="Nhập địa chỉ chủ nuôi"
-                  value={fosterAddress}
-                  onChange={(e) => setFosterAddress(e.target.value)}/>
+                  value={dataInsert.foster_address}
+                  onChange={(e) => editDataInsert('foster_address', e.target.value)}/>
               </Col>
             </Row>
           </Col>
@@ -235,8 +256,8 @@ const ListCase = () => {
             <TextArea
               placeholder="Nhập ghi chú"
               autoSize={{minRows: 2, maxRows: 6}}
-              value={note}
-              onChange={(e) => setNote(e.target.value)}
+              value={dataInsert.note}
+              onChange={(e) => editDataInsert('note', e.target.value)}
             />
           </Col>
         </Row>

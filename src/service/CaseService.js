@@ -10,8 +10,13 @@ const createCase = async (data, images) => {
   try {
     let formData = new FormData();
     for(let i in data) {
-      formData.append(i, data[i]);
+      if(i === 'receive_date') {
+        formData.append(i, data[i].format('YYYY/MM/DD'));
+      } else {
+        formData.append(i, data[i]);
+      }
     }
+
     for (let i in images) {
       formData.append("images", images[i].originFileObj);
     }

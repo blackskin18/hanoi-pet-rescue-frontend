@@ -17,7 +17,7 @@ const createPlace = async (data) => {
   }
 }
 
-const getPlaces = async (searchParams, page, type = '') => {
+const getPlaces = async (searchParams = {}, page = '', type = '') => {
   try {
     let response = await axios.get(API.GET_PLACES, {
       params: {
