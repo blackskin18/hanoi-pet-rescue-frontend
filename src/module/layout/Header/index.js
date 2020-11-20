@@ -64,13 +64,14 @@ const Header = () => {
             <Menu.Item key="sub3-3"><Link to="/places/1">Phòng khám</Link></Menu.Item>
             <Menu.Item key="sub3-4"><Link to="/places/2">Nhà chung</Link></Menu.Item>
             <Menu.Item key="sub3-5"><Link to="/places/3">Nhà Foster</Link></Menu.Item>
-            <Menu.Item key="sub3-5"><Link to="/places/4">Nhà chủ nuôi mới</Link></Menu.Item>
+            <Menu.Item key="sub3-6"><Link to="/places/4">Nhà chủ nuôi mới</Link></Menu.Item>
           </SubMenu>
           <SubMenu key="sub2" icon={<TeamOutlined />} title="Nhóm chuyên môn">
             <Menu.Item key="sub2-1">Tạo nhóm chuyên môn</Menu.Item>
-            <Menu.Item key="sub2-2">Điều phối, cứu hộ, y tế</Menu.Item>
-            <Menu.Item key="sub2-3">Tình nguyện viên</Menu.Item>
-            <Menu.Item key="sub2-4">Foster</Menu.Item>
+            <Menu.Item key="sub2-2"><Link to="/users/type">Tất cả</Link></Menu.Item>
+            <Menu.Item key="sub2-2"><Link to="/users/type/1">Điều phối, cứu hộ, y tế, admin</Link></Menu.Item>
+            <Menu.Item key="sub2-3"><Link to="/users/type/2">Tình nguyện viên</Link></Menu.Item>
+            <Menu.Item key="sub2-4"><Link to="/users/type/3">Foster</Link></Menu.Item>
           </SubMenu>
           <Menu.Item key="10" icon={<PieChartOutlined/>}>
             Thư viện ảnh

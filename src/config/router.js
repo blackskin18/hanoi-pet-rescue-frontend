@@ -4,6 +4,7 @@ import CreatePlace from '../module/page/CreatePlace'
 import CreateCase  from '../module/page/CreateCase'
 import CreateUser  from '../module/page/CreateUser'
 import ListPlace   from '../module/page/ListPlace'
+import ListUser   from '../module/page/ListUser'
 import Login   from '../module/page/Login/login'
 
 export default [
@@ -34,6 +35,10 @@ export default [
   {
     path: '/places/:type?',
     page: ListPlace
+  },
+  {
+    path: '/list-user/:type?',
+    page: ListUser
   },
   {
     path: '/',

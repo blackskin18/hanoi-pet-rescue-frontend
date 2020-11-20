@@ -3,7 +3,7 @@ import './style.scss'
 import {Row, Col, Divider, Input, Button, Select, Modal, Upload, DatePicker} from 'antd';
 import {PlusOutlined}                                                        from '@ant-design/icons';
 import CaseService                                                           from '../../../service/CaseService';
-import {PLACE_TYPE}                                                          from "../../../config";
+import {PLACE_TYPE_TEXT}                                                          from "../../../config";
 import PlaceService                                                          from "../../../service/PlaceService";
 
 const {Option}   = Select;
@@ -25,13 +25,15 @@ const ListCase = () => {
   const [previewTitle, setPreviewTitle]     = useState('');
   const [images, setImages]                 = useState([]);
   const [placeId, setPlaceId]               = useState(null);
-  // const [placeType, setPlaceType]           = useState(null);
   const [placeToChoose, setPlaceToChoose]   = useState([]);
   const [dataInsert, setDataInsert]         = useState({});
+  const [placeTypeText, setPlaceTypeText] = useState('');
 
 
   useEffect(() => {
     getPlaceSelect()
+    console.log(PLACE_TYPE_TEXT[dataInsert.place_type])
+    setPlaceTypeText(PLACE_TYPE_TEXT[dataInsert.place_type])
   }, [dataInsert.place_type])
 
   const getPlaceSelect = async () => {
@@ -154,23 +156,46 @@ const ListCase = () => {
             </Row>
           </Col>
         </Row>
+
         <Row>
-          <Col span={4}>
-            Mô tả
+          <Col span={12}>
+            <Row>
+              <Col span={8}>Giới tính</Col>
+              <Col span={16}>
+                <Select className="w-100" placeholder="Chọn giới tính" value={dataInsert.gender}
+                        onChange={(e) => editDataInsert('gender', e)}>
+                  <Option value="1">Đực</Option>
+                  <Option value="2">Cái</Option>
+                  <Option value="3">Chưa rõ</Option>
+                </Select>
+              </Col>
+            </Row>
           </Col>
-          <Col span={20}>
-            <TextArea
-              placeholder="Nhập mô tả"
-              autoSize={{minRows: 2, maxRows: 6}}
-              value={dataInsert.description}
-              onChange={(e) => editDataInsert('description', e.target.value)}
-            />
+          <Col span={12}>
+            <Row>
+              <Col span={8} className="padding-left-sm">Tuổi</Col>
+              <Col span={8}>
+                <Input
+                  placeholder="Nhập số tháng"
+                  width="100%"
+                  className="w-100"
+                  value={dataInsert.age_month}
+                  onChange={(e) => editDataInsert('age_month', e.target.value)}/>
+              </Col>
+              <Col span={8}>
+                <Input
+                  placeholder="Nhập số năm"
+                  width="100%"
+                  className="w-100"
+                  value={dataInsert.age_year}
+                  onChange={(e) => editDataInsert('age_year', e.target.value)}/>
+              </Col>
+            </Row>
           </Col>
         </Row>
+
         <Row>
-          <Col span={4}>
-            Nơi ở hiện tại
-          </Col>
+          <Col span={4}>Nơi ở hiện tại</Col>
           <Col span={20}>
             <Select className="w-100"
                     placeholder="Chọn nơi ở hiện tại"
@@ -188,10 +213,11 @@ const ListCase = () => {
           placeToChoose.length > 0 &&
           <Row>
             <Col span={4}>
+              Chọn {placeTypeText}
             </Col>
             <Col span={20}>
               <Select className="w-100"
-                      placeholder="Chọn nơi ở hiện tại"
+                      placeholder={'Chọn '+ placeTypeText}
                       value={placeId}
                       onChange={(e) => setPlaceId(e)} style={{width: "100%"}}>
                 {
@@ -203,6 +229,21 @@ const ListCase = () => {
             </Col>
           </Row>
         }
+
+
+        <Row>
+          <Col span={4}>
+            Mô tả
+          </Col>
+          <Col span={20}>
+            <TextArea
+              placeholder="Nhập mô tả"
+              autoSize={{minRows: 2, maxRows: 6}}
+              value={dataInsert.description}
+              onChange={(e) => editDataInsert('description', e.target.value)}
+            />
+          </Col>
+        </Row>
         <Row>
           <Col span={4}>
             Trạng thái
@@ -263,7 +304,7 @@ const ListCase = () => {
         </Row>
         <Row>
           <Col span={24} className="text-center">
-            <Button type="primary" size="large" onClick={() => handleCreateCase()}>
+            <Button type="primary" size="large" onClick={handleCreateCase}>
               Tạo case
             </Button>
           </Col>
