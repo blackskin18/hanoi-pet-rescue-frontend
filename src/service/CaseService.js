@@ -3,7 +3,9 @@ import axios from 'axios'
 
 const API     = {
   CREATE_CASE: API_URL + 'cases',
-  GET_CASES: API_URL + 'cases'
+  GET_CASES: API_URL + 'cases',
+  GET_CASE_DETAIL: API_URL + 'cases/{id}',
+  DELETE_CASE: API_URL + 'cases/{id}'
 }
 
 const createCase = async (data, images) => {
@@ -54,8 +56,28 @@ const getCases = async (searchParams, page,  limit = '', type = '') => {
   }
 }
 
+const getCaseDetail = async (id) => {
+  try {
+    let response = await axios.get(API.GET_CASE_DETAIL.replace('{id}', id));
+    return response.data;
+  } catch (error) {
+    return error.response;
+  }
+}
+
+const deleteCase = async (id) => {
+  try {
+    let response = await axios.delete(API.DELETE_CASE.replace('{id}', id));
+    return response.data;
+  } catch (error) {
+    return error.response.data;
+  }
+}
+
 export default {
   createCase,
-  getCases
+  getCases,
+  getCaseDetail,
+  deleteCase
 }
 

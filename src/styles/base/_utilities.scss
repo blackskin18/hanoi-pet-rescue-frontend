@@ -104,6 +104,9 @@
     }
 
     &-bottom {
+        &-5 {
+            margin-bottom: .5rem;
+        }
         &-xm {
             margin-bottom: 1rem;
         }
@@ -116,6 +119,9 @@
         &-lg {
             margin-bottom: 5.5rem;
         }
+        &-none {
+            margin-bottom: 0 !important;
+        }
     }
 }
 
@@ -126,6 +132,12 @@
     &-left {
         &-sm {
             padding-left: 2rem;
+        }
+    }
+
+    &-bottom{
+        &-none {
+            padding-bottom: 0;
         }
     }
 }

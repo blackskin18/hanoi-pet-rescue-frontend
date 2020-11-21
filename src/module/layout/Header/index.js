@@ -68,10 +68,10 @@ const Header = () => {
           </SubMenu>
           <SubMenu key="sub2" icon={<TeamOutlined />} title="Nhóm chuyên môn">
             <Menu.Item key="sub2-1">Tạo nhóm chuyên môn</Menu.Item>
-            <Menu.Item key="sub2-2"><Link to="/users/type">Tất cả</Link></Menu.Item>
-            <Menu.Item key="sub2-2"><Link to="/users/type/1">Điều phối, cứu hộ, y tế, admin</Link></Menu.Item>
-            <Menu.Item key="sub2-3"><Link to="/users/type/2">Tình nguyện viên</Link></Menu.Item>
-            <Menu.Item key="sub2-4"><Link to="/users/type/3">Foster</Link></Menu.Item>
+            <Menu.Item key="sub2-2"><Link to="/list-user">Tất cả</Link></Menu.Item>
+            <Menu.Item key="sub2-2"><Link to="/list-user/1">Điều phối, cứu hộ, y tế, admin</Link></Menu.Item>
+            <Menu.Item key="sub2-3"><Link to="/list-user/2">Tình nguyện viên</Link></Menu.Item>
+            <Menu.Item key="sub2-4"><Link to="/list-user/3">Foster</Link></Menu.Item>
           </SubMenu>
           <Menu.Item key="10" icon={<PieChartOutlined/>}>
             Thư viện ảnh

@@ -80,7 +80,7 @@ const ListCase = () => {
 
   return (<div className="home-page">
     <Divider orientation="left">
-      <h4 className="text-primary-green left-align padding-left-xs">Tạo case </h4>
+      <h4 className="text-primary-green left-align padding-left-xs">Tạo case</h4>
     </Divider>
     <Row justify="space-between" className="filter-row">
       <Col span={8}>
@@ -269,22 +269,22 @@ const ListCase = () => {
               <Col span={5}>
                 <Input
                   placeholder="Nhập tên chủ nuôi"
-                  value={dataInsert.foster_name}
-                  onChange={(e) => editDataInsert('foster_name', e.target.value)}/>
+                  value={dataInsert.owner_name}
+                  onChange={(e) => editDataInsert('owner_name', e.target.value)}/>
               </Col>
               <Col span={3} className="padding-left-sm">ĐT:</Col>
               <Col span={5}>
                 <Input
                   placeholder="Nhập sđt chủ nuôi"
-                  value={dataInsert.foster_phone}
-                  onChange={(e) => editDataInsert('foster_phone', e.target.value)}/>
+                  value={dataInsert.owner_phone}
+                  onChange={(e) => editDataInsert('owner_phone', e.target.value)}/>
               </Col>
               <Col span={3} className="padding-left-sm">Đ/C:</Col>
               <Col span={5}>
                 <Input
                   placeholder="Nhập địa chỉ chủ nuôi"
-                  value={dataInsert.foster_address}
-                  onChange={(e) => editDataInsert('foster_address', e.target.value)}/>
+                  value={dataInsert.owner_address}
+                  onChange={(e) => editDataInsert('owner_address', e.target.value)}/>
               </Col>
             </Row>
           </Col>

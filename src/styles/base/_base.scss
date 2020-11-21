@@ -33,3 +33,7 @@ body {
     margin: 0 5rem;
     padding-top: 2rem;
 }
+
+button:focus{
+    outline: none;
+}

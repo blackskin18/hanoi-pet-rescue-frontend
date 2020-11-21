@@ -1,12 +1,13 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect}    from 'react'
 import './style.scss'
-import {Table, Space, Tag}          from 'antd';
-import {SearchOutlined}             from '@ant-design/icons';
-import UserService                  from "../../../service/UserService";
-import {SearchText}                 from '../../component/SearchInput/index';
-import {Link}                       from "react-router-dom";
-
-const ROLE_TAG = ["magenta", "red", "volcano", "orange", "gold", "lime", "green", "cyan", "blue", "geekblue", "purple"]
+import {Table, message, Tag, Popconfirm} from 'antd';
+import {SearchOutlined}                from '@ant-design/icons';
+import UserService                     from "../../../service/UserService";
+import {SearchText}                    from '../../component/SearchInput/index';
+import {Link}                          from "react-router-dom";
+import {ROLE_TAG}                      from '../../../config'
+import {Button, ButtonLink}            from "../Button";
+import CaseService                     from "../../../service/CaseService";
 
 const ListCaseTable = (props) => {
   const [searchParams, setSearchParam] = useState({})
@@ -15,11 +16,11 @@ const ListCaseTable = (props) => {
   const [listUsers, setListUsers]      = useState([])
 
   useEffect(() => {
-    getPlaceData()
+    getUserData()
     console.log(props.type)
   }, [props.type])
 
-  const getPlaceData = async (search = {}, page = null) => {
+  const getUserData = async (search = {}, page = null) => {
     if (!page) page = currentPage
     if (!search) search = searchParams
     let response = await UserService.getUsers(search, page, props.type)
@@ -46,7 +47,7 @@ const ListCaseTable = (props) => {
       ...searchParams,
       [dataIndex]: selectedKeys[0]
     })
-    getPlaceData({...searchParams, [dataIndex]: selectedKeys[0]}, 1)
+    getUserData({...searchParams, [dataIndex]: selectedKeys[0]}, 1)
   }
 
   const handleReset = (clearFilters, dataIndex) => {
@@ -55,7 +56,7 @@ const ListCaseTable = (props) => {
     setSearchParam({
       ...searchParams
     })
-    getPlaceData({...searchParams}, 1)
+    getUserData({...searchParams}, 1)
   }
 
   const getColumnSearchProps = dataIndex => ({
@@ -69,6 +70,16 @@ const ListCaseTable = (props) => {
       handleReset={handleReset}/>,
     filterIcon    : filtered => <SearchOutlined style={{color: filtered ? '#1890ff' : undefined}}/>,
   });
+
+  const confirmDelete = async (id) => {
+    let response = await UserService.deleteUser(id);
+    if(response.code === 1) {
+      message.success('Xóa thành công');
+      getUserData()
+    } else {
+      message.error(response.message);
+    }
+  }
 
   const columns = [
     {
@@ -104,12 +115,19 @@ const ListCaseTable = (props) => {
       title    : 'Hành động',
       dataIndex: 'action',
       key      : 'action',
-      render   : () => {
-        return <Space size="middle">
-          <Link to="">Chi tiết</Link>
-          <Link to="">Sửa</Link>
-          <Link to="">Xóa</Link>
-        </Space>
+      render   : (text, object) => {
+        return <div>
+          <ButtonLink className="margin-bottom-5" type="detail" to={"/detail-user/" + object.id}>Chi tiết</ButtonLink><br/>
+          <Button className="margin-bottom-5" type="edit" onClick={() => console.log('khanh')}>Sửa</Button><br/>
+          <Popconfirm
+            title="Are you sure to delete this task?"
+            onConfirm={() => confirmDelete(object.id)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button type="delete">Xóa</Button>
+          </Popconfirm>
+        </div>
       }
     }
   ];
@@ -123,7 +141,7 @@ const ListCaseTable = (props) => {
         pagination={{
           total   : total, defaultCurrent: 1, defaultPageSize: 20, showQuickJumper: true, showSizeChanger: false,
           onChange: (page, size) => {
-            getPlaceData(null, page, size)
+            getUserData(null, page, size)
             setCurrentPage(page)
           }
         }}

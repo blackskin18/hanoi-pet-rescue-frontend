@@ -4,8 +4,11 @@ import CreatePlace from '../module/page/CreatePlace'
 import CreateCase  from '../module/page/CreateCase'
 import CreateUser  from '../module/page/CreateUser'
 import ListPlace   from '../module/page/ListPlace'
-import ListUser   from '../module/page/ListUser'
-import Login   from '../module/page/Login/login'
+import ListUser    from '../module/page/ListUser'
+import Login       from '../module/page/Login/login'
+import DetailCase  from '../module/page/DetailCase'
+import DetailPlace from '../module/page/DetailPlace'
+import DetailUser  from '../module/page/DetailUser'
 
 export default [
   {
@@ -23,6 +26,18 @@ export default [
   {
     path: '/create-case/',
     page: CreateCase
+  },
+  {
+    path: '/detail-case/:id',
+    page: DetailCase
+  },
+  {
+    path: '/detail-user/:id',
+    page: DetailUser
+  },
+  {
+    path: '/detail-place/:id',
+    page: DetailPlace
   },
   {
     path: '/create-user/',

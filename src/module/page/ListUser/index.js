@@ -4,8 +4,8 @@ import UserTable   from '../../component/UserTable';
 import {useParams} from "react-router";
 import './style.scss'
 
-
 const ListPlace = () => {
+  console.log('aaaa')
   var {type} = useParams()
   return (<div className="home-page">
     <Divider orientation="left">

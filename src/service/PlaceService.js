@@ -5,6 +5,8 @@ const API     = {
   CREATE_PLACE: API_URL + 'places',
   GET_PLACES: API_URL + 'places',
   GET_ROOT_HOSPITAL: API_URL + 'places/root-hospitals',
+  GET_PLACE_DETAIL: API_URL + 'places/{id}',
+  DELETE_PLACE: API_URL + 'places/{id}'
 }
 
 const createPlace = async (data) => {
@@ -43,9 +45,28 @@ const getRootHospitals = async () => {
   }
 }
 
+const getPlaceDetail = async (id) => {
+  try {
+    let response = await axios.get(API.GET_PLACE_DETAIL.replace('{id}', id));
+    return response.data;
+  } catch (error) {
+    return error.response;
+  }
+}
+
+const deletePlace = async (id) => {
+  try {
+    let response = await axios.delete(API.DELETE_PLACE.replace('{id}', id));
+    return response.data;
+  } catch (error) {
+    return error.response.data;
+  }
+}
+
 export default {
   createPlace,
   getPlaces,
-  getRootHospitals
+  getRootHospitals,
+  getPlaceDetail,
+  deletePlace
 }
-

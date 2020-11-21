@@ -1,0 +1,49 @@
+@import "../../../styles/abstracts/variables";
+
+.detail-case-page {
+  & .fullscreen .image-gallery-slide.center {
+    height: inherit;
+  }
+  & .image-gallery-slide.center {
+    height: 500px;
+    & div {
+      height: 100%;
+      background: black;
+    }
+  }
+
+  & .image-gallery-content .image-gallery-slide .image-gallery-image {
+    height: 100%;
+    object-fit: contain;
+  }
+
+  & .image-gallery-thumbnail + .image-gallery-thumbnail{
+    height: 100px;
+    background: black;
+  }
+
+  & .image-gallery-thumbnail .image-gallery-thumbnail-inner {
+    height: 100%;
+  }
+
+  & .image-gallery-thumbnail .image-gallery-thumbnail-image {
+    height: 100%;
+    object-fit: contain;
+  }
+
+  & .row-info {
+    border-bottom: 1px solid $grey_color;
+    padding: .5rem 0;
+  }
+
+  & .button-link {
+    cursor: pointer;
+    &:hover {
+      text-decoration: underline;
+    }
+
+    &-edit {
+      margin-right: 1rem;
+    }
+  }
+}

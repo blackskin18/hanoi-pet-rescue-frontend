@@ -4,6 +4,8 @@ import axios from 'axios'
 const API     = {
   CREATE_USER: API_URL + 'users',
   GET_USERS: API_URL + 'users',
+  GET_USER_DETAIL: API_URL + 'users/{id}',
+  DELETE_USER: API_URL + 'users/{id}',
 }
 
 const createUser = async (data) => {
@@ -31,8 +33,29 @@ const getUsers = async (searchParams, page, type = '') => {
   }
 }
 
+
+const getUserDetail = async (id) => {
+  try {
+    let response = await axios.get(API.GET_USER_DETAIL.replace('{id}', id));
+    return response.data;
+  } catch (error) {
+    return error.response;
+  }
+}
+
+const deleteUser = async (id) => {
+  try {
+    let response = await axios.delete(API.DELETE_USER.replace('{id}', id));
+    return response.data;
+  } catch (error) {
+    return error.response.data;
+  }
+}
+
 export default {
   createUser,
   getUsers,
+  getUserDetail,
+  deleteUser
 }
 

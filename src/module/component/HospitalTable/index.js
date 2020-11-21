@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect }      from 'react'
 import './style.scss'
-import { Table, Space}                      from 'antd';
-import { SearchOutlined }             from '@ant-design/icons';
-import PlaceService                   from "../../../service/PlaceService";
-import { SearchText }                 from '../../component/SearchInput/index';
-import {Link , useHistory} from "react-router-dom";
+import {Table, Space, Popconfirm, message} from 'antd';
+import { SearchOutlined }                  from '@ant-design/icons';
+import PlaceService                        from "../../../service/PlaceService";
+import { SearchText }                      from '../../component/SearchInput/index';
+import {Link , useHistory}                 from "react-router-dom";
+import {Button, ButtonLink}                from "../Button";
+import UserService                         from "../../../service/UserService";
 
 const ListCaseTable = (props) => {
   const [searchParams, setSearchParam] = useState({})
@@ -20,7 +22,6 @@ const ListCaseTable = (props) => {
     if (!page) page = currentPage
     if (!search) search = searchParams
     let response = await PlaceService.getPlaces(search, page, 1)
-    console.log(response)
     setListHospitals(response.data.places)
     setTotal(response.data.total)
     moveToTop()
@@ -68,6 +69,15 @@ const ListCaseTable = (props) => {
     filterIcon: filtered => <SearchOutlined style={{color: filtered ? '#1890ff' : undefined}}/>,
   });
 
+  const confirmDelete = async (id) => {
+    let response = await PlaceService.deletePlace(id);
+    if(response.code === 1) {
+      message.success('Xóa thành công');
+      getHospitalData()
+    } else {
+      message.error(response.message ? response.message : 'Xóa thất bại, vui lòng liên hệ kỹ thuật');
+    }
+  }
 
   const columns = [
     {
@@ -127,11 +137,19 @@ const ListCaseTable = (props) => {
       title: 'Hành động',
       dataIndex: 'action',
       key: 'action',
-      render: () => {
-        return <Space size="middle">
-          <Link to="">Sửa</Link>
-          <Link to="">Xóa</Link>
-        </Space>
+      render   : (text, object) => {
+        return <div>
+          <ButtonLink className="margin-bottom-5" type="detail" to={"/detail-place/" + object.id}>Chi tiết</ButtonLink><br/>
+          <Button className="margin-bottom-5" type="edit" onClick={() => console.log('khanh')}>Sửa</Button><br/>
+          <Popconfirm
+            title="Are you sure to delete this task?"
+            onConfirm={() => confirmDelete(object.id)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button type="delete">Xóa</Button>
+          </Popconfirm>
+        </div>
       }
     },
   ];
