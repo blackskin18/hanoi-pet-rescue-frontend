@@ -1,14 +1,14 @@
-import React, {useState, useEffect}                                         from 'react'
+import React, {useState, useEffect}                                from 'react'
 import './style.scss'
-import {Row, Col, Divider, Descriptions, Tag} from 'antd';
-import {ROLE_TAG}                from '../../../config'
+import {Row, Col, Divider, Descriptions, Tag, Popconfirm, message} from 'antd';
+import {ROLE_TAG}                                                  from '../../../config'
+import {useHistory, useParams}                                     from "react-router";
+import UserService                                                 from "../../../service/UserService";
 import "react-image-gallery/styles/scss/image-gallery.scss";
-
-import {useParams} from "react-router";
-import UserService from "../../../service/UserService";
 
 const DetailCase = () => {
   const [info, setInfo] = useState({});
+  const history         = useHistory()
   var {id}              = useParams()
 
   useEffect(() => {
@@ -17,15 +17,36 @@ const DetailCase = () => {
 
   const getDetailInfo = async () => {
     let response = await UserService.getUserDetail(id);
-    console.log(response)
     setInfo(response.data)
   }
 
-  return (<div className="home-page">
+  const confirmDelete = async () => {
+    let response = await UserService.deleteUser(id);
+    if (response.code === 1) {
+      message.success('Xóa thành công');
+      history.push('/list-user')
+    } else {
+      message.error(response.message ? response.message : 'Xóa thất bại, vui lòng liên hệ kỹ thuật');
+    }
+  }
+
+  return (<div className="detail-user-page">
     <Divider orientation="left">
-      <h4 className="text-primary-green left-align padding-left-xs">Thông tin thành viên {info.code_full}</h4>
+      <h4 className="text-primary-green left-align padding-left-xs margin-bottom-none">Thông tin thành
+        viên {info.code_full}</h4>
     </Divider>
-    <Row justify="space-between" className="detail-case-page">
+    <Row className="margin-bottom-5">
+      <a className="button-link button-link-edit">Sửa</a>
+      <Popconfirm
+        title="Are you sure to delete this task?"
+        onConfirm={confirmDelete}
+        okText="Yes"
+        cancelText="No"
+      >
+        <a className="button-link button-link-delete">Xóa</a>
+      </Popconfirm>
+    </Row>
+    <Row justify="space-between">
       <Col offset={5} span={14} className="padding-left-sm">
         <Descriptions
           bordered

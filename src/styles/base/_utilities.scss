@@ -123,6 +123,11 @@
             margin-bottom: 0 !important;
         }
     }
+    &-right {
+        &-xs{
+          margin-right: 1rem;
+        }
+    }
 }
 
 .padding {

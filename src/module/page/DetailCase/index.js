@@ -1,13 +1,13 @@
-import React, {useState, useEffect}                   from 'react'
+import React, {useState, useEffect}                           from 'react'
 import './style.scss'
-import {Row, Col, Divider, Descriptions, Popconfirm}  from 'antd';
-import CaseService                                    from '../../../service/CaseService';
-import {PLACE_TYPE_TEXT, CASE_TYPE_TEXT, GENDER_TEXT} from "../../../config";
-import {Link, useHistory}                             from "react-router-dom";
-import {format_date, detect_age}                      from '../../../utils/helper'
+import {Row, Col, Divider, Descriptions, Popconfirm, message} from 'antd';
+import CaseService                                            from '../../../service/CaseService';
+import {PLACE_TYPE_TEXT, CASE_TYPE_TEXT, GENDER_TEXT}         from "../../../config";
+import {Link, useHistory}                                     from "react-router-dom";
+import {format_date, detect_age}                              from '../../../utils/helper'
+import ImageGallery                                           from 'react-image-gallery';
+import {useParams}                                            from "react-router";
 import "react-image-gallery/styles/scss/image-gallery.scss";
-import ImageGallery                                   from 'react-image-gallery';
-import {useParams}                                    from "react-router";
 
 const DetailCase = () => {
   const [info, setInfo]     = useState({});
@@ -31,7 +31,10 @@ const DetailCase = () => {
   const confirmDelete = async () => {
     let response = await CaseService.deleteCase(id);
     if (response.code === 1) {
+      message.success('Xóa thành công');
       history.push('/list-case')
+    } else {
+      message.error(response.message ? response.message : 'Xóa thất bại, vui lòng liên hệ kỹ thuật');
     }
   }
 

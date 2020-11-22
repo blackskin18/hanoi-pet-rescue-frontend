@@ -1,11 +1,10 @@
 import React, { useEffect, useState }       from 'react';
-import { Row, Col, Menu, Dropdown, Button } from 'antd';
+import { Menu } from 'antd';
 import { Link, useHistory }                 from "react-router-dom";
 import {
   EnvironmentOutlined,
   PieChartOutlined,
   UserOutlined,
-  MailOutlined,
   PlusOutlined,
   TableOutlined,
   TeamOutlined
@@ -41,10 +40,14 @@ const Header = () => {
       <div className='bottom-vector hide-under-lg'>
         <div lg={{span: 24}} span={0} className="header-svg">
           <span><UserOutlined/></span>
-          <span className="header-username text-gray">{name}</span>
+          <span className="header-username text-gray">
+            <Link to={"/detail-user/" + localStorage.getItem('id')}>
+            {name}
+            </Link>
+          </span>
         </div>
       </div>
-      <div>
+      <div className="header-menu-box">
         <Menu
           defaultSelectedKeys={['1']}
           mode="inline"
@@ -69,15 +72,14 @@ const Header = () => {
           <SubMenu key="sub2" icon={<TeamOutlined />} title="Nhóm chuyên môn">
             <Menu.Item key="sub2-1">Tạo nhóm chuyên môn</Menu.Item>
             <Menu.Item key="sub2-2"><Link to="/list-user">Tất cả</Link></Menu.Item>
-            <Menu.Item key="sub2-2"><Link to="/list-user/1">Điều phối, cứu hộ, y tế, admin</Link></Menu.Item>
-            <Menu.Item key="sub2-3"><Link to="/list-user/2">Tình nguyện viên</Link></Menu.Item>
-            <Menu.Item key="sub2-4"><Link to="/list-user/3">Foster</Link></Menu.Item>
+            <Menu.Item key="sub2-3"><Link to="/list-user/1">Điều phối, cứu hộ, y tế, admin</Link></Menu.Item>
+            <Menu.Item key="sub2-4"><Link to="/list-user/2">Tình nguyện viên</Link></Menu.Item>
+            <Menu.Item key="sub2-5"><Link to="/list-user/3">Foster</Link></Menu.Item>
           </SubMenu>
-          <Menu.Item key="10" icon={<PieChartOutlined/>}>
-            Thư viện ảnh
-          </Menu.Item>
           <Menu.Item key="11" icon={<PieChartOutlined/>}>
-            Lịch sử doạt động
+            <Link to="/report">
+              Báo cáo cứu hộ
+            </Link>
           </Menu.Item>
         </Menu>
       </div>

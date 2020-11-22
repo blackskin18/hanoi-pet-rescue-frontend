@@ -1,0 +1,17 @@
+@import "../../../styles/abstracts/variables";
+
+.button-export {
+  border: none;
+  background-color: inherit;
+  color: $primary_color;
+  text-decoration: underline;
+  cursor: pointer;
+  transition: .1s;
+
+  &:hover {
+    transform: translateY(-1px);
+  }
+  &:active {
+    transform: translateY(0);
+  }
+}

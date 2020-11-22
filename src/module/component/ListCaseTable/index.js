@@ -27,8 +27,11 @@ const ListCaseTable = (props) => {
     if(!search) search = searchParams
     if(!size) size = limit
     let response = await CaseService.getCases(search, page, size, props.type)
-    setListCase(response.data.cases)
-    setTotal(response.data.total)
+    if(response && response.data) {
+      setListCase(response.data.cases)
+      setTotal(response.data.total)
+    }
+
     moveToTop()
   }
 
@@ -206,25 +209,6 @@ const ListCaseTable = (props) => {
     <Row justify="space-between" className="filter-row">
       <Col className="count-case">
         Tổng số case: { total }
-      </Col>
-      <Col>
-        <Row gutter={10}>
-          <Col>
-            <Select defaultValue="Năm" style={{width: 120}}>
-              <Option value="jack">2020</Option>
-            </Select>
-          </Col>
-          <Col>
-            <Select defaultValue="Tháng" style={{width: 120}}>
-              <Option value="jack">12</Option>
-            </Select>
-          </Col>
-          <Col>
-            <Select defaultValue="Ngày" style={{width: 120}}>
-              <Option value="jack">08</Option>
-            </Select>
-          </Col>
-        </Row>
       </Col>
     </Row>
     <div className="list-case-table">

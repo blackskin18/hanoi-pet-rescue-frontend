@@ -1,18 +1,15 @@
-import React, {useState, useEffect}                   from 'react'
+import React, {useState, useEffect}                           from 'react'
 import './style.scss'
-import {Row, Col, Divider, Descriptions}              from 'antd';
-import PlaceService                                   from '../../../service/PlaceService';
-import {PLACE_TYPE_TEXT, CASE_TYPE_TEXT, GENDER_TEXT} from "../../../config";
-import {Link, useHistory}                             from "react-router-dom";
-
-import {format_date, detect_age} from '../../../utils/helper'
-
+import {Row, Col, Divider, Descriptions, Popconfirm, message} from 'antd';
+import PlaceService                                           from '../../../service/PlaceService';
+import {PLACE_TYPE_TEXT, CASE_TYPE_TEXT, GENDER_TEXT}         from "../../../config";
+import {Link, useHistory}                                     from "react-router-dom";
 
 import {useParams} from "react-router";
 
-
 const DetailCase = () => {
   const [info, setInfo] = useState({});
+  const history         = useHistory()
   var {id}              = useParams()
 
   useEffect(() => {
@@ -24,17 +21,40 @@ const DetailCase = () => {
     setInfo(response.data)
   }
 
-  return (<div className="home-page">
+  const confirmDelete = async () => {
+    let response = await PlaceService.deletePlace(id);
+    if (response.code === 1) {
+      message.success('Xóa thành công');
+      history.push('/places/1')
+    } else {
+      message.error(response.message ? response.message : 'Xóa thất bại, vui lòng liên hệ kỹ thuật');
+    }
+  }
+
+  return (<div className="detail-case-page">
     <Divider orientation="left">
-      <h4 className="text-primary-green left-align padding-left-xs">Thông tin {info.type && PLACE_TYPE_TEXT[info.type]}</h4>
+      <h4 className="text-primary-green left-align padding-left-xs margin-bottom-none">Thông
+        tin {info.type && PLACE_TYPE_TEXT[info.type]}</h4>
     </Divider>
-    <Row justify="space-between" className="detail-case-page">
-      <Col span={14} className="padding-left-sm">
+    <Row className="margin-bottom-5">
+      <a className="button-link button-link-edit">Sửa</a>
+      <Popconfirm
+        title="Are you sure to delete this task?"
+        onConfirm={confirmDelete}
+        okText="Yes"
+        cancelText="No"
+      >
+        <a className="button-link button-link-delete">Xóa</a>
+      </Popconfirm>
+    </Row>
+    <Row justify="space-between">
+      <Col span={14} offset={5}>
         <Descriptions
           bordered
           column={2}
         >
-          <Descriptions.Item span={2} label={"Tên " + (PLACE_TYPE_TEXT[info.type] ? PLACE_TYPE_TEXT[info.type] : '')}>{info.name}</Descriptions.Item>
+          <Descriptions.Item span={2}
+                             label={"Tên " + (PLACE_TYPE_TEXT[info.type] ? PLACE_TYPE_TEXT[info.type] : '')}>{info.name}</Descriptions.Item>
           {
             info.children && info.children.length > 0 &&
             <Descriptions.Item span={2} label={"Danh sách chi nhánh"}>

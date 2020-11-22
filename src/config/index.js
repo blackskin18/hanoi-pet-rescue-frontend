@@ -1,4 +1,4 @@
-export const API_URL       = 'http://localhost:8000/api/';
+export const API_URL       = 'https://c10653876100.ngrok.io/api/';
 export const LIMIT_PRODUCT = 6;
 export const LIMIT_NEWEST_POST = 3;
 export const NEWS_POST_CATEGORY = 2;
@@ -21,10 +21,26 @@ export const CASE_TYPE_TEXT = {
   '3': 'Khác',
 }
 
+export const CASE_TYPE = {
+  DOG: '1',
+  CAT: '2',
+  OTHER: '3',
+}
+
+export const CASE_STATUS = {
+  SAVING: '1',
+  POST_FIND_OWNER: '2',
+  FOUND_OWNER: '3',
+  DIED: '4',
+  READY_FIND_OWNER: '5',
+}
+
 export const GENDER_TEXT = {
   '1': 'Đực',
   '2': 'Cái',
   '3': 'Chưa rõ',
 }
+
+
 
 export const ROLE_TAG = ["magenta", "red", "volcano", "orange", "gold", "lime", "green", "cyan", "blue", "geekblue", "purple"]

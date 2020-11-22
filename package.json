@@ -9,14 +9,17 @@
     "moment": "^2.27.0",
     "node-sass": "^4.14.1",
     "react": "^16.13.1",
+    "react-data-export": "^0.6.0",
     "react-dom": "^16.13.1",
+    "react-export-excel": "^0.5.3",
     "react-google-login": "^5.1.22",
     "react-highlight-words": "^0.16.0",
     "react-image-gallery": "^1.0.8",
     "react-responsive-carousel": "^3.2.10",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.1"
+    "react-scripts": "3.4.1",
+    "xlsx": "^0.16.9"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -9,6 +9,7 @@ import Login       from '../module/page/Login/login'
 import DetailCase  from '../module/page/DetailCase'
 import DetailPlace from '../module/page/DetailPlace'
 import DetailUser  from '../module/page/DetailUser'
+import Report      from '../module/page/Report'
 
 export default [
   {
@@ -54,6 +55,10 @@ export default [
   {
     path: '/list-user/:type?',
     page: ListUser
+  },
+  {
+    path: '/report',
+    page: Report
   },
   {
     path: '/',
