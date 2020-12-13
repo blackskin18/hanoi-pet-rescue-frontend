@@ -1,11 +1,14 @@
-import React, {useState, useEffect}                                    from 'react'
+import React, {useState, useEffect}                    from 'react'
 import './style.scss'
-import {Tag, Space, Input, Button, Select, DatePicker} from 'antd';
-import {SearchOutlined}                                                from '@ant-design/icons';
-import {getStatus}                                                     from '../../../service/StatusService';
+import {Col, Row, Tag, Space, Input, Button, Select, DatePicker} from 'antd';
+import {SearchOutlined}                                from '@ant-design/icons';
+import {getStatus}                                     from '../../../service/StatusService';
+import PlaceService                                    from "../../../service/PlaceService";
+import {PLACE_TYPE_TEXT}                               from "../../../config";
 
 const { RangePicker } = DatePicker;
 const dateFormat = 'YYYY/MM/DD';
+const {Option}   = Select;
 
 
 export const SearchText = (props) => {
@@ -42,21 +45,116 @@ export const SearchText = (props) => {
 }
 
 export const SearchPlace = (props) => {
-  // useEffect( () => {
-  //   props.clearFilters()
-  // }, [props.type])
+  const [placeType, setPlaceType] = useState('')
+  const [places, setPlaces] = useState('')
+  const [placeId, setPlaceId] = useState('')
+  const [children, setChildren] = useState('')
+  useEffect( () => {
+    getPlaces()
+  }, [placeType])
 
-  return <div style={{padding: 8}}>
-    <Input
-      ref={node => {
-        // this.searchInput = node;
-      }}
-      placeholder={`Search ${props.dataIndex}`}
-      value={props.selectedKeys[0]}
-      onChange={e => props.setSelectedKeys(e.target.value ? [e.target.value] : [])}
-      onPressEnter={() => props.handleSearch(props.selectedKeys, props.confirm, props.dataIndex)}
-      style={{width: 188, marginBottom: 8, display: 'block'}}
-    />
+  useEffect(() => {
+    getPlaceDetail()
+  }, [placeId])
+
+  const getPlaceDetail = async () => {
+    let response = await PlaceService.getPlaceDetail(placeId)
+    console.log(response)
+    if(response.data && response.data.children) {
+      setChildren(response.data.children)
+    }
+  }
+
+  const getPlaces = async () => {
+    let response = await PlaceService.getPlaces({}, '', placeType, true)
+    setPlaces(response.data.places)
+  }
+
+  return <div style={{padding: 8, width: '500px'}}>
+    <Row>
+      <Col span={8}>
+        Chọn nơi ở hiện tại
+      </Col>
+      <Col span={16}>
+        <Select className="w-100"
+                showSearch
+                placeholder="Chọn nơi ở hiện tại"
+                value={placeType}
+                onChange={(e) => setPlaceType(e)} style={{width: "100%"}}>
+          <Option value="" key="0" disabled>Chọn nơi ở hiện tại</Option>
+          <Option value={1} key="1">Phòng Phám</Option>
+          <Option value={2} key="2">Nhà chung</Option>
+          <Option value={3} key="3">Nhà Foster</Option>
+          <Option value={4} key="4">Nhà Chủ nuôi mới</Option>
+        </Select>
+      </Col>
+    </Row>
+    {
+      placeType &&
+      <Row>
+        <Col span={8}>
+          Chọn {placeType && PLACE_TYPE_TEXT[placeType]}
+        </Col>
+        <Col span={16}>
+          <Select className="w-100"
+                  showSearch
+                  placeholder={'Chọn ' + PLACE_TYPE_TEXT[placeType]}
+                  filterOption={(input, option) =>
+                    option.children && option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                  }
+                  onChange={(e) => {
+                    setPlaceId(e)
+                    props.setSelectedKeys(e ? [e] : '')
+                  }}
+                  style={{width: "100%"}}>
+            {
+              places && places.map(function (place, key) {
+                return <Option value={place.id} key={key}>{place.name}</Option>
+              })
+            }
+          </Select>
+        </Col>
+      </Row>
+    }
+
+    {
+      children && children.length > 0 &&
+      <Row>
+        <Col span={8}>
+          Chọn {placeType && PLACE_TYPE_TEXT[placeType]}
+        </Col>
+        <Col span={16}>
+          <Select className="w-100"
+                  showSearch
+                  placeholder={'Chọn chi nhánh'}
+                  filterOption={(input, option) =>
+                    option.children && option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                  }
+                  onChange={(e) => {
+                    console.log(e)
+                    props.setSelectedKeys(e ? [e] : '')
+                  }}
+                  style={{width: "100%"}}>
+            {
+              children && children.map(function (place, key) {
+                return <Option value={place.id} key={key}>{place.name}</Option>
+              })
+            }
+          </Select>
+        </Col>
+      </Row>
+    }
+
+    {/*<Input*/}
+    {/*  ref={node => {*/}
+    {/*    // this.searchInput = node;*/}
+    {/*  }}*/}
+    {/*  placeholder={`Search ${props.dataIndex}`}*/}
+    {/*  value={props.selectedKeys[0]}*/}
+    {/*  onChange={e => props.setSelectedKeys(e.target.value ? [e.target.value] : [])}*/}
+    {/*  onPressEnter={() => props.handleSearch(props.selectedKeys, props.confirm, props.dataIndex)}*/}
+    {/*  style={{width: 188, marginBottom: 8, display: 'block'}}*/}
+    {/*/>*/}
     <Space>
       <Button
         type="primary"

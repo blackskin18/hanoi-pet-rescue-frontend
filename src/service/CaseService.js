@@ -31,7 +31,7 @@ const createCase = async (data, images) => {
     });
     return response.data;
   } catch (error) {
-    return error.response;
+    return error.response.data;
   }
 }
 

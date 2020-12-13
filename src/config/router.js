@@ -1,6 +1,6 @@
-import Home        from '../module/page/Home'
 import ListCase    from '../module/page/ListCase'
 import CreatePlace from '../module/page/CreatePlace'
+import CreateHospital from '../module/page/CreateHospital'
 import CreateCase  from '../module/page/CreateCase'
 import CreateUser  from '../module/page/CreateUser'
 import ListPlace   from '../module/page/ListPlace'
@@ -12,10 +12,6 @@ import DetailUser  from '../module/page/DetailUser'
 import Report      from '../module/page/Report'
 
 export default [
-  {
-    path: '/home',
-    page: Home
-  },
   {
     path: '/login',
     page: Login
@@ -45,8 +41,12 @@ export default [
     page: CreateUser
   },
   {
-    path: '/create-place',
+    path: '/create-place/:type',
     page: CreatePlace
+  },
+  {
+    path: '/create-hospital/:branch?',
+    page: CreateHospital
   },
   {
     path: '/places/:type?',
@@ -62,6 +62,6 @@ export default [
   },
   {
     path: '/',
-    page: Home
+    page: ListCase
   }
 ]

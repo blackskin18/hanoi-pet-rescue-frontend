@@ -5,3 +5,8 @@
   width: 150px !important;
   height: 150px !important;
 }
+
+.ant-divider-horizontal.ant-divider-with-text::before,
+.ant-divider-horizontal.ant-divider-with-text::after {
+  border-top-color: $primary_color !important;
+}

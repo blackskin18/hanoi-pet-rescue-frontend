@@ -7,6 +7,7 @@ import {SearchStatus, SearchText, SearchDateRange, SearchPlace}     from '../../
 import {Link, useHistory}                                           from "react-router-dom";
 import {Button, ButtonLink}                                         from '../../component/Button'
 
+
 const {Option} = Select;
 
 const ListCaseTable = (props) => {
@@ -48,6 +49,7 @@ const ListCaseTable = (props) => {
   }
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    console.log(selectedKeys, confirm, dataIndex)
     confirm()
     setSearchParam({
       ...searchParams,
@@ -142,6 +144,9 @@ const ListCaseTable = (props) => {
       title    : 'Ngày cứu hộ',
       dataIndex: 'receive_date',
       key      : 'receive_date',
+      render: (receive_date) => {
+        return <span>{receive_date && receive_date.split(' ')[0]}</span>
+      },
       ...getColumnSearchProps('receive_date'),
     },
     {
@@ -174,25 +179,25 @@ const ListCaseTable = (props) => {
       },
       ...getColumnSearchProps('status'),
     },
-    {
-      title    : 'Hành động',
-      dataIndex: 'action',
-      key      : 'action',
-      render   : (text, object) => {
-        return <div>
-          <ButtonLink className="margin-bottom-5" type="detail" to={"/detail-case/" + object.id}>Chi tiết</ButtonLink><br/>
-          <Button className="margin-bottom-5" type="edit" onClick={() => console.log('khanh')}>Sửa</Button><br/>
-          <Popconfirm
-            title="Are you sure to delete this task?"
-            onConfirm={() => confirmDelete(object.id)}
-            okText="Yes"
-            cancelText="No"
-          >
-            <Button type="delete">Xóa</Button>
-          </Popconfirm>
-        </div>
-      }
-    }
+    // {
+    //   title    : 'Hành động',
+    //   dataIndex: 'action',
+    //   key      : 'action',
+    //   render   : (text, object) => {
+    //     return <div>
+    //       <ButtonLink className="margin-bottom-5" type="detail" to={"/detail-case/" + object.id}>Chi tiết</ButtonLink><br/>
+    //       <Button className="margin-bottom-5" type="edit" onClick={() => console.log('khanh')}>Sửa</Button><br/>
+    //       <Popconfirm
+    //         title="Are you sure to delete this task?"
+    //         onConfirm={() => confirmDelete(object.id)}
+    //         okText="Yes"
+    //         cancelText="No"
+    //       >
+    //         <Button type="delete">Xóa</Button>
+    //       </Popconfirm>
+    //     </div>
+    //   }
+    // }
   ];
 
   const confirmDelete = async (id) => {
@@ -223,6 +228,13 @@ const ListCaseTable = (props) => {
             setCurrentPage(page)
           }
         }}
+        onRow = {
+          (record, rowIndex) => {
+            return {
+              onClick: event => history.push('/detail-case/' + record.id), // click row
+            }
+          }
+        }
       />
     </div>
   </div>)

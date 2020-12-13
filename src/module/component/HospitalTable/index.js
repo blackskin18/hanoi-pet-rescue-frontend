@@ -104,12 +104,6 @@ const ListCaseTable = (props) => {
       }
     },
     {
-      title: 'Tên người quản lý',
-      dataIndex: 'director_name',
-      key: 'director_name',
-      ...getColumnSearchProps('director_name'),
-    },
-    {
       title: 'Địa chỉ',
       dataIndex: 'address',
       key: 'address',
@@ -126,6 +120,14 @@ const ListCaseTable = (props) => {
       dataIndex: 'director_name',
       key: 'director_name',
       ...getColumnSearchProps('director_name'),
+    },
+    {
+      title: 'Số case đang tạm trú',
+      dataIndex: 'animals',
+      key: 'animals',
+      render: (animals) => {
+        return <span>{animals.length}</span>
+      }
     },
     {
       title: 'Ghi chú',

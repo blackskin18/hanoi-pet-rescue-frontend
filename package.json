@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "antd": "^4.6.0",
+    "antd-img-crop": "^3.13.2",
     "axios": "^0.19.2",
     "cra-template": "1.0.3",
     "moment": "^2.27.0",

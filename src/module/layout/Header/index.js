@@ -11,7 +11,7 @@ import {
 }                                           from '@ant-design/icons';
 import './style.scss'
 import "antd/dist/antd.css";
-import logo                                 from "../../../assets/images/POC2.svg"
+import logo                                 from "../../../assets/images/logo.png"
 import {useAuth}                            from "../../../hooks/auth";
 
 const {SubMenu} = Menu
@@ -63,7 +63,7 @@ const Header = () => {
             <Menu.Item key="sub1-5"><Link to="/list-case/3">Loài khác</Link></Menu.Item>
           </SubMenu>
           <SubMenu key="sub3" icon={<EnvironmentOutlined />} title="Địa điểm">
-            <Menu.Item key="sub3-2"><Link to="/create-place">Tạo địa điểm</Link></Menu.Item>
+            {/*<Menu.Item key="sub3-2"><Link to="/create-place">Tạo địa điểm</Link></Menu.Item>*/}
             <Menu.Item key="sub3-3"><Link to="/places/1">Phòng khám</Link></Menu.Item>
             <Menu.Item key="sub3-4"><Link to="/places/2">Nhà chung</Link></Menu.Item>
             <Menu.Item key="sub3-5"><Link to="/places/3">Nhà Foster</Link></Menu.Item>

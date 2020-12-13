@@ -1,17 +1,19 @@
 import React, {useState, useEffect}                           from 'react'
 import './style.scss'
-import {Row, Col, Divider, Descriptions, Popconfirm, message} from 'antd';
+import {Modal, Row, Col, Divider, Descriptions, Popconfirm, message} from 'antd';
 import CaseService                                            from '../../../service/CaseService';
 import {PLACE_TYPE_TEXT, CASE_TYPE_TEXT, GENDER_TEXT}         from "../../../config";
 import {Link, useHistory}                                     from "react-router-dom";
-import {format_date, detect_age}                              from '../../../utils/helper'
+import {format_date, detect_age, detect_age_arr}                              from '../../../utils/helper'
 import ImageGallery                                           from 'react-image-gallery';
 import {useParams}                                            from "react-router";
 import "react-image-gallery/styles/scss/image-gallery.scss";
+import CreateCaseForm from "../../component/CreateCaseForm"
 
 const DetailCase = () => {
   const [info, setInfo]     = useState({});
   const [images, setImages] = useState([]);
+  const [visibleModalEdit, setVisibleModalEdit] = useState(false);
   const history             = useHistory()
   var {id}                  = useParams()
 
@@ -45,7 +47,7 @@ const DetailCase = () => {
         case {info.code_full}</h4>
     </Divider>
     <Row className="margin-bottom-5">
-      <a className="button-link button-link-edit">Sửa</a>
+      <a className="button-link button-link-edit" onClick={() => setVisibleModalEdit(true)}>Sửa</a>
       <Popconfirm
         title="Are you sure to delete this task?"
         onConfirm={confirmDelete}
@@ -57,11 +59,11 @@ const DetailCase = () => {
     </Row>
     <Row justify="space-between">
       {images.length > 0 &&
-      <Col span={10}>
+      <Col span={8}>
         <ImageGallery items={images} autoPlay={false} showPlayButton={false}/>
       </Col>
       }
-      <Col span={14} className={images.length > 0 && "padding-left-sm"}>
+      <Col span={16} className={images.length > 0 && "padding-left-sm"}>
         <Descriptions
           bordered
           column={{xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1}}
@@ -88,6 +90,33 @@ const DetailCase = () => {
         </Descriptions>
       </Col>
     </Row>
+    <Modal
+      title="Basic Modal"
+      visible={visibleModalEdit}
+      width="90vw"
+      // onOk={this.handleEditModal}
+      // onCancel={this.handleCancel}
+    >
+      <CreateCaseForm
+        dataInsert={{
+          code: info.code,
+          receive_place: 'aaaa',
+          // receive_date: 'aaaa',
+          name: 'aaaa',
+          type: info.type,
+          gender: info.gender,
+          age_month: detect_age_arr(info.date_of_birth)[1],
+          age_year: detect_age_arr(info.date_of_birth)[0],
+          place_type: info.place && info.place.type,
+          description: info.description,
+          status: info.status && info.status.id,
+          // owner_name: 'type',
+          // owner_phone: 'type',
+          // owner_address: 'type',
+          note: info.note,
+        }}
+      />
+    </Modal>
   </div>)
 }
 

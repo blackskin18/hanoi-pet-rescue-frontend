@@ -1,4 +1,4 @@
-export const API_URL       = 'https://c10653876100.ngrok.io/api/';
+export const API_URL       = 'http://127.0.0.1:8000/api/';
 export const LIMIT_PRODUCT = 6;
 export const LIMIT_NEWEST_POST = 3;
 export const NEWS_POST_CATEGORY = 2;
@@ -33,6 +33,12 @@ export const CASE_STATUS = {
   FOUND_OWNER: '3',
   DIED: '4',
   READY_FIND_OWNER: '5',
+}
+
+export const GENDER = {
+  MALE: '1',
+  FAMALE: '2',
+  OTHER: '3',
 }
 
 export const GENDER_TEXT = {

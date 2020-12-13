@@ -15,17 +15,19 @@ const createPlace = async (data) => {
     console.log(response.data)
     return response.data;
   } catch (error) {
-    return error.response;
+    console.log(error.response.data)
+    return error.response.data;
   }
 }
 
-const getPlaces = async (searchParams = {}, page = '', type = '') => {
+const getPlaces = async (searchParams = {}, page = '', type = '', all = false) => {
   try {
     let response = await axios.get(API.GET_PLACES, {
       params: {
         type,
         ...searchParams,
-        page: page
+        page: page,
+        all
       }
     });
     return response.data;

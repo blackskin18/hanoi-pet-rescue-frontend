@@ -4,10 +4,6 @@
   margin-bottom: 2.5rem;
 }
 
-.count-case {
-  background: lighten($primary_color, 50%);
-}
-
 .list-case-table .ant-image-img{
   object-fit: cover;
 }
@@ -25,6 +21,5 @@
       z-index: 1000;
     }
   }
-
 
 }

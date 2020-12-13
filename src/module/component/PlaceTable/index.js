@@ -90,7 +90,7 @@ const ListCaseTable = (props) => {
   ];
 
 
-  if (PLACE_TYPE.FOSTER !== props.type) {
+  if (PLACE_TYPE.COMMON_HOME == props.type) {
     columns.push(
       {
         title    : 'Người phụ trách',
@@ -99,38 +99,41 @@ const ListCaseTable = (props) => {
         ...getColumnSearchProps('director_name'),
       }
     )
-
-    columns.push(
-      {
-        title    : 'Ghi chú',
-        dataIndex: 'note',
-        key      : 'note',
-        ...getColumnSearchProps('note'),
-      }
-    )
-    columns.push(
-      {
-        title    : 'Hành động',
-        dataIndex: 'action',
-        key      : 'action',
-        render   : () => {
-          return <Space size="middle">
-            <Link to="">Sửa</Link>
-            <Link to="">Xóa</Link>
-          </Space>
-        }
-      }
-    )
-  } else {
-    columns.push(
-      {
-        title    : 'Ghi chú',
-        dataIndex: 'note',
-        key      : 'note',
-        ...getColumnSearchProps('note'),
-      }
-    )
   }
+
+
+
+  columns.push(
+    {
+      title: 'Số case đang tạm trú',
+      dataIndex: 'animals',
+      key: 'animals',
+      render: (animals) => {
+        return <span>{animals.length}</span>
+      }
+    }
+  )
+  columns.push(
+    {
+      title    : 'Ghi chú',
+      dataIndex: 'note',
+      key      : 'note',
+      ...getColumnSearchProps('note'),
+    }
+  )
+  columns.push(
+    {
+      title    : 'Hành động',
+      dataIndex: 'action',
+      key      : 'action',
+      render   : () => {
+        return <Space size="middle">
+          <Link to="">Sửa</Link>
+          <Link to="">Xóa</Link>
+        </Space>
+      }
+    }
+  )
 
 
   return (<div>
