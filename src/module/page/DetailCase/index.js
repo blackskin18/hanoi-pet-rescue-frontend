@@ -1,34 +1,56 @@
-import React, {useState, useEffect}                           from 'react'
+import React, {useState, useEffect}                                  from 'react'
+import moment from 'moment';
 import './style.scss'
 import {Modal, Row, Col, Divider, Descriptions, Popconfirm, message} from 'antd';
-import CaseService                                            from '../../../service/CaseService';
-import {PLACE_TYPE_TEXT, CASE_TYPE_TEXT, GENDER_TEXT}         from "../../../config";
-import {Link, useHistory}                                     from "react-router-dom";
-import {format_date, detect_age, detect_age_arr}                              from '../../../utils/helper'
-import ImageGallery                                           from 'react-image-gallery';
-import {useParams}                                            from "react-router";
+import CaseService                                                   from '../../../service/CaseService';
+import {PLACE_TYPE_TEXT, CASE_TYPE_TEXT, GENDER_TEXT}                from "../../../config";
+import {Link, useHistory}                                            from "react-router-dom";
+import {format_date, detect_age, detect_age_arr}                     from '../../../utils/helper'
+import ImageGallery                                                  from 'react-image-gallery';
+import {useParams}                                                   from "react-router";
 import "react-image-gallery/styles/scss/image-gallery.scss";
-import CreateCaseForm from "../../component/CreateCaseForm"
+import CreateCaseForm                                                from "../../component/CreateCaseForm"
 
 const DetailCase = () => {
-  const [info, setInfo]     = useState({});
-  const [images, setImages] = useState([]);
+  const [info, setInfo]                         = useState({});
+  const [images, setImages]                     = useState([]);
+  const [imagesToEdit, setImagesToEdit]         = useState([]);
   const [visibleModalEdit, setVisibleModalEdit] = useState(false);
-  const history             = useHistory()
-  var {id}                  = useParams()
+  const history                                 = useHistory()
+  var {id}                                      = useParams()
 
   useEffect(() => {
     getDetailInfo()
   }, [])
 
+
+  const editCase = async (data, images) => {
+    return await CaseService.editCase(data, images, id)
+  }
+
   const getDetailInfo = async () => {
     let response   = await CaseService.getCaseDetail(id);
-    let imagesData = response.data.animal_image.map(function (image) {
-      return {original: image.path, thumbnail: image.path}
-    })
-    setImages(imagesData)
+
+    if(response.data.animal_image) {
+      let imagesData = response.data.animal_image.map(function (image) {
+        return {original: image.path, thumbnail: image.path}
+      })
+
+      let imageToEdit = response.data.animal_image.map(function (image) {
+        return {
+          uid   : image.id,
+          name: 'image.png',
+          status: 'done',
+          url   : image.path,
+        }
+      });
+      setImagesToEdit(imageToEdit)
+      setImages(imagesData)
+    }
     setInfo(response.data)
   }
+
+  const handleCancelEdit = () => setVisibleModalEdit(false)
 
   const confirmDelete = async () => {
     let response = await CaseService.deleteCase(id);
@@ -94,27 +116,31 @@ const DetailCase = () => {
       title="Basic Modal"
       visible={visibleModalEdit}
       width="90vw"
-      // onOk={this.handleEditModal}
-      // onCancel={this.handleCancel}
+      okButtonProps={{ style: { display: 'none' } }}
+      cancelButtonProps={{ style: { display: 'none' } }}
+      onCancel={handleCancelEdit}
     >
       <CreateCaseForm
         dataInsert={{
-          code: info.code,
-          receive_place: 'aaaa',
-          // receive_date: 'aaaa',
-          name: 'aaaa',
-          type: info.type,
-          gender: info.gender,
-          age_month: detect_age_arr(info.date_of_birth)[1],
-          age_year: detect_age_arr(info.date_of_birth)[0],
-          place_type: info.place && info.place.type,
-          description: info.description,
-          status: info.status && info.status.id,
-          // owner_name: 'type',
-          // owner_phone: 'type',
-          // owner_address: 'type',
-          note: info.note,
+          code         : info.code,
+          receive_place: info.receive_place,
+          receive_date: moment(info.receive_date, 'YYYY-MM-DD'),
+          name         : info.name,
+          type         : info.type,
+          gender       : info.gender,
+          age_month    : detect_age_arr(info.date_of_birth)[1],
+          age_year     : detect_age_arr(info.date_of_birth)[0],
+          place_type   : info.place && info.place.type,
+          description  : info.description,
+          status       : info.status && info.status.id,
+          note         : info.note,
+          place_id: info.place_id,
+          foster_id: info.foster_id,
+          owner_id: info.owner_id,
         }}
+        placeId={info.place_id}
+        images={imagesToEdit}
+        submitAction={editCase}
       />
     </Modal>
   </div>)

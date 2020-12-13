@@ -9,6 +9,8 @@ import {Button, ButtonLink}                from "../Button";
 import UserService                         from "../../../service/UserService";
 
 const ListCaseTable = (props) => {
+  const [checkStrictly, setCheckStrictly] = useState(false);
+
   const [searchParams, setSearchParam] = useState({})
   const [currentPage, setCurrentPage] = useState(1)
   const [total, setTotal] = useState(null)
@@ -86,8 +88,8 @@ const ListCaseTable = (props) => {
       key: 'name',
       ...getColumnSearchProps('name'),
       render: (text, object) => {
-        if(object.parent) {
-          return <span>{object.parent.name}</span>
+        if(object.parent_id) {
+          return <span></span>
         } else {
           return <span>{object.name}</span>
         }
@@ -98,7 +100,7 @@ const ListCaseTable = (props) => {
       dataIndex: 'branch',
       key: 'branch',
       render: (text, object) => {
-        if(object.parent) {
+        if(object.parent_id) {
           return <span>{object.name}</span>
         }
       }
@@ -157,10 +159,11 @@ const ListCaseTable = (props) => {
   ];
 
   return (<div>
-    <div className="list-case-table">
+    <div className="list-hospital-table">
       <Table
         columns={columns}
         dataSource={listHospitals}
+        // rowSelection={{checkStrictly }}
         pagination={{
           total: total, defaultCurrent: 1, defaultPageSize: 20, showQuickJumper: true, showSizeChanger: false,
           onChange: (page, size) => {

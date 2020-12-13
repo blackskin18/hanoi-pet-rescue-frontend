@@ -8,7 +8,7 @@
   object-fit: cover;
 }
 
-.list-case-table {
+.list-hospital-table {
   & .ant-table table {
     text-align: left;
     position: relative;
@@ -22,4 +22,8 @@
     }
   }
 
+  & .ant-table-row-level-1 {
+    background: lighten($primary_color, 45);
+  }
 }
+

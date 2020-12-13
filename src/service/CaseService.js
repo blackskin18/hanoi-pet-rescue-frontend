@@ -8,7 +8,8 @@ const API = {
   GET_CASES      : API_URL + 'cases',
   GET_CASE_DETAIL: API_URL + 'cases/{id}',
   DELETE_CASE    : API_URL + 'cases/{id}',
-  GET_REPORT     : API_URL + 'cases/report'
+  GET_REPORT     : API_URL + 'cases/report',
+  PATCH_CASE     : API_URL + 'cases/{id}',
 }
 
 const createCase = async (data, images) => {
@@ -112,11 +113,44 @@ const getReport = async (type, timeData) => {
   }
 }
 
+
+const editCase = async (data, images, id) => {
+  try {
+    let formData = new FormData();
+    for (let i in data) {
+      if (i === 'receive_date') {
+        formData.append(i, data[i].format('YYYY/MM/DD'));
+      } else {
+        formData.append(i, data[i]);
+      }
+    }
+
+    console.log(images, formData)
+
+    for (let i in images) {
+      if(images[i].size) {
+        formData.append("images_add[]", images[i].originFileObj);
+      } else {
+        formData.append("old_images[]", images[i].url);
+      }
+    }
+    formData.append("_method", 'PATCH');
+
+    let response = await axios.post(API.PATCH_CASE.replace('{id}', id), formData, {
+      headers: {"Content-Type": "multipart/form-data"}
+    });
+    return response.data;
+  } catch (error) {
+    return error.response.data;
+  }
+}
+
 export default {
   createCase,
   getCases,
   getCaseDetail,
   deleteCase,
-  getReport
+  getReport,
+  editCase
 }
 

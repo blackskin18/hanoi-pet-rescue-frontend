@@ -22,7 +22,7 @@ const ListCaseTable = (props) => {
   const [previewVisible, setPreviewVisible] = useState(false)
   const [previewImage, setPreviewImage]     = useState('');
   const [previewTitle, setPreviewTitle]     = useState('');
-  const [images, setImages]                 = useState([]);
+  const [images, setImages]                 = useState(props.images ? props.images : []);
   const [placeId, setPlaceId]               = useState(props.placeId ? props.placeId : null);
   const [placeToChoose, setPlaceToChoose]   = useState([]);
   const [dataInsert, setDataInsert]         = useState(props.dataInsert ? props.dataInsert : {});
@@ -62,6 +62,7 @@ const ListCaseTable = (props) => {
   }
 
   const getPlaceSelect = async () => {
+    if(!dataInsert.place_type) return
     let response = await PlaceService.getPlaces({}, '', dataInsert.place_type)
     setPlaceToChoose(response.data.places)
     setPlaceId(null)
@@ -86,7 +87,7 @@ const ListCaseTable = (props) => {
       ...dataInsert,
       place_id: placeId
     }
-
+    console.log(data)
     let response = await props.submitAction(data, images)
     if (response.code === 1) {
 
@@ -245,7 +246,7 @@ const ListCaseTable = (props) => {
               <Select className="w-100"
                       showSearch
                       placeholder="Chọn nơi ở hiện tại"
-                      value={dataInsert.place_type}
+                      value={dataInsert.place_type && dataInsert.place_type}
                       onChange={(e) => editDataInsert('place_type', e)} style={{width: "100%"}}>
                 <Option value="" key="0" disabled>Chọn nơi ở hiện tại</Option>
                 <Option value={1} key="1">Phòng Phám</Option>
@@ -253,12 +254,11 @@ const ListCaseTable = (props) => {
                 <Option value={3} key="3">Nhà Foster</Option>
                 <Option value={4} key="4">Nhà Chủ nuôi mới</Option>
               </Select>
-              {errors.place_type && <span className="text-red">{errors.place_type[0]}</span>}
-
+              {/*{errors.place_type && <span className="text-red">{errors.place_type[0]}</span>}*/}
             </Col>
           </Row>
           {
-            placeToChoose.length > 0 &&
+            (placeToChoose && placeToChoose.length > 0) &&
             <Row>
               <Col span={4}>
                 Chọn {placeTypeText}
