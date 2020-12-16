@@ -1,10 +1,10 @@
-import React, {useState, useEffect}                                          from 'react'
+import React, { useState, useEffect }                                          from 'react'
 import './style.scss'
-import {Row, Col, Divider, Input, Button, Select, Modal, Upload, DatePicker} from 'antd';
-import {PlusOutlined}                                                        from '@ant-design/icons';
-import CaseService                                                           from '../../../service/CaseService';
-import {CASE_TYPE, PLACE_TYPE_TEXT, GENDER}                                  from "../../../config";
-import PlaceService                                                          from "../../../service/PlaceService";
+import { Row, Col, Divider, Input, Button, Select, Modal, Upload, DatePicker } from 'antd';
+import { PlusOutlined }                                                        from '@ant-design/icons';
+import CaseService                                                             from '../../../service/CaseService';
+import { CASE_TYPE, PLACE_TYPE_TEXT, GENDER, PLACE_TYPE }                      from "../../../config";
+import PlaceService                                                            from "../../../service/PlaceService";
 
 const {Option}   = Select;
 const {TextArea} = Input;
@@ -23,7 +23,7 @@ const ListCaseTable = (props) => {
   const [previewImage, setPreviewImage]     = useState('');
   const [previewTitle, setPreviewTitle]     = useState('');
   const [images, setImages]                 = useState(props.images ? props.images : []);
-  const [placeId, setPlaceId]               = useState(props.placeId ? props.placeId : null);
+  const [placeId, setPlaceId]               = useState(props.placeId ? parseInt(props.placeId) : null);
   const [placeToChoose, setPlaceToChoose]   = useState([]);
   const [dataInsert, setDataInsert]         = useState(props.dataInsert ? props.dataInsert : {});
   const [placeTypeText, setPlaceTypeText]   = useState('');
@@ -32,41 +32,61 @@ const ListCaseTable = (props) => {
   const [codePrefix, setCodePrefix]         = useState(false);
   const [fosters, setFosters]               = useState([]);
   const [owners, setOwners]                 = useState([]);
+  const [hospitals, setHospitals]           = useState([]);
+  const [commonHomes, setCommonHomes]       = useState([]);
+  const [branches, setBranches]             = useState([]);
 
   useEffect(() => {
     getAllFosters()
     getAllOwners()
+    getAllCommonHome()
+    getAllHospital()
   }, [])
 
   useEffect(() => {
-    getPlaceSelect()
+    // getPlaceSelect()
+    if (dataInsert.place_type == PLACE_TYPE.COMMON_HOME) setPlaceToChoose(commonHomes)
+    if (dataInsert.place_type == PLACE_TYPE.HOSPITAL) setPlaceToChoose(hospitals)
+    if (dataInsert.place_type == PLACE_TYPE.OWNER) setPlaceToChoose(owners)
+    if (dataInsert.place_type == PLACE_TYPE.FOSTER) setPlaceToChoose(fosters)
+
     setPlaceTypeText(PLACE_TYPE_TEXT[dataInsert.place_type])
   }, [dataInsert.place_type])
 
   useEffect(() => {
     let $year   = dataInsert.receive_date ? String(dataInsert.receive_date.year()).slice(2) : '';
     let $type   = dataInsert.type ? (dataInsert.type == CASE_TYPE.DOG ? 'D' : (dataInsert.type == CASE_TYPE.CAT ? 'C' : 'O')) : '';
-    let $gender = dataInsert.gender ? (dataInsert.gender == GENDER.MAN ? 'M' : (dataInsert.gender == GENDER.FAMALE ? 'F' : 'O')) : '';
+    let $gender = dataInsert.gender ? (dataInsert.gender == GENDER.MALE ? 'M' : (dataInsert.gender == GENDER.FAMALE ? 'F' : 'O')) : '';
     setCodePrefix($year + $type + $gender)
   }, [dataInsert.type, dataInsert.gender, dataInsert.receive_date])
 
 
   const getAllFosters = async () => {
-    let response = await PlaceService.getPlaces({}, '', 3)
+    let response = await PlaceService.getPlaces({}, '', PLACE_TYPE.FOSTER, true)
     setFosters(response.data.places)
   }
 
   const getAllOwners = async () => {
-    let response = await PlaceService.getPlaces({}, '', 4)
+    let response = await PlaceService.getPlaces({}, '', PLACE_TYPE.OWNER, true)
     setOwners(response.data.places)
   }
 
-  const getPlaceSelect = async () => {
-    if(!dataInsert.place_type) return
-    let response = await PlaceService.getPlaces({}, '', dataInsert.place_type)
-    setPlaceToChoose(response.data.places)
-    setPlaceId(null)
+  const getAllHospital = async () => {
+    let response = await PlaceService.getPlaces({}, '', PLACE_TYPE.HOSPITAL, true)
+    setHospitals(response.data.places)
   }
+
+  const getAllCommonHome = async () => {
+    let response = await PlaceService.getPlaces({}, '', PLACE_TYPE.COMMON_HOME, true)
+    setCommonHomes(response.data.places)
+  }
+
+  // const getPlaceSelect = async () => {
+  //   if(!dataInsert.place_type) return
+  //   let response = await PlaceService.getPlaces({}, '', dataInsert.place_type)
+  //   setPlaceToChoose(response.data.places)
+  //   setPlaceId(null)
+  // }
 
   const handleCancelPreview = () => setPreviewVisible(false);
   const handlePreviewImages = async file => {
@@ -83,18 +103,29 @@ const ListCaseTable = (props) => {
 
   const handleCreateCase = async () => {
     setIsSubmit(true)
-    var data = {
+    var data     = {
       ...dataInsert,
       place_id: placeId
     }
-    console.log(data)
     let response = await props.submitAction(data, images)
     if (response.code === 1) {
 
-    } else {
+    } else if (response.errors) {
       setErrors(response.errors)
     }
     setIsSubmit(false)
+  }
+
+  const handleSelectPlace = (e) => {
+    if (dataInsert.place_type === PLACE_TYPE.HOSPITAL) {
+      var hospital = hospitals.filter((hospital)=> {
+        return hospital.id == e
+      })[0]
+      if(hospital.children && hospital.children.length > 0) {
+        setBranches(hospital.children)
+      }
+    }
+    setPlaceId(e)
   }
 
   const editDataInsert = function (key, value) {
@@ -207,9 +238,9 @@ const ListCaseTable = (props) => {
                           placeholder="Chọn giới tính"
                           value={dataInsert.gender}
                           onChange={(e) => editDataInsert('gender', e)}>
-                    <Option value="1">Đực</Option>
-                    <Option value="2">Cái</Option>
-                    <Option value="3">Chưa rõ</Option>
+                    <Option value={1}>Đực</Option>
+                    <Option value={2}>Cái</Option>
+                    <Option value={3}>Chưa rõ</Option>
                   </Select>
                   {errors.gender && <span className="text-red">{errors.gender[0]}</span>}
                 </Col>
@@ -247,18 +278,21 @@ const ListCaseTable = (props) => {
                       showSearch
                       placeholder="Chọn nơi ở hiện tại"
                       value={dataInsert.place_type && dataInsert.place_type}
-                      onChange={(e) => editDataInsert('place_type', e)} style={{width: "100%"}}>
+                      onChange={(e) => {
+                        setPlaceId(undefined)
+                        editDataInsert('place_type', e)
+                      }} style={{width: "100%"}}>
                 <Option value="" key="0" disabled>Chọn nơi ở hiện tại</Option>
-                <Option value={1} key="1">Phòng Phám</Option>
-                <Option value={2} key="2">Nhà chung</Option>
-                <Option value={3} key="3">Nhà Foster</Option>
-                <Option value={4} key="4">Nhà Chủ nuôi mới</Option>
+                <Option value="1" key="1">Phòng Phám</Option>
+                <Option value="2" key="2">Nhà chung</Option>
+                <Option value="3" key="3">Nhà Foster</Option>
+                <Option value="4" key="4">Nhà Chủ nuôi mới</Option>
               </Select>
-              {/*{errors.place_type && <span className="text-red">{errors.place_type[0]}</span>}*/}
+              {errors.place_type && <span className="text-red">{errors.place_type[0]}</span>}
             </Col>
           </Row>
           {
-            (placeToChoose && placeToChoose.length > 0) &&
+            dataInsert.place_type &&
             <Row>
               <Col span={4}>
                 Chọn {placeTypeText}
@@ -271,9 +305,28 @@ const ListCaseTable = (props) => {
                         filterOption={(input, option) =>
                           option.children && option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                         }
-                        onChange={(e) => setPlaceId(e)} style={{width: "100%"}}>
+                        onChange={handleSelectPlace} style={{width: "100%"}}>
                   {
-                    placeToChoose.map(function (place, key) {
+                    dataInsert.place_type == PLACE_TYPE.COMMON_HOME &&
+                    commonHomes.map(function (place, key) {
+                      return <Option value={place.id} key={key}>{place.name}</Option>
+                    })
+                  }
+                  {
+                    dataInsert.place_type == PLACE_TYPE.HOSPITAL &&
+                    hospitals.map(function (place, key) {
+                      return <Option value={place.id} key={key}>{place.name}</Option>
+                    })
+                  }
+                  {
+                    dataInsert.place_type == PLACE_TYPE.FOSTER &&
+                    fosters.map(function (place, key) {
+                      return <Option value={place.id} key={key}>{place.name}</Option>
+                    })
+                  }
+                  {
+                    dataInsert.place_type == PLACE_TYPE.OWNER &&
+                    owners.map(function (place, key) {
                       return <Option value={place.id} key={key}>{place.name}</Option>
                     })
                   }
@@ -282,6 +335,33 @@ const ListCaseTable = (props) => {
               </Col>
             </Row>
           }
+
+          {
+            branches && branches.length > 0 &&
+            <Row>
+              <Col span={4}>
+                Chọn chi nhánh
+              </Col>
+              <Col span={20}>
+                <Select className="w-100"
+                        showSearch
+                        placeholder={'Chọn chi nhánh'}
+                        value={dataInsert.branch_id}
+                        filterOption={(input, option) =>
+                          option.children && option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        }
+                        onChange={(e) => editDataInsert('branch_id', e)} style={{width: "100%"}}>
+                  {
+                    branches.map(function (place, key) {
+                      return <Option value={place.id} key={key}>{place.name}</Option>
+                    })
+                  }
+                </Select>
+                {errors.place_id && <span className="text-red">{errors.place_id[0]}</span>}
+              </Col>
+            </Row>
+          }
+
           <Row>
             <Col span={4}>
               Mô tả
@@ -326,7 +406,6 @@ const ListCaseTable = (props) => {
                         option.children && option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                       }
                       onChange={(e) => editDataInsert('foster_id', e)} style={{width: "100%"}}>
-                <Option value=""></Option>
                 {
                   fosters.map(function (foster, key) {
                     return <Option value={foster.id} key={key}>{foster.name}</Option>

@@ -120,12 +120,10 @@ const editCase = async (data, images, id) => {
     for (let i in data) {
       if (i === 'receive_date') {
         formData.append(i, data[i].format('YYYY/MM/DD'));
-      } else {
+      } else if(data[i]) {
         formData.append(i, data[i]);
       }
     }
-
-    console.log(images, formData)
 
     for (let i in images) {
       if(images[i].size) {
