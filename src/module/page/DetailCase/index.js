@@ -1,26 +1,38 @@
 import React, {useState, useEffect}                                  from 'react'
-import moment from 'moment';
+import moment                                                        from 'moment';
 import './style.scss'
 import {Modal, Row, Col, Divider, Descriptions, Popconfirm, message} from 'antd';
 import CaseService                                                   from '../../../service/CaseService';
-import {PLACE_TYPE_TEXT, CASE_TYPE_TEXT, GENDER_TEXT}                from "../../../config";
+import { PLACE_TYPE_TEXT, CASE_TYPE_TEXT, GENDER_TEXT, PLACE_TYPE }  from "../../../config";
 import {Link, useHistory}                                            from "react-router-dom";
 import {format_date, detect_age, detect_age_arr}                     from '../../../utils/helper'
 import ImageGallery                                                  from 'react-image-gallery';
 import {useParams}                                                   from "react-router";
 import "react-image-gallery/styles/scss/image-gallery.scss";
 import CreateCaseForm                                                from "../../component/CreateCaseForm"
+import PlaceService                                                  from "../../../service/PlaceService";
 
 const DetailCase = () => {
   const [info, setInfo]                         = useState({});
   const [images, setImages]                     = useState([]);
   const [imagesToEdit, setImagesToEdit]         = useState([]);
   const [visibleModalEdit, setVisibleModalEdit] = useState(false);
+  const [placeId, setPlaceId] = useState(false);
+  const [branchId, setBranchId] = useState(false);
+  const [fosters, setFosters]               = useState([]);
+  const [owners, setOwners]                 = useState([]);
+  const [hospitals, setHospitals]           = useState([]);
+  const [commonHomes, setCommonHomes]       = useState([]);
+
   const history                                 = useHistory()
   var {id}                                      = useParams()
 
   useEffect(() => {
     getDetailInfo()
+    getAllFosters()
+    getAllOwners()
+    getAllCommonHome()
+    getAllHospital()
   }, [])
 
 
@@ -48,6 +60,15 @@ const DetailCase = () => {
       setImages(imagesData)
     }
     setInfo(response.data)
+
+    if(response.data.place && response.data.place.parent_id) {
+      console.log('place_id', response.data.place.parent_id)
+      console.log('branch_id', response.data.place.id)
+      setPlaceId(response.data.place.parent_id)
+      setBranchId(response.data.place.id)
+    } else {
+      setPlaceId(response.data.place.id)
+    }
   }
 
   const handleCancelEdit = () => setVisibleModalEdit(false)
@@ -60,6 +81,26 @@ const DetailCase = () => {
     } else {
       message.error(response.message ? response.message : 'Xóa thất bại, vui lòng liên hệ kỹ thuật');
     }
+  }
+
+  const getAllFosters = async () => {
+    let response = await PlaceService.getPlaces({}, '', PLACE_TYPE.FOSTER, true)
+    setFosters(response.data.places)
+  }
+
+  const getAllOwners = async () => {
+    let response = await PlaceService.getPlaces({}, '', PLACE_TYPE.OWNER, true)
+    setOwners(response.data.places)
+  }
+
+  const getAllHospital = async () => {
+    let response = await PlaceService.getPlaces({}, '', PLACE_TYPE.HOSPITAL, true)
+    setHospitals(response.data.places)
+  }
+
+  const getAllCommonHome = async () => {
+    let response = await PlaceService.getPlaces({}, '', PLACE_TYPE.COMMON_HOME, true)
+    setCommonHomes(response.data.places)
   }
 
 
@@ -100,14 +141,14 @@ const DetailCase = () => {
             {info.foster && <span>Nhà Foster <Link to="">{info.foster.name}</Link></span>}
             {info.place && <span>{PLACE_TYPE_TEXT[info.place.type]} <Link to="">{info.place.name}</Link></span>}
           </Descriptions.Item>
-          <Descriptions.Item label="Mô tả" span={2}>{info.description} </Descriptions.Item>
+          <Descriptions.Item label="Mô tả" span={2}><pre>{info.description}</pre></Descriptions.Item>
           <Descriptions.Item label="Trạng thái" span={2}>{info.status && info.status.name} </Descriptions.Item>
           <Descriptions.Item label="Thông tin chủ nuôi" span={2}>
             <p>Tên: {info.owner_name}</p>
             <p>Điện thoại: {info.owner_phone}</p>
             <p>Địa chỉ: {info.owner_address}</p>
           </Descriptions.Item>
-          <Descriptions.Item label="Ghi chú" span={2}>{info.note} </Descriptions.Item>
+          <Descriptions.Item label="Ghi chú" span={2}><pre>{info.note}</pre></Descriptions.Item>
 
         </Descriptions>
       </Col>
@@ -134,13 +175,18 @@ const DetailCase = () => {
           description  : info.description,
           status       : info.status && info.status.id,
           note         : info.note,
-          place_id: info.place_id,
-          foster_id: info.foster_id,
-          owner_id: info.owner_id,
+          place_id     : placeId,
+          foster_id    : info.foster_id,
+          branch_id    : branchId,
+          owner_id     : info.owner_id,
         }}
-        placeId={info.place_id}
+        placeId={placeId}
         images={imagesToEdit}
         submitAction={editCase}
+        fosters={fosters}
+        owners={owners}
+        hospitals={hospitals}
+        commonHomes={commonHomes}
       />
     </Modal>
   </div>)

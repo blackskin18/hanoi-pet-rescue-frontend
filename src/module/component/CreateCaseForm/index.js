@@ -30,26 +30,25 @@ const ListCaseTable = (props) => {
   const [isSubmit, setIsSubmit]             = useState(false);
   const [errors, setErrors]                 = useState(false);
   const [codePrefix, setCodePrefix]         = useState(false);
-  const [fosters, setFosters]               = useState([]);
-  const [owners, setOwners]                 = useState([]);
-  const [hospitals, setHospitals]           = useState([]);
-  const [commonHomes, setCommonHomes]       = useState([]);
+  const fosters                             = props.fosters;
+  const owners                              = props.owners;
+  const hospitals                           = props.hospitals;
+  const commonHomes                         = props.commonHomes;
   const [branches, setBranches]             = useState([]);
 
   useEffect(() => {
-    getAllFosters()
-    getAllOwners()
-    getAllCommonHome()
-    getAllHospital()
+    console.log(placeId)
+  }, [placeId])
+
+
+  useEffect(() => {
+    if (props.place_type == PLACE_TYPE.HOSPITAL) {
+      setPlaceToChoose(hospitals)
+      handleSelectPlace(placeId)
+    }
   }, [])
 
   useEffect(() => {
-    // getPlaceSelect()
-    if (dataInsert.place_type == PLACE_TYPE.COMMON_HOME) setPlaceToChoose(commonHomes)
-    if (dataInsert.place_type == PLACE_TYPE.HOSPITAL) setPlaceToChoose(hospitals)
-    if (dataInsert.place_type == PLACE_TYPE.OWNER) setPlaceToChoose(owners)
-    if (dataInsert.place_type == PLACE_TYPE.FOSTER) setPlaceToChoose(fosters)
-
     setPlaceTypeText(PLACE_TYPE_TEXT[dataInsert.place_type])
   }, [dataInsert.place_type])
 
@@ -61,25 +60,25 @@ const ListCaseTable = (props) => {
   }, [dataInsert.type, dataInsert.gender, dataInsert.receive_date])
 
 
-  const getAllFosters = async () => {
-    let response = await PlaceService.getPlaces({}, '', PLACE_TYPE.FOSTER, true)
-    setFosters(response.data.places)
-  }
-
-  const getAllOwners = async () => {
-    let response = await PlaceService.getPlaces({}, '', PLACE_TYPE.OWNER, true)
-    setOwners(response.data.places)
-  }
-
-  const getAllHospital = async () => {
-    let response = await PlaceService.getPlaces({}, '', PLACE_TYPE.HOSPITAL, true)
-    setHospitals(response.data.places)
-  }
-
-  const getAllCommonHome = async () => {
-    let response = await PlaceService.getPlaces({}, '', PLACE_TYPE.COMMON_HOME, true)
-    setCommonHomes(response.data.places)
-  }
+  // const getAllFosters = async () => {
+  //   let response = await PlaceService.getPlaces({}, '', PLACE_TYPE.FOSTER, true)
+  //   setFosters(response.data.places)
+  // }
+  //
+  // const getAllOwners = async () => {
+  //   let response = await PlaceService.getPlaces({}, '', PLACE_TYPE.OWNER, true)
+  //   setOwners(response.data.places)
+  // }
+  //
+  // const getAllHospital = async () => {
+  //   let response = await PlaceService.getPlaces({}, '', PLACE_TYPE.HOSPITAL, true)
+  //   setHospitals(response.data.places)
+  // }
+  //
+  // const getAllCommonHome = async () => {
+  //   let response = await PlaceService.getPlaces({}, '', PLACE_TYPE.COMMON_HOME, true)
+  //   setCommonHomes(response.data.places)
+  // }
 
   // const getPlaceSelect = async () => {
   //   if(!dataInsert.place_type) return
@@ -118,10 +117,10 @@ const ListCaseTable = (props) => {
 
   const handleSelectPlace = (e) => {
     if (dataInsert.place_type === PLACE_TYPE.HOSPITAL) {
-      var hospital = hospitals.filter((hospital)=> {
+      var hospital = hospitals.filter((hospital) => {
         return hospital.id == e
       })[0]
-      if(hospital.children && hospital.children.length > 0) {
+      if (hospital.children && hospital.children.length > 0) {
         setBranches(hospital.children)
       }
     }
@@ -416,8 +415,6 @@ const ListCaseTable = (props) => {
 
             </Col>
           </Row>
-
-
           <Row>
             <Col span={4}>
               Chọn chủ nuôi
