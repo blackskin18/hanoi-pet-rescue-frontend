@@ -37,13 +37,7 @@ const ListCaseTable = (props) => {
   const [branches, setBranches]             = useState([]);
 
   useEffect(() => {
-    console.log(placeId)
-  }, [placeId])
-
-
-  useEffect(() => {
-    if (props.place_type == PLACE_TYPE.HOSPITAL) {
-      setPlaceToChoose(hospitals)
+    if (dataInsert.place_type == PLACE_TYPE.HOSPITAL && placeId) {
       handleSelectPlace(placeId)
     }
   }, [])
@@ -60,32 +54,6 @@ const ListCaseTable = (props) => {
   }, [dataInsert.type, dataInsert.gender, dataInsert.receive_date])
 
 
-  // const getAllFosters = async () => {
-  //   let response = await PlaceService.getPlaces({}, '', PLACE_TYPE.FOSTER, true)
-  //   setFosters(response.data.places)
-  // }
-  //
-  // const getAllOwners = async () => {
-  //   let response = await PlaceService.getPlaces({}, '', PLACE_TYPE.OWNER, true)
-  //   setOwners(response.data.places)
-  // }
-  //
-  // const getAllHospital = async () => {
-  //   let response = await PlaceService.getPlaces({}, '', PLACE_TYPE.HOSPITAL, true)
-  //   setHospitals(response.data.places)
-  // }
-  //
-  // const getAllCommonHome = async () => {
-  //   let response = await PlaceService.getPlaces({}, '', PLACE_TYPE.COMMON_HOME, true)
-  //   setCommonHomes(response.data.places)
-  // }
-
-  // const getPlaceSelect = async () => {
-  //   if(!dataInsert.place_type) return
-  //   let response = await PlaceService.getPlaces({}, '', dataInsert.place_type)
-  //   setPlaceToChoose(response.data.places)
-  //   setPlaceId(null)
-  // }
 
   const handleCancelPreview = () => setPreviewVisible(false);
   const handlePreviewImages = async file => {
@@ -108,7 +76,7 @@ const ListCaseTable = (props) => {
     }
     let response = await props.submitAction(data, images)
     if (response.code === 1) {
-
+      props.afterSubmit()
     } else if (response.errors) {
       setErrors(response.errors)
     }
@@ -116,14 +84,17 @@ const ListCaseTable = (props) => {
   }
 
   const handleSelectPlace = (e) => {
-    if (dataInsert.place_type === PLACE_TYPE.HOSPITAL) {
-      var hospital = hospitals.filter((hospital) => {
-        return hospital.id == e
+    if (dataInsert.place_type == PLACE_TYPE.HOSPITAL) {
+      var hospital = hospitals.filter((hospital1) => {
+        return hospital1.id == e
       })[0]
       if (hospital.children && hospital.children.length > 0) {
         setBranches(hospital.children)
+      } else {
+        setBranches([])
       }
     }
+    editDataInsert('branch_id', null)
     setPlaceId(e)
   }
 
@@ -275,17 +246,17 @@ const ListCaseTable = (props) => {
             <Col span={20}>
               <Select className="w-100"
                       showSearch
+                      allowClear
                       placeholder="Chọn nơi ở hiện tại"
                       value={dataInsert.place_type && dataInsert.place_type}
                       onChange={(e) => {
                         setPlaceId(undefined)
                         editDataInsert('place_type', e)
                       }} style={{width: "100%"}}>
-                <Option value="" key="0" disabled>Chọn nơi ở hiện tại</Option>
-                <Option value="1" key="1">Phòng Phám</Option>
-                <Option value="2" key="2">Nhà chung</Option>
-                <Option value="3" key="3">Nhà Foster</Option>
-                <Option value="4" key="4">Nhà Chủ nuôi mới</Option>
+                <Option value={1} key="1">Phòng Phám</Option>
+                <Option value={2} key="2">Nhà chung</Option>
+                <Option value={3} key="3">Nhà Foster</Option>
+                <Option value={4} key="4">Nhà Chủ nuôi mới</Option>
               </Select>
               {errors.place_type && <span className="text-red">{errors.place_type[0]}</span>}
             </Col>
@@ -399,6 +370,7 @@ const ListCaseTable = (props) => {
             <Col span={20}>
               <Select className="w-100"
                       showSearch
+                      allowClear
                       placeholder='Chọn Foster'
                       value={dataInsert.foster_id}
                       filterOption={(input, option) =>
@@ -422,6 +394,7 @@ const ListCaseTable = (props) => {
             <Col span={20}>
               <Select className="w-100"
                       showSearch
+                      allowClear
                       placeholder='Chọn chủ nuôi'
                       value={dataInsert.owner_id}
                       filterOption={(input, option) =>

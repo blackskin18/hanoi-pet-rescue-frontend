@@ -40,6 +40,11 @@ const DetailCase = () => {
     return await CaseService.editCase(data, images, id)
   }
 
+  const afterSubmit = async () => {
+    setVisibleModalEdit(false)
+    getDetailInfo()
+  }
+
   const getDetailInfo = async () => {
     let response   = await CaseService.getCaseDetail(id);
 
@@ -67,7 +72,7 @@ const DetailCase = () => {
       setPlaceId(response.data.place.parent_id)
       setBranchId(response.data.place.id)
     } else {
-      setPlaceId(response.data.place.id)
+      setPlaceId(response.data.place_id)
     }
   }
 
@@ -126,29 +131,43 @@ const DetailCase = () => {
         <ImageGallery items={images} autoPlay={false} showPlayButton={false}/>
       </Col>
       }
-      <Col span={16} className={images.length > 0 && "padding-left-sm"}>
+      <Col span={16}>
         <Descriptions
           bordered
-          column={{xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1}}
+          column={2}
         >
-          <Descriptions.Item label="Ngày nhận">{format_date(info.receive_date)}</Descriptions.Item>
-          <Descriptions.Item label="Nơi nhận">{info.receive_place}</Descriptions.Item>
+          <Descriptions.Item label="Ngày nhận"><span>{format_date(info.receive_date)}</span></Descriptions.Item>
+          <Descriptions.Item label="Nơi nhận"><span>{info.receive_place}</span></Descriptions.Item>
           <Descriptions.Item label="Tên">{info.name}</Descriptions.Item>
           <Descriptions.Item label="Loài">{CASE_TYPE_TEXT[info.type]}</Descriptions.Item>
           <Descriptions.Item label="Giới tính">{GENDER_TEXT[info.gender]} </Descriptions.Item>
           <Descriptions.Item label="Tuổi">{detect_age(info.date_of_birth)} </Descriptions.Item>
           <Descriptions.Item label="Nơi ở hiện tại" span={2}>
-            {info.foster && <span>Nhà Foster <Link to="">{info.foster.name}</Link></span>}
             {info.place && <span>{PLACE_TYPE_TEXT[info.place.type]} <Link to="">{info.place.name}</Link></span>}
           </Descriptions.Item>
           <Descriptions.Item label="Mô tả" span={2}><pre>{info.description}</pre></Descriptions.Item>
           <Descriptions.Item label="Trạng thái" span={2}>{info.status && info.status.name} </Descriptions.Item>
-          <Descriptions.Item label="Thông tin chủ nuôi" span={2}>
-            <p>Tên: {info.owner_name}</p>
-            <p>Điện thoại: {info.owner_phone}</p>
-            <p>Địa chỉ: {info.owner_address}</p>
+          <Descriptions.Item label="Thông tin Foster" span={2}>
+            {
+              info.foster &&
+              [
+                <p>Tên: {info.foster.name}</p>,
+                <p>Điện thoại: {info.foster.phone}</p>,
+                <p>Địa chỉ: {info.foster.address}</p>
+              ]
+            }
           </Descriptions.Item>
-          <Descriptions.Item label="Ghi chú" span={2}><pre>{info.note}</pre></Descriptions.Item>
+          <Descriptions.Item label="Thông tin chủ nuôi" span={2}>
+            {
+              info.owner &&
+                [
+                  <p>Tên: {info.owner.name}</p>,
+                  <p>Điện thoại: {info.owner.phone}</p>,
+                  <p>Địa chỉ: {info.owner.address}</p>
+                ]
+            }
+          </Descriptions.Item>
+          <Descriptions.Item label="Ghi chú" span={2}><pre className="animal-notes">{info.note}</pre></Descriptions.Item>
 
         </Descriptions>
       </Col>
@@ -183,6 +202,7 @@ const DetailCase = () => {
         placeId={placeId}
         images={imagesToEdit}
         submitAction={editCase}
+        afterSubmit={afterSubmit}
         fosters={fosters}
         owners={owners}
         hospitals={hospitals}
