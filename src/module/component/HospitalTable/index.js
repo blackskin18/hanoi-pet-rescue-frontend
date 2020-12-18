@@ -1,20 +1,24 @@
 import React, { useState, useEffect }      from 'react'
 import './style.scss'
-import {Table, Space, Popconfirm, message} from 'antd';
-import { SearchOutlined }                  from '@ant-design/icons';
+import { Table, Space, Popconfirm, message, Modal } from 'antd';
+import { SearchOutlined }                           from '@ant-design/icons';
 import PlaceService                        from "../../../service/PlaceService";
 import { SearchText }                      from '../../component/SearchInput/index';
 import {Link , useHistory}                 from "react-router-dom";
 import {Button, ButtonLink}                from "../Button";
 import UserService                         from "../../../service/UserService";
+import CreateHospital                      from "../Form/CreateHospital";
+import { PLACE_TYPE }                      from "../../../config";
 
 const ListCaseTable = (props) => {
   const [checkStrictly, setCheckStrictly] = useState(false);
-
   const [searchParams, setSearchParam] = useState({})
   const [currentPage, setCurrentPage] = useState(1)
   const [total, setTotal] = useState(null)
   const [listHospitals, setListHospitals] = useState([])
+  const [dataToEdit, setDataToEdit] = useState({})
+  const [visibleModalEdit, setVisibleModalEdit] = useState(false);
+
 
   useEffect(() => {
     getHospitalData()
@@ -81,6 +85,20 @@ const ListCaseTable = (props) => {
     }
   }
 
+  const handleEdit = (hospital) => {
+    setDataToEdit(hospital);
+    setVisibleModalEdit(true)
+  }
+
+  const editPlace = async (data) => {
+    return await PlaceService.editPlace(data, dataToEdit.id);
+  }
+
+  const afterEdit = () => {
+    getHospitalData();
+    setVisibleModalEdit(false);
+  }
+
   const columns = [
     {
       title: 'Phòng khám',
@@ -144,7 +162,7 @@ const ListCaseTable = (props) => {
       render   : (text, object) => {
         return <div>
           <ButtonLink className="margin-bottom-5" type="detail" to={"/detail-place/" + object.id}>Chi tiết</ButtonLink><br/>
-          <Button className="margin-bottom-5" type="edit" onClick={() => console.log('khanh')}>Sửa</Button><br/>
+          <Button className="margin-bottom-5" type="edit" onClick={() => handleEdit(object)}>Sửa</Button><br/>
           <Popconfirm
             title="Are you sure to delete this task?"
             onConfirm={() => confirmDelete(object.id)}
@@ -173,6 +191,22 @@ const ListCaseTable = (props) => {
         }}
       />
     </div>
+    <Modal
+      title="Sửa phòng khám"
+      visible={visibleModalEdit}
+      width="90vw"
+      okButtonProps={{style: {display: 'none'}}}
+      cancelButtonProps={{style: {display: 'none'}}}
+      onCancel={() => setVisibleModalEdit(false)}
+    >
+      <CreateHospital
+        dataInsert={dataToEdit}
+        submitAction={editPlace}
+        afterSubmit={afterEdit}
+        type={PLACE_TYPE.HOSPITAL}
+        branch={!!dataToEdit.parent_id}
+      />
+    </Modal>
   </div>)
 }
 

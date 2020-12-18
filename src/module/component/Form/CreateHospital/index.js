@@ -1,18 +1,24 @@
-import React, {useState, useEffect}               from 'react'
+import React, { useState, useEffect }               from 'react'
 import './style.scss'
-import {Row, Col, Divider, Input, Button, Select} from 'antd';
-import PlaceService                               from "../../../../service/PlaceService";
-import {PLACE_TYPE}                               from "../../../../config/index"
-import {useParams}                                from "react-router";
+import { Row, Col, Divider, Input, Button, Select } from 'antd';
+import PlaceService                                 from "../../../../service/PlaceService";
+import { PLACE_TYPE }                               from "../../../../config/index"
+import { useParams }                                from "react-router";
 
 const {Option} = Select;
 
 const CreateHospital = (props) => {
-  var {branch}                            = useParams()
+  const [branch, setBranch]               = useState(props.branch);
   const [dataInsert, setDataInsert]       = useState(props.dataInsert ? props.dataInsert : {});
   const [rootHospitals, setRootHospitals] = useState([]);
-  const [errors, setErrors]                 = useState(false);
-  const [isSubmit, setIsSubmit]             = useState(false);
+  const [errors, setErrors]               = useState(false);
+  const [isSubmit, setIsSubmit]           = useState(false);
+
+  useEffect(() => {
+    console.log(props.dataInsert)
+    setDataInsert(props.dataInsert)
+    setBranch(props.branch)
+  }, [props.dataInsert])
 
   const createPlace = async function () {
     setIsSubmit(false)
@@ -30,6 +36,7 @@ const CreateHospital = (props) => {
       setErrors(response.errors)
     }
     setIsSubmit(false)
+    props.afterSubmit()
   }
 
   const editDataInsert = function (key, value) {
@@ -60,7 +67,10 @@ const CreateHospital = (props) => {
                   Phòng khám
                 </Col>
                 <Col span={20}>
-                  <Select onChange={(e) => editDataInsert('parent_id', e)} style={{width: "100%"}}>
+                  <Select
+                    placeholder="Chọn phòng khám gốc"
+                    value={dataInsert.parent_id ? parseInt(dataInsert.parent_id) : undefined}
+                    onChange={(e) => editDataInsert('parent_id', e)} style={{width: "100%"}}>
                     {
                       rootHospitals && rootHospitals.map((hospital, key) => {
                         return <Option value={hospital.id} key={key}>{hospital.name}</Option>
@@ -77,6 +87,7 @@ const CreateHospital = (props) => {
                 </Col>
                 <Col span={20}>
                   <Input
+                    value={dataInsert.name}
                     placeholder="Nhập tên chi nhánh"
                     onChange={(e) => editDataInsert('name', e.target.value)}
                   />
@@ -91,6 +102,7 @@ const CreateHospital = (props) => {
               </Col>
               <Col span={20}>
                 <Input
+                  value={dataInsert.name}
                   placeholder="Nhập tên phòng khám"
                   onChange={(e) => editDataInsert('name', e.target.value)}
                 />
@@ -105,6 +117,7 @@ const CreateHospital = (props) => {
           </Col>
           <Col span={20}>
             <Input
+              value={dataInsert.address}
               placeholder="Nhập địa chỉ"
               onChange={(e) => editDataInsert('address', e.target.value)}
             />
@@ -118,6 +131,7 @@ const CreateHospital = (props) => {
           </Col>
           <Col span={20}>
             <Input
+              value={dataInsert.phone}
               placeholder="Nhập hotline"
               onChange={(e) => editDataInsert('phone', e.target.value)}
             />
@@ -131,20 +145,22 @@ const CreateHospital = (props) => {
           </Col>
           <Col span={20}>
             <Row gutter={30}>
-              <Col span={2}>Tên</Col>
+              <Col span={4}>Tên {dataInsert.directer_name}</Col>
               <Col span={8}>
                 <Input
+                  value={dataInsert.director_name}
                   placeholder="Nhập tên người phụ trách"
-                  onChange={(e) => editDataInsert('directer_name', e.target.value)}
+                  onChange={(e) => editDataInsert('director_name', e.target.value)}
                 />
                 {errors.directer_name && <span className="text-red">{errors.directer_name[0]}</span>}
 
               </Col>
-              <Col span={4} offset={2}>Điện Thoại</Col>
+              <Col span={4}>Điện Thoại</Col>
               <Col span={8}>
                 <Input
-                  placeholder="Nhập số điện thoại người phụ trách"
-                  onChange={(e) => editDataInsert('directer_phone', e.target.value)}
+                  value={dataInsert.director_phone}
+                  placeholder="Nhập sđt người phụ trách"
+                  onChange={(e) => editDataInsert('director_phone', e.target.value)}
                 />
                 {errors.directer_phone && <span className="text-red">{errors.directer_phone[0]}</span>}
 

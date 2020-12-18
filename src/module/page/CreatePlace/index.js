@@ -14,7 +14,7 @@ const CreatePlace = () => {
   }
 
   return (<div className="home-page">
-    <Divider orientation="left">
+    <Divider>
       <h4 className="text-primary-green left-align padding-left-xs">Tạo {PLACE_TYPE_TEXT[type]}</h4>
     </Divider>
     {
