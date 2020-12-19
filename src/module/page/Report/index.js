@@ -10,7 +10,7 @@ const {Option} = Select;
 
 function PickerWithType({type, onChange, defaultValue}) {
   if (type === 'date') return <DatePicker onChange={onChange}/>;
-  return <DatePicker picker={type} onChange={onChange} disabledDate={disabledDate} defaultValue={defaultValue}/>;
+  return <DatePicker allowClear={false} picker={type} onChange={onChange} disabledDate={disabledDate} defaultValue={defaultValue}/>;
 }
 
 function disabledDate(current) {
@@ -19,12 +19,21 @@ function disabledDate(current) {
 
 const Report = () => {
   const [type, setType]                         = useState('year');
-  const [time, getTime]                         = useState(moment(new Date(), 'YYYY-MM-DD'));
+  const [time, setTime]                         = useState(moment(new Date(), 'YYYY-MM-DD'));
+  const [timeProgressive, setTimeProgressive]                         = useState(moment(new Date(), 'YYYY-MM-DD'));
   const [dataReportStatus, setDataReportStatus] = useState([]);
   const [dataReportPlace, setDataReportPlace]   = useState([]);
+  const [dataReportType, setDataReportType]     = useState([]);
+  const [countCase, setCountCase]               = useState(0);
+
+  const [dataReportStatus1, setDataReportStatus1] = useState([]);
+  const [dataReportPlace1, setDataReportPlace1]   = useState([]);
+  const [dataReportType1, setDataReportType1]     = useState([]);
+  const [countCase1, setCountCase1]               = useState(0);
 
   useEffect(() => {
     getReport()
+    getReportProgressive()
   }, [])
 
   const getReport = async (timeData = false) => {
@@ -34,11 +43,40 @@ const Report = () => {
     var response = await CaseService.getReport(type, timeData)
     setDataReportStatus(response.data.report_by_status)
     setDataReportPlace(response.data.report_by_place)
+    setDataReportType(response.data.report_by_type)
+    setCountCase(response.data.count)
   }
 
-  const findReportStatus = (type, status) => {
-    if (dataReportStatus.length > 0) {
-      let result = dataReportStatus.filter(function (object) {
+  const getReportProgressive = async (timeData = false) => {
+    if (!timeData) {
+      timeData = timeProgressive
+    }
+    var response = await CaseService.getReportProgressive(timeData)
+    setDataReportStatus1(response.data.report_by_status)
+    setDataReportPlace1(response.data.report_by_place)
+    setDataReportType1(response.data.report_by_type)
+    setCountCase1(response.data.count)
+  }
+
+  const downloadReport = async (reportType = 0) => {
+    if(reportType == 1) {
+      await CaseService.downloadReportProgressive(timeProgressive)
+    } else {
+      await CaseService.downloadReport(type, time)
+    }
+  }
+
+  const findReportStatus = (type, status, report = 0) => {
+    let data = [];
+    if(report == 1) {
+      data = dataReportStatus1;
+    } else {
+      data = dataReportStatus;
+    }
+
+
+    if (data.length > 0) {
+      let result = data.filter(function (object) {
         return object.type == type && object.status == status
       })
       return result[0] ? result[0].count : 0
@@ -46,9 +84,16 @@ const Report = () => {
     return 0
   }
 
-  const findReportPlace = (type, place) => {
-    if (dataReportPlace.length > 0) {
-      let result = dataReportPlace.filter(function (object) {
+  const findReportPlace = (type, place, report = 0) => {
+    let data = [];
+    if(report == 1) {
+      data = dataReportPlace1;
+    } else {
+      data = dataReportPlace;
+    }
+
+    if (data.length > 0) {
+      let result = data.filter(function (object) {
         return object.type == type && object.place_type == place
       })
       return result[0] ? result[0].count : 0
@@ -56,144 +101,234 @@ const Report = () => {
     return 0
   }
 
-  const countByType = (type = 'all') => {
-    let result = 0;
-    for (let i in dataReportStatus) {
-      if (dataReportStatus[i].type == type || type === 'all') result += dataReportStatus[i].count
+  const countByType = (type = 'all', report = 0) => {
+    let data = 0;
+    if(report == 1) {
+      data = dataReportType1;
+    } else {
+      data = dataReportType;
     }
 
-    for (let i in dataReportPlace) {
-      if (dataReportPlace[i].type == type || type === 'all') result += dataReportPlace[i].count
+    if (type == 'all') return report == 1 ? countCase1 : countCase;
+    for (let i in data) {
+      if (data[i].type == type) return data[i].count
+    }
+
+    return 0;
+  }
+
+  const getCountByStatus = (status, report = 0) => {
+    let data = 0;
+    if(report == 1) {
+      data = dataReportStatus1;
+    } else {
+      data = dataReportStatus;
+    }
+
+    let result = 0;
+    for (let i in data) {
+      if (data[i].status == status) result += data[i].count
     }
     return result;
   }
 
-  const getCountByStatus = (status) => {
+  const getCountByPlace = (placeType, report = 0) => {
+    let data = 0;
+    if(report == 1) {
+      data = dataReportPlace1;
+    } else {
+      data = dataReportPlace;
+    }
+
     let result = 0;
-    for (let i in dataReportStatus) {
-      if (dataReportStatus[i].status == status) result += dataReportStatus[i].count
+    for (let i in data) {
+      if (data[i].place_type == placeType) result += data[i].count
     }
     return result;
   }
 
-  const getCountByPlace = (placeType) => {
-    let result = 0;
-    for (let i in dataReportPlace) {
-      if (dataReportPlace[i].place_type == placeType) result += dataReportPlace[i].count
-    }
-    return result;
-  }
-
-  return (<div className="detail-user-page">
-    <Divider orientation="left">
-      <h4 className="text-primary-green left-align padding-left-xs margin-bottom-none">Báo cáo cứu hộ</h4>
-    </Divider>
-    <Row>
-      <Col className="margin-bottom-5" span={10} offset={1}>
-        <span className="margin-right-xs">Báo cáo theo</span>
-        <span>
-          <Select value={type} onChange={setType}>
-            <Option value="month">Tháng</Option>
-            <Option value="quarter">Quý</Option>
-            <Option value="year">Năm</Option>
-          </Select>
-          <PickerWithType
-            type={type}
-            onChange={value => {
-              getTime(value)
-              getReport(value)
-            }}
-            defaultValue={moment(new Date(), 'YYYY-MM-DD')}
-          />
-        </span>
-      </Col>
-      <Col span={12} className="text-right">
-        <ExportReport
-          findReportStatus={findReportStatus}
-          findReportPlace={findReportPlace}
-          countByType={countByType}
-          getCountByStatus={getCountByStatus}
-          getCountByPlace={getCountByPlace}
-        />
-      </Col>
-    </Row>
-    <div className="report-table">
-      <Row>
-        <Col className="report-table__header" span={2} offset={1}></Col>
-        <Col className="report-table__header" span={10}><b>Tình trạng cứu hộ</b></Col>
-        <Col className="report-table__header" span={8}><b>Nơi ở hiện tại</b></Col>
-        <Col className="report-table__header" span={2}></Col>
+  return (<div className="report-page">
+    <div className="margin-bottom-lg">
+      <Row className="report-header">
+        <Col span={24}>
+          <h2 className="report-header__title">
+            Báo cáo cứu hộ
+          </h2>
+        </Col>
+        <Col className="margin-bottom-5 " span={24}>
+          <div className="report-header__filter">
+            <Select value={type} onChange={setType}>
+              <Option value="month">Tháng</Option>
+              <Option value="quarter">Quý</Option>
+              <Option value="year">Năm</Option>
+            </Select>
+            <PickerWithType
+              type={type}
+              onChange={value => {
+                setTime(value)
+                getReport(value)
+              }}
+              defaultValue={moment(new Date(), 'YYYY-MM-DD')}
+            />
+          </div>
+        </Col>
       </Row>
       <Row>
-        <Col className="report-table__header" span={2} offset={1}><b>Loài</b></Col>
-        <Col className="report-table__header" span={2}><b>Đang cứu hộ</b></Col>
-        <Col className="report-table__header" span={2}><b>Sẵn sàng tìm chủ</b></Col>
-        <Col className="report-table__header" span={2}><b>Đã đăng chuyển chủ</b></Col>
-        <Col className="report-table__header" span={2}><b>Đã về chủ mới</b></Col>
-        <Col className="report-table__header" span={2}><b>Đã mất</b></Col>
-        <Col className="report-table__header" span={2}><b>Nhà chung</b></Col>
-        <Col className="report-table__header" span={2}><b>Phòng khám</b></Col>
-        <Col className="report-table__header" span={2}><b>Nhà foster</b></Col>
-        <Col className="report-table__header" span={2}><b>Nhà chủ nuôi mới</b></Col>
-        <Col className="report-table__header" span={2}><b>Tổng</b></Col>
+        <Col span={24} className="text-right">
+          <button className="button-export" onClick={() => downloadReport(0)}>Tải báo cáo</button>
+        </Col>
       </Row>
-      <Row>
-        <Col className="report-table__header" span={2} offset={1}><b>Chó</b></Col>
-        <Col span={2}>{findReportStatus(CASE_TYPE.DOG, CASE_STATUS.SAVING)}</Col>
-        <Col span={2}>{findReportStatus(CASE_TYPE.DOG, CASE_STATUS.READY_FIND_OWNER)}</Col>
-        <Col span={2}>{findReportStatus(CASE_TYPE.DOG, CASE_STATUS.POST_FIND_OWNER)}</Col>
-        <Col span={2}>{findReportStatus(CASE_TYPE.DOG, CASE_STATUS.FOUND_OWNER)}</Col>
-        <Col span={2}>{findReportStatus(CASE_TYPE.DOG, CASE_STATUS.DIED)}</Col>
-
-        <Col span={2}>{findReportPlace(CASE_TYPE.DOG, PLACE_TYPE.COMMON_HOME)}</Col>
-        <Col span={2}>{findReportPlace(CASE_TYPE.DOG, PLACE_TYPE.HOSPITAL)}</Col>
-        <Col span={2}>{findReportPlace(CASE_TYPE.DOG, PLACE_TYPE.FOSTER)}</Col>
-        <Col span={2}>{findReportPlace(CASE_TYPE.DOG, PLACE_TYPE.OWNER)}</Col>
-        <Col span={2}>{countByType(CASE_TYPE.DOG)}</Col>
-      </Row>
-      <Row>
-        <Col className="report-table__header" span={2} offset={1}><b>Mèo</b></Col>
-        <Col span={2}>{findReportStatus(CASE_TYPE.CAT, CASE_STATUS.SAVING)}</Col>
-        <Col span={2}>{findReportStatus(CASE_TYPE.CAT, CASE_STATUS.READY_FIND_OWNER)}</Col>
-        <Col span={2}>{findReportStatus(CASE_TYPE.CAT, CASE_STATUS.POST_FIND_OWNER)}</Col>
-        <Col span={2}>{findReportStatus(CASE_TYPE.CAT, CASE_STATUS.FOUND_OWNER)}</Col>
-        <Col span={2}>{findReportStatus(CASE_TYPE.CAT, CASE_STATUS.DIED)}</Col>
-
-        <Col span={2}>{findReportPlace(CASE_TYPE.CAT, PLACE_TYPE.COMMON_HOME)}</Col>
-        <Col span={2}>{findReportPlace(CASE_TYPE.CAT, PLACE_TYPE.HOSPITAL)}</Col>
-        <Col span={2}>{findReportPlace(CASE_TYPE.CAT, PLACE_TYPE.FOSTER)}</Col>
-        <Col span={2}>{findReportPlace(CASE_TYPE.CAT, PLACE_TYPE.OWNER)}</Col>
-        <Col span={2}>{countByType(CASE_TYPE.CAT)}</Col>
-      </Row>
-      <Row>
-        <Col className="report-table__header" span={2} offset={1}><b>Loài khác</b></Col>
-        <Col span={2}>{findReportStatus(CASE_TYPE.OTHER, CASE_STATUS.SAVING)}</Col>
-        <Col span={2}>{findReportStatus(CASE_TYPE.OTHER, CASE_STATUS.READY_FIND_OWNER)}</Col>
-        <Col span={2}>{findReportStatus(CASE_TYPE.OTHER, CASE_STATUS.POST_FIND_OWNER)}</Col>
-        <Col span={2}>{findReportStatus(CASE_TYPE.OTHER, CASE_STATUS.FOUND_OWNER)}</Col>
-        <Col span={2}>{findReportStatus(CASE_TYPE.OTHER, CASE_STATUS.DIED)}</Col>
-
-        <Col span={2}>{findReportPlace(CASE_TYPE.OTHER, PLACE_TYPE.COMMON_HOME)}</Col>
-        <Col span={2}>{findReportPlace(CASE_TYPE.OTHER, PLACE_TYPE.HOSPITAL)}</Col>
-        <Col span={2}>{findReportPlace(CASE_TYPE.OTHER, PLACE_TYPE.FOSTER)}</Col>
-        <Col span={2}>{findReportPlace(CASE_TYPE.OTHER, PLACE_TYPE.OWNER)}</Col>
-        <Col span={2}>{countByType(CASE_TYPE.OTHER)}</Col>
-      </Row>
-      <Row>
-        <Col className="report-table__header" span={2} offset={1}><b>Tổng cộng</b></Col>
-        <Col span={2}>{getCountByStatus(CASE_STATUS.SAVING)}</Col>
-        <Col span={2}>{getCountByStatus(CASE_STATUS.READY_FIND_OWNER)}</Col>
-        <Col span={2}>{getCountByStatus(CASE_STATUS.POST_FIND_OWNER)}</Col>
-        <Col span={2}>{getCountByStatus(CASE_STATUS.FOUND_OWNER)}</Col>
-        <Col span={2}>{getCountByStatus(CASE_STATUS.DIED)}</Col>
-
-        <Col span={2}>{getCountByPlace(PLACE_TYPE.COMMON_HOME)}</Col>
-        <Col span={2}>{getCountByPlace(PLACE_TYPE.HOSPITAL)}</Col>
-        <Col span={2}>{getCountByPlace(PLACE_TYPE.FOSTER)}</Col>
-        <Col span={2}>{getCountByPlace(PLACE_TYPE.OWNER)}</Col>
-        <Col span={2}>{countByType()}</Col>
-      </Row>
+      <div className="report-table">
+        <table>
+          <thead>
+          <tr>
+            <th rowSpan={2} colSpan={1}>Loài</th>
+            <th rowSpan={2}>Tổng số case cứu hộ mới</th>
+            <th colSpan={3}>Nơi ở hiện tại</th>
+            <th rowSpan={2}>Case về chủ mới</th>
+            <th rowSpan={2}>Case mất</th>
+          </tr>
+          <tr>
+            <th>Nhà chung</th>
+            <th>Phòng khám</th>
+            <th>Nhà foster</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Chó</td>
+            <td>{countByType(CASE_TYPE.DOG)}</td>
+            <td>{findReportPlace(CASE_TYPE.DOG, PLACE_TYPE.COMMON_HOME)}</td>
+            <td>{findReportPlace(CASE_TYPE.DOG, PLACE_TYPE.HOSPITAL)}</td>
+            <td>{findReportPlace(CASE_TYPE.DOG, PLACE_TYPE.FOSTER)}</td>
+            <td>{findReportStatus(CASE_TYPE.DOG, CASE_STATUS.FOUND_OWNER)}</td>
+            <td>{findReportStatus(CASE_TYPE.DOG, CASE_STATUS.DIED)}</td>
+          </tr>
+          <tr>
+            <td>Mèo</td>
+            <td>{countByType(CASE_TYPE.CAT)}</td>
+            <td>{findReportPlace(CASE_TYPE.CAT, PLACE_TYPE.COMMON_HOME)}</td>
+            <td>{findReportPlace(CASE_TYPE.CAT, PLACE_TYPE.HOSPITAL)}</td>
+            <td>{findReportPlace(CASE_TYPE.CAT, PLACE_TYPE.FOSTER)}</td>
+            <td>{findReportStatus(CASE_TYPE.CAT, CASE_STATUS.FOUND_OWNER)}</td>
+            <td>{findReportStatus(CASE_TYPE.CAT, CASE_STATUS.DIED)}</td>
+          </tr>
+          <tr>
+            <td>Loài Khác</td>
+            <td>{countByType(CASE_TYPE.OTHER)}</td>
+            <td>{findReportPlace(CASE_TYPE.OTHER, PLACE_TYPE.COMMON_HOME)}</td>
+            <td>{findReportPlace(CASE_TYPE.OTHER, PLACE_TYPE.HOSPITAL)}</td>
+            <td>{findReportPlace(CASE_TYPE.OTHER, PLACE_TYPE.FOSTER)}</td>
+            <td>{findReportStatus(CASE_TYPE.OTHER, CASE_STATUS.FOUND_OWNER)}</td>
+            <td>{findReportStatus(CASE_TYPE.OTHER, CASE_STATUS.DIED)}</td>
+          </tr>
+          <tr>
+            <td>Tổng cộng</td>
+            <td>{countByType('all')}</td>
+            <td>{getCountByPlace(PLACE_TYPE.COMMON_HOME)}</td>
+            <td>{getCountByPlace(PLACE_TYPE.HOSPITAL)}</td>
+            <td>{getCountByPlace(PLACE_TYPE.FOSTER)}</td>
+            <td>{getCountByStatus(CASE_STATUS.FOUND_OWNER)}</td>
+            <td>{getCountByStatus(CASE_STATUS.DIED)}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
+
+
+    <div>
+      <Row className="report-header">
+        <Col span={24}>
+          <h2 className="report-header__title">
+            Báo cáo cứu hộ Lũy kế
+          </h2>
+        </Col>
+        <Col className="margin-bottom-5 " span={24}>
+          <div className="report-header__filter">
+            Đến
+            <DatePicker
+              allowClear={false}
+              onChange={value => {
+                setTimeProgressive(value)
+                getReportProgressive(value)
+              }}
+              defaultValue={moment(new Date(), 'YYYY-MM-DD')}
+            />
+          </div>
+        </Col>
+      </Row>
+      <Row>
+        <Col span={24} className="text-right">
+          <button className="button-export" onClick={() => downloadReport(1)}>Tải báo cáo</button>
+        </Col>
+      </Row>
+      <div className="report-table">
+        <table>
+          <thead>
+            <tr>
+              <th rowSpan={2} colSpan={1}>Loài</th>
+              <th colSpan={4}>Nơi ở hiện tại</th>
+              <th rowSpan={2}>Đã mất</th>
+              <th rowSpan={2}>Tổng case đang cứu hộ</th>
+              <th rowSpan={2}>Tổng case đã cứu hộ đến {timeProgressive.format('DD/MM/YYYY')}</th>
+            </tr>
+            <tr>
+              <th>Nhà chung</th>
+              <th>Phòng khám</th>
+              <th>Nhà foster</th>
+              <th>Nhà chủ nuôi mới</th>
+            </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Chó</td>
+            <td>{findReportPlace(CASE_TYPE.DOG, PLACE_TYPE.COMMON_HOME, 1)}</td>
+            <td>{findReportPlace(CASE_TYPE.DOG, PLACE_TYPE.HOSPITAL, 1)}</td>
+            <td>{findReportPlace(CASE_TYPE.DOG, PLACE_TYPE.FOSTER, 1)}</td>
+            <td>{findReportPlace(CASE_TYPE.DOG, PLACE_TYPE.OWNER, 1)}</td>
+
+            <td>{findReportStatus(CASE_TYPE.DOG, CASE_STATUS.DIED, 1)}</td>
+            <td>{findReportStatus(CASE_TYPE.DOG, CASE_STATUS.SAVING, 1)}</td>
+            <td>{countByType(CASE_TYPE.DOG, 1)}</td>
+          </tr>
+          <tr>
+            <td>Mèo</td>
+            <td>{findReportPlace(CASE_TYPE.CAT, PLACE_TYPE.COMMON_HOME, 1)}</td>
+            <td>{findReportPlace(CASE_TYPE.CAT, PLACE_TYPE.HOSPITAL, 1)}</td>
+            <td>{findReportPlace(CASE_TYPE.CAT, PLACE_TYPE.FOSTER, 1)}</td>
+            <td>{findReportPlace(CASE_TYPE.CAT, PLACE_TYPE.OWNER, 1)}</td>
+
+            <td>{findReportStatus(CASE_TYPE.CAT, CASE_STATUS.DIED, 1)}</td>
+            <td>{findReportStatus(CASE_TYPE.CAT, CASE_STATUS.SAVING, 1)}</td>
+            <td>{countByType(CASE_TYPE.CAT, 1)}</td>
+          </tr>
+          <tr>
+            <td>Loài Khác</td>
+            <td>{findReportPlace(CASE_TYPE.OTHER, PLACE_TYPE.COMMON_HOME, 1)}</td>
+            <td>{findReportPlace(CASE_TYPE.OTHER, PLACE_TYPE.HOSPITAL, 1)}</td>
+            <td>{findReportPlace(CASE_TYPE.OTHER, PLACE_TYPE.FOSTER, 1)}</td>
+            <td>{findReportPlace(CASE_TYPE.OTHER, PLACE_TYPE.OWNER, 1)}</td>
+
+            <td>{findReportStatus(CASE_TYPE.OTHER, CASE_STATUS.DIED, 1)}</td>
+            <td>{findReportStatus(CASE_TYPE.OTHER, CASE_STATUS.SAVING, 1)}</td>
+            <td>{countByType(CASE_TYPE.OTHER, 1)}</td>
+          </tr>
+          <tr>
+            <td>Tổng cộng</td>
+            <td>{getCountByPlace(PLACE_TYPE.COMMON_HOME, 1)}</td>
+            <td>{getCountByPlace(PLACE_TYPE.HOSPITAL, 1)}</td>
+            <td>{getCountByPlace(PLACE_TYPE.FOSTER, 1)}</td>
+            <td>{getCountByPlace(PLACE_TYPE.OWNER, 1)}</td>
+            <td>{getCountByStatus(CASE_STATUS.DIED, 1)}</td>
+            <td>{getCountByStatus(CASE_STATUS.SAVING, 1)}</td>
+            <td>{countByType('all', 1)}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
   </div>)
 }
 

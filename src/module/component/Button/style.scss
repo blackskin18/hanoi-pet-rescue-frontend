@@ -19,11 +19,18 @@
 .button-delete {
   background: $orange;
 }
-.button-edit {
+.button-edit,
+.button-submit
+{
   background: $yellow_color;
 }
 .button-detail {
   background: $green_color;
+}
+
+.button-large {
+  width: 150px;
+  padding: .5rem 0;
 }
 
 .button-goto-page {

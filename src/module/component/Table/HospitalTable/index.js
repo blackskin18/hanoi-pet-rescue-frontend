@@ -2,17 +2,14 @@ import React, { useState, useEffect }      from 'react'
 import './style.scss'
 import { Table, Space, Popconfirm, message, Modal } from 'antd';
 import { SearchOutlined }                           from '@ant-design/icons';
-import PlaceService                        from "../../../service/PlaceService";
-import { SearchText }                      from '../../component/SearchInput/index';
-import {Link , useHistory}                 from "react-router-dom";
-import {Button, ButtonLink}                from "../Button";
-import UserService                         from "../../../service/UserService";
-import CreateHospital                      from "../Form/CreateHospital";
-import { PLACE_TYPE }                      from "../../../config";
+import PlaceService                        from "../../../../service/PlaceService";
+import { SearchText }                      from '../../../component/SearchInput/index';
+import {Button, ButtonLink}                from "../../Button";
+import CreateHospital                      from "../../Form/CreateHospital";
+import { PLACE_TYPE }                      from "../../../../config";
 
 
 const ListCaseTable = (props) => {
-  const [checkStrictly, setCheckStrictly] = useState(false);
   const [searchParams, setSearchParam] = useState({})
   const [currentPage, setCurrentPage] = useState(1)
   const [total, setTotal] = useState(null)
@@ -165,12 +162,12 @@ const ListCaseTable = (props) => {
           <ButtonLink className="margin-bottom-5" type="detail" to={"/detail-place/" + object.id}>Chi tiết</ButtonLink><br/>
           <Button className="margin-bottom-5" type="edit" onClick={() => handleEdit(object)}>Sửa</Button><br/>
           <Popconfirm
-            title="Are you sure to delete this task?"
+            title="Bạn có muốn chắc xóa phòng khám này không?"
             onConfirm={() => confirmDelete(object.id)}
             okText="Yes"
             cancelText="No"
           >
-            <Button type="delete">Xóa</Button>
+            <Button type="delete">Xóa</Button>s
           </Popconfirm>
         </div>
       }
@@ -206,6 +203,7 @@ const ListCaseTable = (props) => {
         afterSubmit={afterEdit}
         type={PLACE_TYPE.HOSPITAL}
         branch={!!dataToEdit.parent_id}
+        buttonText="Sửa phòng khám"
       />
     </Modal>
   </div>)

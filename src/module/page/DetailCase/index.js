@@ -1,29 +1,31 @@
-import React, { useState, useEffect }                                  from 'react'
-import moment                                                          from 'moment';
+import React, {useState, useEffect} from 'react'
+import moment                       from 'moment';
+import {Modal, Row, Col, Divider, Descriptions, Popconfirm, message} from 'antd';
+import CaseService                                                   from '../../../service/CaseService';
+import {PLACE_TYPE_TEXT, CASE_TYPE_TEXT, GENDER_TEXT, PLACE_TYPE}    from "../../../config";
+import {Link, useHistory}                                            from "react-router-dom";
+import {format_date, detect_age, detect_age_arr}                     from '../../../utils/helper'
+import ImageGallery                                                  from 'react-image-gallery';
+import {useParams}                                                   from "react-router";
+import CreateCaseForm                                                from "../../component/Form/CreateCaseForm";
+import PlaceService                                                  from "../../../service/PlaceService";
+import HistoryTable                                                  from "../../component/Table/HistoryTable";
+import "react-image-gallery/styles/scss/image-gallery.scss";
 import './style.scss'
 
-import { Modal, Row, Col, Divider, Descriptions, Popconfirm, message } from 'antd';
-import CaseService                                                     from '../../../service/CaseService';
-import { PLACE_TYPE_TEXT, CASE_TYPE_TEXT, GENDER_TEXT, PLACE_TYPE }    from "../../../config";
-import { Link, useHistory }                                            from "react-router-dom";
-import { format_date, detect_age, detect_age_arr }                     from '../../../utils/helper'
-import ImageGallery                                                    from 'react-image-gallery';
-import { useParams }                                                   from "react-router";
-import "react-image-gallery/styles/scss/image-gallery.scss";
-import CreateCaseForm                            from "../../component/Form/CreateCaseForm";
-import PlaceService                                                    from "../../../service/PlaceService";
-
 const DetailCase = () => {
-  const [info, setInfo]                         = useState({});
-  const [images, setImages]                     = useState([]);
-  const [imagesToEdit, setImagesToEdit]         = useState([]);
-  const [visibleModalEdit, setVisibleModalEdit] = useState(false);
-  const [placeId, setPlaceId]                   = useState(false);
-  const [branchId, setBranchId]                 = useState(false);
-  const [fosters, setFosters]                   = useState([]);
-  const [owners, setOwners]                     = useState([]);
-  const [hospitals, setHospitals]               = useState([]);
-  const [commonHomes, setCommonHomes]           = useState([]);
+  const [info, setInfo]                                   = useState({});
+  const [dataToEdit, setDataToEdit]                       = useState({});
+  const [images, setImages]                               = useState([]);
+  const [imagesToEdit, setImagesToEdit]                   = useState([]);
+  const [visibleModalEdit, setVisibleModalEdit]           = useState(false);
+  const [visibleModalHistories, setVisibleModalHistories] = useState(false);
+  const [placeId, setPlaceId]                             = useState(false);
+  const [branchId, setBranchId]                           = useState(false);
+  const [fosters, setFosters]                             = useState([]);
+  const [owners, setOwners]                               = useState([]);
+  const [hospitals, setHospitals]                         = useState([]);
+  const [commonHomes, setCommonHomes]                     = useState([]);
 
   const history = useHistory()
   var {id}      = useParams()
@@ -56,10 +58,10 @@ const DetailCase = () => {
 
       let imageToEdit = response.data.animal_image.map(function (image) {
         return {
-          uid: image.id,
-          name: 'image.png',
+          uid   : image.id,
+          name  : 'image.png',
           status: 'done',
-          url: image.path,
+          url   : image.path,
         }
       });
       setImagesToEdit(imageToEdit)
@@ -68,8 +70,6 @@ const DetailCase = () => {
     setInfo(response.data)
 
     if (response.data.place && response.data.place.parent_id) {
-      console.log('place_id', response.data.place.parent_id)
-      console.log('branch_id', response.data.place.id)
       setPlaceId(response.data.place.parent_id)
       setBranchId(response.data.place.id)
     } else {
@@ -109,6 +109,39 @@ const DetailCase = () => {
     setCommonHomes(response.data.places)
   }
 
+  const handleOpenPopupEdit = () => {
+    if (Object.keys(info).length === 0 ||
+      hospitals.length === 0 ||
+      owners.length === 0 ||
+      commonHomes.length === 0 ||
+      fosters.length === 0
+    ) {
+      message.loading('đang tải thông tin case, vui lòng đợi một chút');
+      return;
+    }
+
+    console.log('branch', branchId)
+
+    setDataToEdit({
+      code         : info.code,
+      receive_place: info.receive_place,
+      receive_date : moment(info.receive_date, 'YYYY-MM-DD'),
+      name         : info.name,
+      type         : info.type,
+      gender       : info.gender,
+      age_month    : detect_age_arr(info.date_of_birth)[1],
+      age_year     : detect_age_arr(info.date_of_birth)[0],
+      place_type   : info.place && info.place.type,
+      description  : info.description,
+      status       : info.status && info.status.id,
+      note         : info.note,
+      place_id     : placeId,
+      foster_id    : info.foster_id,
+      branch_id    : branchId,
+      owner_id     : info.owner_id,
+    })
+    setVisibleModalEdit(true)
+  }
 
   return (<div className="detail-case-page">
     <Divider orientation="left" className="">
@@ -116,8 +149,12 @@ const DetailCase = () => {
         case {info.code_full}</h4>
     </Divider>
     <Row className="margin-bottom-5">
-      <a className="button-link button-link-edit" onClick={() => setVisibleModalEdit(true)}>Sửa</a>
+      <a className="button-link button-link-edit"
+         onClick={handleOpenPopupEdit}>
+        Sửa
+      </a>
       <Popconfirm
+        className="button-link button-link-edit"
         title="Are you sure to delete this task?"
         onConfirm={confirmDelete}
         okText="Yes"
@@ -125,6 +162,10 @@ const DetailCase = () => {
       >
         <a className="button-link button-link-delete">Xóa</a>
       </Popconfirm>
+      <a className="button-link button-link-edit"
+         onClick={() => setVisibleModalHistories(true)}>
+        Lịch sử cập nhập
+      </a>
     </Row>
     <Row justify="space-between">
       {images.length > 0 &&
@@ -153,16 +194,16 @@ const DetailCase = () => {
           {
             info.foster &&
             <Descriptions.Item label="Thông tin Foster" span={2}>
-              <p>Tên: {info.foster.name}</p>,
-              <p>Điện thoại: {info.foster.phone}</p>,
+              <p>Tên: {info.foster.name}</p>
+              <p>Điện thoại: {info.foster.phone}</p>
               <p>Địa chỉ: {info.foster.address}</p>
             </Descriptions.Item>
           }
           {
             info.owner &&
             <Descriptions.Item label="Thông tin chủ nuôi" span={2}>
-              <p>Tên: {info.owner.name}</p>,
-              <p>Điện thoại: {info.owner.phone}</p>,
+              <p>Tên: {info.owner.name}</p>
+              <p>Điện thoại: {info.owner.phone}</p>
               <p>Địa chỉ: {info.owner.address}</p>
             </Descriptions.Item>
           }
@@ -173,7 +214,7 @@ const DetailCase = () => {
       </Col>
     </Row>
     <Modal
-      title="Basic Modal"
+      title="Sửa thông tin case"
       visible={visibleModalEdit}
       width="90vw"
       okButtonProps={{style: {display: 'none'}}}
@@ -181,24 +222,7 @@ const DetailCase = () => {
       onCancel={handleCancelEdit}
     >
       <CreateCaseForm
-        dataInsert={{
-          code: info.code,
-          receive_place: info.receive_place,
-          receive_date: moment(info.receive_date, 'YYYY-MM-DD'),
-          name: info.name,
-          type: info.type,
-          gender: info.gender,
-          age_month: detect_age_arr(info.date_of_birth)[1],
-          age_year: detect_age_arr(info.date_of_birth)[0],
-          place_type: info.place && info.place.type,
-          description: info.description,
-          status: info.status && info.status.id,
-          note: info.note,
-          place_id: placeId,
-          foster_id: info.foster_id,
-          branch_id: branchId,
-          owner_id: info.owner_id,
-        }}
+        dataInsert={dataToEdit}
         placeId={placeId}
         images={imagesToEdit}
         submitAction={editCase}
@@ -207,7 +231,19 @@ const DetailCase = () => {
         owners={owners}
         hospitals={hospitals}
         commonHomes={commonHomes}
+        buttonText="Sửa case"
       />
+    </Modal>
+
+    <Modal
+      title="Lịch sử cập nhật"
+      visible={visibleModalHistories}
+      width="90vw"
+      okButtonProps={{style: {display: 'none'}}}
+      cancelButtonProps={{style: {display: 'none'}}}
+      onCancel={() => setVisibleModalHistories(false)}
+    >
+      <HistoryTable histories={info.history}/>
     </Modal>
   </div>)
 }

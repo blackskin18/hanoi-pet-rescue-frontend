@@ -6,9 +6,10 @@ import { PLACE_TYPE_TEXT, CASE_TYPE_TEXT, GENDER_TEXT, PLACE_TYPE } from "../../
 import { Link, useHistory }                                         from "react-router-dom";
 
 
-import { useParams }      from "react-router";
-import CreatePlaceForm    from "../../component/Form/CreatePlace";
-import CreateHospital    from "../../component/Form/CreateHospital";
+import { useParams }   from "react-router";
+import CreatePlaceForm from "../../component/Form/CreatePlace";
+import CreateHospital  from "../../component/Form/CreateHospital";
+import CreateUser      from "../../component/Form/CreateUser";
 
 const DetailCase = () => {
   const [visibleModalEdit, setVisibleModalEdit] = useState(false);
@@ -42,7 +43,7 @@ const DetailCase = () => {
   const afterEdit = () => {
     getDetailInfo();
     setVisibleModalEdit(false);
-    message.success('Xửa thành công');
+    message.success('Sửa thành công');
   }
 
 
@@ -116,6 +117,7 @@ const DetailCase = () => {
             afterSubmit={afterEdit}
             type={info.type}
             branch={!!info.parent_id}
+            buttonText="Sửa phòng khám"
           />
           :
           <CreatePlaceForm
@@ -123,6 +125,7 @@ const DetailCase = () => {
             submitAction={editPlace}
             afterSubmit={afterEdit}
             type={info.type}
+            buttonText="Sửa địa điểm"
           />
       }
 

@@ -1,15 +1,15 @@
-import { API_URL } from '../config'
-import axios       from 'axios'
-import moment      from 'moment';
+import {API_URL} from '../config'
+import axios     from 'axios'
+import moment    from 'moment';
 
 
 const API = {
-  CREATE_CASE: API_URL + 'cases',
-  GET_CASES: API_URL + 'cases',
+  CREATE_CASE    : API_URL + 'cases',
+  GET_CASES      : API_URL + 'cases',
   GET_CASE_DETAIL: API_URL + 'cases/{id}',
-  DELETE_CASE: API_URL + 'cases/{id}',
-  GET_REPORT: API_URL + 'cases/report',
-  PATCH_CASE: API_URL + 'cases/{id}',
+  DELETE_CASE    : API_URL + 'cases/{id}',
+  GET_REPORT     : API_URL + 'cases/report',
+  PATCH_CASE     : API_URL + 'cases/{id}',
 }
 
 const createCase = async (data, images) => {
@@ -53,7 +53,6 @@ const getCases = async (searchParams, page, limit = '', type = '') => {
         page: page
       }
     });
-    console.log(response.data)
     return response.data;
   } catch (error) {
     return error.response;
@@ -103,6 +102,23 @@ const getReport = async (type, timeData) => {
     let response = await axios.get(API.GET_REPORT, {
       params: {
         'start_time': startDate,
+        'end_time'  : endDate,
+      }
+    });
+    return response.data;
+
+  } catch (error) {
+    return error;
+  }
+}
+
+const getReportProgressive = async (timeData) => {
+  try {
+    var endDateMoment = moment(timeData)
+    var endDate       = endDateMoment.format('YYYY/MM/DD')
+
+    let response = await axios.get(API.GET_REPORT, {
+      params: {
         'end_time': endDate,
       }
     });
@@ -143,12 +159,53 @@ const editCase = async (data, images, id) => {
   }
 }
 
+const downloadReport = async (type, timeData) => {
+  try {
+    var time = type === 'year' ? timeData.format('YYYY/01/01') : timeData.format('YYYY/MM/01')
+
+    var startDateMoment = moment(time)
+    var endDateMoment   = moment(time)
+
+    switch (type) {
+      case "month":
+        endDateMoment.add(1, 'months').subtract(1, 'd')
+        break;
+      case "quarter":
+        endDateMoment.add(1, 'Q').subtract(1, 'd')
+        break;
+      case "year":
+        endDateMoment.add(1, 'y').subtract(1, 'd')
+        break;
+    }
+
+    var startDate = startDateMoment.format('YYYY/MM/DD')
+    var endDate   = endDateMoment.format('YYYY/MM/DD')
+
+    window.open('http://localhost:8000/api/animal-test/1?start_time=' + startDate + '&end_time=' + endDate)
+  } catch (error) {
+    return error;
+  }
+}
+
+const downloadReportProgressive = async (timeData) => {
+  try {
+    var endDateMoment = moment(timeData)
+    var endDate       = endDateMoment.format('YYYY/MM/DD')
+    window.open('http://localhost:8000/api/animal-test/1?end_time=' + endDate)
+  } catch (error) {
+    return error;
+  }
+}
+
 export default {
   createCase,
   getCases,
   getCaseDetail,
   deleteCase,
   getReport,
-  editCase
+  editCase,
+  getReportProgressive,
+  downloadReport,
+  downloadReportProgressive
 }
 

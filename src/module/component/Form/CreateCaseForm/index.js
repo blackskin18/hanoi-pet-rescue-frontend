@@ -1,10 +1,9 @@
-import React, { useState, useEffect }                                          from 'react'
+import React, {useState, useEffect}                         from 'react'
+import {Row, Col, Input, Select, Modal, Upload, DatePicker} from 'antd';
+import {PlusOutlined}                                       from '@ant-design/icons';
+import {CASE_TYPE, PLACE_TYPE_TEXT, GENDER, PLACE_TYPE}     from "../../../../config";
+import {Button}                                             from "../../Button";
 import './style.scss'
-import { Row, Col, Divider, Input, Button, Select, Modal, Upload, DatePicker } from 'antd';
-import { PlusOutlined }                                                        from '@ant-design/icons';
-import CaseService                                                             from '../../../../service/CaseService';
-import { CASE_TYPE, PLACE_TYPE_TEXT, GENDER, PLACE_TYPE }                      from "../../../../config";
-import PlaceService                                                            from "../../../../service/PlaceService";
 
 const {Option}   = Select;
 const {TextArea} = Input;
@@ -37,10 +36,11 @@ const ListCaseTable = (props) => {
   const [branches, setBranches]             = useState([]);
 
   useEffect(() => {
+    setDataInsert(props.dataInsert)
     if (dataInsert.place_type == PLACE_TYPE.HOSPITAL && placeId) {
-      handleSelectPlace(placeId)
+      detectBranch(placeId)
     }
-  }, [])
+  }, [props.dataInsert])
 
   useEffect(() => {
     setPlaceTypeText(PLACE_TYPE_TEXT[dataInsert.place_type])
@@ -54,8 +54,8 @@ const ListCaseTable = (props) => {
   }, [dataInsert.type, dataInsert.gender, dataInsert.receive_date])
 
 
-
   const handleCancelPreview = () => setPreviewVisible(false);
+
   const handlePreviewImages = async file => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
@@ -83,7 +83,7 @@ const ListCaseTable = (props) => {
     setIsSubmit(false)
   }
 
-  const handleSelectPlace = (e) => {
+  const detectBranch = (e) => {
     if (dataInsert.place_type == PLACE_TYPE.HOSPITAL) {
       var hospital = hospitals.filter((hospital1) => {
         return hospital1.id == e
@@ -94,6 +94,11 @@ const ListCaseTable = (props) => {
         setBranches([])
       }
     }
+
+  }
+
+  const handleSelectPlace = (e) => {
+    detectBranch(e)
     editDataInsert('branch_id', null)
     setPlaceId(e)
   }
@@ -310,7 +315,7 @@ const ListCaseTable = (props) => {
             branches && branches.length > 0 &&
             <Row>
               <Col span={4}>
-                Chọn chi nhánh
+                Chọn chi nhánh {dataInsert.branch_id}
               </Col>
               <Col span={20}>
                 <Select className="w-100"
@@ -429,11 +434,11 @@ const ListCaseTable = (props) => {
           </Row>
           <Row>
             <Col span={24} className="text-center">
-              <Button type="primary"
+              <Button type="submit"
                       size="large"
                       disabled={isSubmit}
                       onClick={handleCreateCase}>
-                Tạo case
+                {props.buttonText}
               </Button>
             </Col>
           </Row>

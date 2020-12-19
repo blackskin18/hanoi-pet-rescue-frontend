@@ -3,6 +3,7 @@ import axios from 'axios'
 
 const API     = {
   CREATE_USER: API_URL + 'users',
+  EDIT_USER: API_URL + 'users/{id}',
   GET_USERS: API_URL + 'users',
   GET_USER_DETAIL: API_URL + 'users/{id}',
   DELETE_USER: API_URL + 'users/{id}',
@@ -11,6 +12,16 @@ const API     = {
 const createUser = async (data) => {
   try {
     let response = await axios.post(API.CREATE_USER, data);
+    return response.data;
+  } catch (error) {
+    return error.response;
+  }
+}
+
+const editUser = async (data, id) => {
+  try {
+    data['_method'] = 'PATCH';
+    let response = await axios.post(API.EDIT_USER.replace('{id}', id), data);
     return response.data;
   } catch (error) {
     return error.response;
@@ -56,6 +67,7 @@ export default {
   createUser,
   getUsers,
   getUserDetail,
-  deleteUser
+  deleteUser,
+  editUser
 }
 

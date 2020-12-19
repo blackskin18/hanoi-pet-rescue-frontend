@@ -70,7 +70,7 @@ const Header = () => {
             <Menu.Item key="sub3-6"><Link to="/places/4">Nhà chủ nuôi mới</Link></Menu.Item>
           </SubMenu>
           <SubMenu key="sub2" icon={<TeamOutlined />} title="Nhóm chuyên môn">
-            <Menu.Item key="sub2-1">Tạo nhóm chuyên môn</Menu.Item>
+            <Menu.Item key="sub2-1"><Link to="/create-user">Tạo nhóm chuyên môn</Link></Menu.Item>
             <Menu.Item key="sub2-2"><Link to="/list-user">Tất cả</Link></Menu.Item>
             <Menu.Item key="sub2-3"><Link to="/list-user/1">Điều phối, cứu hộ, y tế, admin</Link></Menu.Item>
             <Menu.Item key="sub2-4"><Link to="/list-user/2">Tình nguyện viên</Link></Menu.Item>

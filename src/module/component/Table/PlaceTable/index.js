@@ -1,17 +1,21 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect}               from 'react'
 import './style.scss'
-import {Table, Space}               from 'antd';
-import {SearchOutlined}             from '@ant-design/icons';
-import PlaceService                 from "../../../../service/PlaceService";
-import {SearchText}                 from '../../../component/SearchInput/index';
-import {Link, useHistory}           from "react-router-dom";
-import {PLACE_TYPE}                 from "../../../../config";
+import {Table, Space, Popconfirm, message, Modal} from 'antd';
+import {SearchOutlined}                           from '@ant-design/icons';
+import PlaceService                               from "../../../../service/PlaceService";
+import {SearchText}                               from '../../../component/SearchInput/index';
+import {Link, useHistory}                         from "react-router-dom";
+import {PLACE_TYPE}                               from "../../../../config";
+import {Button, ButtonLink}                       from "../../Button";
+import CreateHospital                             from "../../Form/CreateHospital";
 
 const ListCaseTable = (props) => {
   const [searchParams, setSearchParam] = useState({})
   const [currentPage, setCurrentPage]  = useState(1)
   const [total, setTotal]              = useState(null)
   const [listPlaces, setListPlaces]    = useState([])
+  const [dataToEdit, setDataToEdit] = useState({})
+  const [visibleModalEdit, setVisibleModalEdit] = useState(false);
 
   useEffect(() => {
     getPlaceData()
@@ -68,6 +72,30 @@ const ListCaseTable = (props) => {
     filterIcon    : filtered => <SearchOutlined style={{color: filtered ? '#1890ff' : undefined}}/>,
   });
 
+  const confirmDelete = async (id) => {
+    let response = await PlaceService.deletePlace(id);
+    if(response.code === 1) {
+      message.success('Xóa thành công');
+      getPlaceData()
+    } else {
+      message.error(response.message ? response.message : 'Xóa thất bại, vui lòng liên hệ kỹ thuật');
+    }
+  }
+
+  const handleEdit = (hospital) => {
+    setDataToEdit(hospital);
+    setVisibleModalEdit(true)
+  }
+
+  const editPlace = async (data) => {
+    return await PlaceService.editPlace(data, dataToEdit.id);
+  }
+
+  const afterEdit = () => {
+    getPlaceData();
+    setVisibleModalEdit(false);
+  }
+
   const columns = [
     {
       title    : 'Tên',
@@ -101,8 +129,6 @@ const ListCaseTable = (props) => {
     )
   }
 
-
-
   columns.push(
     {
       title: 'Số case đang tạm trú',
@@ -127,11 +153,18 @@ const ListCaseTable = (props) => {
       dataIndex: 'action',
       key      : 'action',
       render   : (value, place) => {
-        return <Space size="middle">
-          <Link to={"/detail-place/" + place.id}>chi tiết</Link>
-          <Link to="">Sửa</Link>
-          <Link to="">Xóa</Link>
-        </Space>
+        return <div>
+          <ButtonLink className="margin-bottom-5" type="detail" to={"/detail-place/" + place.id}>Chi tiết</ButtonLink><br/>
+          <Button className="margin-bottom-5" type="edit" onClick={() => handleEdit(place)}>Sửa</Button><br/>
+          <Popconfirm
+            title="Bạn có muốn chắc xóa địa điểm này không?"
+            onConfirm={() => confirmDelete(place.id)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button type="delete">Xóa</Button>
+          </Popconfirm>
+        </div>
       }
     }
   )
@@ -151,6 +184,24 @@ const ListCaseTable = (props) => {
         }}
       />
     </div>
+
+    <Modal
+      title="Sửa địa điểm"
+      visible={visibleModalEdit}
+      width="90vw"
+      okButtonProps={{style: {display: 'none'}}}
+      cancelButtonProps={{style: {display: 'none'}}}
+      onCancel={() => setVisibleModalEdit(false)}
+    >
+      <CreateHospital
+        dataInsert={dataToEdit}
+        submitAction={editPlace}
+        afterSubmit={afterEdit}
+        type={dataToEdit.type}
+        branch={!!dataToEdit.parent_id}
+        buttonText="Sửa địa điểm"
+      />
+    </Modal>
   </div>)
 }
 

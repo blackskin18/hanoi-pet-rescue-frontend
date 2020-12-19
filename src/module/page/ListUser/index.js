@@ -4,8 +4,7 @@ import UserTable   from '../../component/Table/UserTable';
 import {useParams} from "react-router";
 import './style.scss'
 
-const ListPlace = () => {
-  console.log('aaaa')
+const ListUser = () => {
   var {type} = useParams()
   return (<div className="home-page">
     <Divider orientation="left">
@@ -21,4 +20,4 @@ const ListPlace = () => {
   </div>)
 }
 
-export default ListPlace
+export default ListUser

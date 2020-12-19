@@ -60,6 +60,7 @@ const ListCase = () => {
       owners={owners}
       hospitals={hospitals}
       commonHomes={commonHomes}
+      buttonText="Tạo case"
     />
   </div>)
 }

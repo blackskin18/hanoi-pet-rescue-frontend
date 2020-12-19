@@ -19,6 +19,7 @@ const ListCase = () => {
       dataInsert={{}}
       submitAction={createPlace}
       branch={branch}
+      buttonText="Tạo phòng khám"
     />
   </div>)
 }

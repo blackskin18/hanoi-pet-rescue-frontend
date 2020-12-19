@@ -8,8 +8,11 @@ import {Link}                                                   from "react-rout
 
 
 export const Button = (props) => {
-  return <button {...props}
-    className={"button-" + props.type + " custom-button " + props.className}
+
+  let className= "button-" + props.type + " custom-button " + props.className;
+  if(props.size) className += " button-" + props.size
+
+  return <button {...props} className={className}
   >
     {props.children}
   </button>

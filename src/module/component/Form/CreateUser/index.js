@@ -1,10 +1,10 @@
-import React, {useState, useEffect}                    from 'react'
+import React, {useState, useEffect}   from 'react'
+import {Row, Col, Input, Select, Tag} from 'antd';
+import {getRoles}                     from "../../../../service/RoleService";
+import {Button}                       from "../../Button";
 import './style.scss'
-import {Row, Col, Divider, Input, Button, Select, Tag} from 'antd';
-import {getRoles}                                      from "../../../../service/RoleService";
 
 const {TextArea} = Input;
-const {Option}   = Select;
 
 const ListCase = (props) => {
   const [dataInsert, setDataInsert] = useState(props.dataInsert ? props.dataInsert : {});
@@ -13,14 +13,18 @@ const ListCase = (props) => {
   const [roles, setRoles]           = useState(null);
 
   useEffect(() => {
+    setDataInsert(props.dataInsert)
+  }, [props.dataInsert])
+
+  useEffect(() => {
     getAllRole()
   }, [])
 
   const createUser = async function () {
     setIsSubmit(false)
-    await UserService.createUser(dataInsert)
+    let response = await props.submitAction(dataInsert)
     if (response && response.code === 1) {
-
+      props.afterSubmit()
     } else {
       setErrors(response.errors)
     }
@@ -137,11 +141,12 @@ const ListCase = (props) => {
       </Col>
     </Row>
     <div className="text-center">
-      <Button
-        type="primary"
-        size="large"
-        onClick={createUser}
-      >Tạo</Button>
+      <Button type="submit"
+              size="large"
+              disabled={isSubmit}
+              onClick={createUser}>
+        {props.buttonText}
+      </Button>
     </div>
   </div>)
 }

@@ -5,6 +5,7 @@ import PlaceService                               from "../../../service/PlaceSe
 import CreatePlaceForm                            from "../../component/Form/CreatePlace";
 import {useParams}                                from "react-router";
 import {PLACE_TYPE, PLACE_TYPE_TEXT}              from "../../../config";
+import CreateHospital                             from "../../component/Form/CreateHospital";
 
 const CreatePlace = () => {
   var {type}                              = useParams()
@@ -23,6 +24,7 @@ const CreatePlace = () => {
         dataInsert={{}}
         type={type}
         submitAction={createPlace}
+        buttonText="Tạo địa điểm"
       />
     }
   </div>)

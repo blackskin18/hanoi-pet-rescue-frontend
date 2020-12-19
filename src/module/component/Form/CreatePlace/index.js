@@ -1,14 +1,21 @@
-import React, {useState}             from 'react'
-import './style.scss'
-import {Row, Col, Input, Button}     from 'antd';
+import React, {useEffect, useState}  from 'react'
+import {Row, Col, Input}             from 'antd';
 import {PLACE_TYPE, PLACE_TYPE_TEXT} from "../../../../config/index"
 import {useParams}                   from "react-router";
+import {Button}                      from "../../Button";
+import './style.scss'
+
 
 const CratePlace = (props) => {
   var {type}                        = useParams()
   const [dataInsert, setDataInsert] = useState(props.dataInsert ? props.dataInsert : {});
   const [isSubmit, setIsSubmit]     = useState(false);
   const [errors, setErrors]         = useState(false);
+
+  useEffect(() => {
+    setDataInsert(props.dataInsert)
+
+  }, [props.dataInsert])
 
   const createPlace = async function () {
     setIsSubmit(false)
@@ -20,12 +27,11 @@ const CratePlace = (props) => {
 
     let response = await props.submitAction(data)
     if (response && response.code === 1) {
-
+      props.afterSubmit()
     } else {
       setErrors(response.errors)
     }
     setIsSubmit(false)
-    props.afterSubmit()
   }
 
   const editDataInsert = function (key, value) {
@@ -74,7 +80,7 @@ const CratePlace = (props) => {
           <Col span={20}>
             <Input
               value={dataInsert.phone}
-              placeholder={"Nhập " + ( props.type == PLACE_TYPE.COMMON_HOME ? 'Hotline' : 'Điện thoại')}
+              placeholder={"Nhập " + (props.type == PLACE_TYPE.COMMON_HOME ? 'Hotline' : 'Điện thoại')}
               onChange={(e) => editDataInsert('phone', e.target.value)}
             />
             {errors.phone && <span className="text-red">{errors.phone[0]}</span>}
@@ -128,12 +134,12 @@ const CratePlace = (props) => {
       </Col>
     </Row>
     <div className="text-center">
-      <Button
-        type="primary"
-        size="large"
-        disabled={isSubmit}
-        onClick={createPlace}
-      >Tạo</Button>
+      <Button type="submit"
+              size="large"
+              disabled={isSubmit}
+              onClick={createPlace}>
+        {props.buttonText}
+      </Button>
     </div>
   </div>)
 }

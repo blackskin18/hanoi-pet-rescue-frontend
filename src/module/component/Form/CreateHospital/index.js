@@ -1,9 +1,9 @@
-import React, { useState, useEffect }               from 'react'
+import React, {useState, useEffect} from 'react'
 import './style.scss'
-import { Row, Col, Divider, Input, Button, Select } from 'antd';
-import PlaceService                                 from "../../../../service/PlaceService";
-import { PLACE_TYPE }                               from "../../../../config/index"
-import { useParams }                                from "react-router";
+import {Row, Col, Input, Select}    from 'antd';
+import PlaceService                 from "../../../../service/PlaceService";
+import {PLACE_TYPE}                 from "../../../../config/index"
+import {Button}                     from "../../Button";
 
 const {Option} = Select;
 
@@ -15,7 +15,6 @@ const CreateHospital = (props) => {
   const [isSubmit, setIsSubmit]           = useState(false);
 
   useEffect(() => {
-    console.log(props.dataInsert)
     setDataInsert(props.dataInsert)
     setBranch(props.branch)
   }, [props.dataInsert])
@@ -26,7 +25,7 @@ const CreateHospital = (props) => {
     let data = {
       ...dataInsert,
       root_hospital: branch,
-      type: PLACE_TYPE.HOSPITAL
+      type         : PLACE_TYPE.HOSPITAL
     }
 
     let response = await props.submitAction(data)
@@ -185,12 +184,11 @@ const CreateHospital = (props) => {
       </Col>
     </Row>
     <div className="text-center">
-      <Button
-        type="primary"
-        size="large"
-        disabled={isSubmit}
-        onClick={createPlace}
-      >Tạo</Button>
+      <Button type="submit"
+              size="large"
+              disabled={isSubmit}
+              onClick={createPlace}
+      >{props.buttonText}</Button>
     </div>
   </div>)
 }

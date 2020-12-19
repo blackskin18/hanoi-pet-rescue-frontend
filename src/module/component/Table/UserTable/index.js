@@ -1,15 +1,17 @@
-import React, {useState, useEffect}    from 'react'
+import React, {useState, useEffect}             from 'react'
 import './style.scss'
-import {Table, message, Tag, Popconfirm} from 'antd';
-import {SearchOutlined}                from '@ant-design/icons';
-import UserService                     from "../../../../service/UserService";
-import {SearchText}                    from '../../../component/SearchInput/index';
-import {Link}                          from "react-router-dom";
-import {ROLE_TAG}                      from '../../../../config'
-import {Button, ButtonLink}            from "../../Button";
-import CaseService                     from "../../../../service/CaseService";
+import {Table, message, Tag, Popconfirm, Modal} from 'antd';
+import {SearchOutlined}                         from '@ant-design/icons';
+import UserService                              from "../../../../service/UserService";
+import {SearchText}                             from '../../../component/SearchInput/index';
+import {ROLE_TAG}                               from '../../../../config'
+import {Button, ButtonLink}                     from "../../Button";
+import CreateUser                               from "../../Form/CreateUser";
 
 const ListCaseTable = (props) => {
+  const [visibleModalEdit, setVisibleModalEdit] = useState(false);
+  const [dataToEdit, setDataToEdit] = useState({});
+
   const [searchParams, setSearchParam] = useState({})
   const [currentPage, setCurrentPage]  = useState(1)
   const [total, setTotal]              = useState(null)
@@ -17,7 +19,6 @@ const ListCaseTable = (props) => {
 
   useEffect(() => {
     getUserData()
-    console.log(props.type)
   }, [props.type])
 
   const getUserData = async (search = {}, page = null) => {
@@ -81,6 +82,28 @@ const ListCaseTable = (props) => {
     }
   }
 
+  const editUser = async (data) => {
+    return await UserService.editUser(data, dataToEdit.id);
+  }
+
+  const afterEdit = () => {
+    getUserData();
+    setVisibleModalEdit(false);
+    message.success('Sửa thành công');
+  }
+
+  const handleEdit = (user) => {
+    let userRoles = user.roles.map(function (role) {
+      return role.id
+    })
+    setDataToEdit({
+      ...user,
+      roles: userRoles
+    })
+
+    setVisibleModalEdit(true)
+  }
+
   const columns = [
     {
       title    : 'Tên',
@@ -118,7 +141,7 @@ const ListCaseTable = (props) => {
       render   : (text, object) => {
         return <div>
           <ButtonLink className="margin-bottom-5" type="detail" to={"/detail-user/" + object.id}>Chi tiết</ButtonLink><br/>
-          <Button className="margin-bottom-5" type="edit" onClick={() => console.log('khanh')}>Sửa</Button><br/>
+          <Button className="margin-bottom-5" type="edit" onClick={() => handleEdit(object)}>Sửa</Button><br/>
           <Popconfirm
             title="Are you sure to delete this task?"
             onConfirm={() => confirmDelete(object.id)}
@@ -147,6 +170,21 @@ const ListCaseTable = (props) => {
         }}
       />
     </div>
+    <Modal
+      title="Sửa thông tin người dùng"
+      visible={visibleModalEdit}
+      width="90vw"
+      okButtonProps={{style: {display: 'none'}}}
+      cancelButtonProps={{style: {display: 'none'}}}
+      onCancel={() => setVisibleModalEdit(false)}
+    >
+      <CreateUser
+        dataInsert={dataToEdit}
+        submitAction={editUser}
+        afterSubmit={afterEdit}
+        buttonText="Sửa người dùng"
+      />
+    </Modal>
   </div>)
 }
 

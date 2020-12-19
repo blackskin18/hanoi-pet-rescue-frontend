@@ -1,49 +1,62 @@
 @import "../../../styles/abstracts/variables";
 
-.detail-user-page {
-  & .fullscreen .image-gallery-slide.center {
-    height: inherit;
-  }
-  & .image-gallery-slide.center {
-    height: 500px;
-    & div {
-      height: 100%;
-      background: black;
-    }
+.report-table {
+  &>div>div {
+    border: 1px solid #333;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  & .image-gallery-content .image-gallery-slide .image-gallery-image {
-    height: 100%;
-    object-fit: contain;
-  }
-
-  & .image-gallery-thumbnail + .image-gallery-thumbnail{
-    height: 100px;
-    background: black;
-  }
-
-  & .image-gallery-thumbnail .image-gallery-thumbnail-inner {
-    height: 100%;
-  }
-
-  & .image-gallery-thumbnail .image-gallery-thumbnail-image {
-    height: 100%;
-    object-fit: contain;
-  }
-
-  & .row-info {
-    border-bottom: 1px solid $grey_color;
+  &__header {
     padding: .5rem 0;
+    //background-color: lighten($green_light_color, 10);
   }
 
-  & .button-link {
-    cursor: pointer;
-    &:hover {
-      text-decoration: underline;
+  &>table{
+    width: 100%;
+    border: 1px solid #333;
+
+    & th, & td {
+      padding: .5rem;
+      text-align: center;
     }
 
-    &-edit {
-      margin-right: 1rem;
+    & * {
+      border: 1px solid #333;
+      padding: 0;
     }
+  }
+}
+
+.report-header {
+  background-color: $green_light_color;
+  text-align: center;
+
+  &__title {
+    font-size: 2.5rem;
+  }
+
+  &__filter {
+    display: flex;
+    justify-items: center;
+    justify-content: center;
+  }
+}
+
+.button-export {
+  border: none;
+  background-color: inherit;
+  color: $primary_color;
+  text-decoration: underline;
+  cursor: pointer;
+  transition: .1s;
+
+  &:hover {
+    transform: translateY(-1px);
+  }
+  &:active {
+    transform: translateY(0);
   }
 }
