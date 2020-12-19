@@ -126,8 +126,9 @@ const ListCaseTable = (props) => {
       title    : 'Hành động',
       dataIndex: 'action',
       key      : 'action',
-      render   : () => {
+      render   : (value, place) => {
         return <Space size="middle">
+          <Link to={"/detail-place/" + place.id}>chi tiết</Link>
           <Link to="">Sửa</Link>
           <Link to="">Xóa</Link>
         </Space>

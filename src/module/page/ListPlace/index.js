@@ -27,9 +27,9 @@ const ListPlace = () => {
           [<Button onClick={() => history.push('/create-hospital/branch')}>Tạo chi nhánh</Button>,
           <Button onClick={() => history.push('/create-hospital')}>Tạo phòng khám</Button>]
       }
-      {type === '2' && <Button onClick={() => history.push('/create-place/commonhome')}>Tạo nhà chung</Button>}
-      {type === '3' && <Button onClick={() => history.push('/create-place')}>Tạo foster</Button>}
-      {type === '4' && <Button onClick={() => history.push('/create-place')}>Tạo chủ nuôi mới</Button>}
+      {type === '2' && <Button onClick={() => history.push('/create-place/2')}>Tạo nhà chung</Button>}
+      {type === '3' && <Button onClick={() => history.push('/create-place/3')}>Tạo foster</Button>}
+      {type === '4' && <Button onClick={() => history.push('/create-place/4')}>Tạo chủ nuôi mới</Button>}
     </div>
 
 

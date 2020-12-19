@@ -25,6 +25,7 @@ const CratePlace = (props) => {
       setErrors(response.errors)
     }
     setIsSubmit(false)
+    props.afterSubmit()
   }
 
   const editDataInsert = function (key, value) {
@@ -45,6 +46,7 @@ const CratePlace = (props) => {
           </Col>
           <Col span={20}>
             <Input
+              value={dataInsert.name}
               placeholder={"Nhập tên " + PLACE_TYPE_TEXT[props.type]}
               onChange={(e) => editDataInsert('name', e.target.value)}
             />
@@ -57,6 +59,7 @@ const CratePlace = (props) => {
           </Col>
           <Col span={20}>
             <Input
+              value={dataInsert.address}
               placeholder="Nhập địa chỉ"
               onChange={(e) => editDataInsert('address', e.target.value)}
             />
@@ -66,11 +69,12 @@ const CratePlace = (props) => {
         </Row>
         <Row>
           <Col span={4}>
-            {PLACE_TYPE == PLACE_TYPE.COMMON_HOME ? 'Hotline' : 'Điện thoại'}
+            {props.type == PLACE_TYPE.COMMON_HOME ? 'Hotline' : 'Điện thoại'}
           </Col>
           <Col span={20}>
             <Input
-              placeholder={"Nhập " + (PLACE_TYPE == PLACE_TYPE.COMMON_HOME ? 'Hotline' : 'Điện thoại')}
+              value={dataInsert.phone}
+              placeholder={"Nhập " + ( props.type == PLACE_TYPE.COMMON_HOME ? 'Hotline' : 'Điện thoại')}
               onChange={(e) => editDataInsert('phone', e.target.value)}
             />
             {errors.phone && <span className="text-red">{errors.phone[0]}</span>}
@@ -85,17 +89,19 @@ const CratePlace = (props) => {
             </Col>
             <Col span={20}>
               <Row gutter={30}>
-                <Col span={2}>Tên</Col>
+                <Col span={4}>Tên</Col>
                 <Col span={8}>
                   <Input
+                    value={dataInsert.directer_name}
                     placeholder="Nhập tên người phụ trách"
                     onChange={(e) => editDataInsert('directer_name', e.target.value)}
                   />
                   {errors.directer_name && <span className="text-red">{errors.directer_name[0]}</span>}
                 </Col>
-                <Col span={4} offset={2}>Điện Thoại</Col>
+                <Col span={4}>Điện Thoại</Col>
                 <Col span={8}>
                   <Input
+                    value={dataInsert.directer_phone}
                     placeholder="Nhập số điện thoại người phụ trách"
                     onChange={(e) => editDataInsert('directer_phone', e.target.value)}
                   />

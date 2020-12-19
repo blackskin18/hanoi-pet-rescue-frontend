@@ -1,31 +1,32 @@
-import React, {useState, useEffect}                                  from 'react'
-import moment                                                        from 'moment';
+import React, { useState, useEffect }                                  from 'react'
+import moment                                                          from 'moment';
 import './style.scss'
-import {Modal, Row, Col, Divider, Descriptions, Popconfirm, message} from 'antd';
-import CaseService                                                   from '../../../service/CaseService';
-import { PLACE_TYPE_TEXT, CASE_TYPE_TEXT, GENDER_TEXT, PLACE_TYPE }  from "../../../config";
-import {Link, useHistory}                        from "react-router-dom";
-import {format_date, detect_age, detect_age_arr} from '../../../utils/helper'
-import ImageGallery                              from 'react-image-gallery';
-import {useParams}                               from "react-router";
+
+import { Modal, Row, Col, Divider, Descriptions, Popconfirm, message } from 'antd';
+import CaseService                                                     from '../../../service/CaseService';
+import { PLACE_TYPE_TEXT, CASE_TYPE_TEXT, GENDER_TEXT, PLACE_TYPE }    from "../../../config";
+import { Link, useHistory }                                            from "react-router-dom";
+import { format_date, detect_age, detect_age_arr }                     from '../../../utils/helper'
+import ImageGallery                                                    from 'react-image-gallery';
+import { useParams }                                                   from "react-router";
 import "react-image-gallery/styles/scss/image-gallery.scss";
-import CreateCaseForm                            from "../../component/Form/CreateCaseForm"
-import PlaceService                              from "../../../service/PlaceService";
+import CreateCaseForm                            from "../../component/Form/CreateCaseForm";
+import PlaceService                                                    from "../../../service/PlaceService";
 
 const DetailCase = () => {
   const [info, setInfo]                         = useState({});
   const [images, setImages]                     = useState([]);
   const [imagesToEdit, setImagesToEdit]         = useState([]);
   const [visibleModalEdit, setVisibleModalEdit] = useState(false);
-  const [placeId, setPlaceId] = useState(false);
-  const [branchId, setBranchId] = useState(false);
-  const [fosters, setFosters]               = useState([]);
-  const [owners, setOwners]                 = useState([]);
-  const [hospitals, setHospitals]           = useState([]);
-  const [commonHomes, setCommonHomes]       = useState([]);
+  const [placeId, setPlaceId]                   = useState(false);
+  const [branchId, setBranchId]                 = useState(false);
+  const [fosters, setFosters]                   = useState([]);
+  const [owners, setOwners]                     = useState([]);
+  const [hospitals, setHospitals]               = useState([]);
+  const [commonHomes, setCommonHomes]           = useState([]);
 
-  const history                                 = useHistory()
-  var {id}                                      = useParams()
+  const history = useHistory()
+  var {id}      = useParams()
 
   useEffect(() => {
     getDetailInfo()
@@ -46,19 +47,19 @@ const DetailCase = () => {
   }
 
   const getDetailInfo = async () => {
-    let response   = await CaseService.getCaseDetail(id);
+    let response = await CaseService.getCaseDetail(id);
 
-    if(response.data.animal_image) {
+    if (response.data.animal_image) {
       let imagesData = response.data.animal_image.map(function (image) {
         return {original: image.path, thumbnail: image.path}
       })
 
       let imageToEdit = response.data.animal_image.map(function (image) {
         return {
-          uid   : image.id,
+          uid: image.id,
           name: 'image.png',
           status: 'done',
-          url   : image.path,
+          url: image.path,
         }
       });
       setImagesToEdit(imageToEdit)
@@ -66,7 +67,7 @@ const DetailCase = () => {
     }
     setInfo(response.data)
 
-    if(response.data.place && response.data.place.parent_id) {
+    if (response.data.place && response.data.place.parent_id) {
       console.log('place_id', response.data.place.parent_id)
       console.log('branch_id', response.data.place.id)
       setPlaceId(response.data.place.parent_id)
@@ -145,30 +146,29 @@ const DetailCase = () => {
           <Descriptions.Item label="Nơi ở hiện tại" span={2}>
             {info.place && <span>{PLACE_TYPE_TEXT[info.place.type]} <Link to="">{info.place.name}</Link></span>}
           </Descriptions.Item>
-          <Descriptions.Item label="Mô tả" span={2}><pre>{info.description}</pre></Descriptions.Item>
+          <Descriptions.Item label="Mô tả" span={2}>
+            <pre className="animal-notes">{info.description}</pre>
+          </Descriptions.Item>
           <Descriptions.Item label="Trạng thái" span={2}>{info.status && info.status.name} </Descriptions.Item>
-          <Descriptions.Item label="Thông tin Foster" span={2}>
-            {
-              info.foster &&
-              [
-                <p>Tên: {info.foster.name}</p>,
-                <p>Điện thoại: {info.foster.phone}</p>,
-                <p>Địa chỉ: {info.foster.address}</p>
-              ]
-            }
+          {
+            info.foster &&
+            <Descriptions.Item label="Thông tin Foster" span={2}>
+              <p>Tên: {info.foster.name}</p>,
+              <p>Điện thoại: {info.foster.phone}</p>,
+              <p>Địa chỉ: {info.foster.address}</p>
+            </Descriptions.Item>
+          }
+          {
+            info.owner &&
+            <Descriptions.Item label="Thông tin chủ nuôi" span={2}>
+              <p>Tên: {info.owner.name}</p>,
+              <p>Điện thoại: {info.owner.phone}</p>,
+              <p>Địa chỉ: {info.owner.address}</p>
+            </Descriptions.Item>
+          }
+          <Descriptions.Item label="Ghi chú" span={2}>
+            <pre className="animal-notes">{info.note}</pre>
           </Descriptions.Item>
-          <Descriptions.Item label="Thông tin chủ nuôi" span={2}>
-            {
-              info.owner &&
-                [
-                  <p>Tên: {info.owner.name}</p>,
-                  <p>Điện thoại: {info.owner.phone}</p>,
-                  <p>Địa chỉ: {info.owner.address}</p>
-                ]
-            }
-          </Descriptions.Item>
-          <Descriptions.Item label="Ghi chú" span={2}><pre className="animal-notes">{info.note}</pre></Descriptions.Item>
-
         </Descriptions>
       </Col>
     </Row>
@@ -176,28 +176,28 @@ const DetailCase = () => {
       title="Basic Modal"
       visible={visibleModalEdit}
       width="90vw"
-      okButtonProps={{ style: { display: 'none' } }}
-      cancelButtonProps={{ style: { display: 'none' } }}
+      okButtonProps={{style: {display: 'none'}}}
+      cancelButtonProps={{style: {display: 'none'}}}
       onCancel={handleCancelEdit}
     >
       <CreateCaseForm
         dataInsert={{
-          code         : info.code,
+          code: info.code,
           receive_place: info.receive_place,
           receive_date: moment(info.receive_date, 'YYYY-MM-DD'),
-          name         : info.name,
-          type         : info.type,
-          gender       : info.gender,
-          age_month    : detect_age_arr(info.date_of_birth)[1],
-          age_year     : detect_age_arr(info.date_of_birth)[0],
-          place_type   : info.place && info.place.type,
-          description  : info.description,
-          status       : info.status && info.status.id,
-          note         : info.note,
-          place_id     : placeId,
-          foster_id    : info.foster_id,
-          branch_id    : branchId,
-          owner_id     : info.owner_id,
+          name: info.name,
+          type: info.type,
+          gender: info.gender,
+          age_month: detect_age_arr(info.date_of_birth)[1],
+          age_year: detect_age_arr(info.date_of_birth)[0],
+          place_type: info.place && info.place.type,
+          description: info.description,
+          status: info.status && info.status.id,
+          note: info.note,
+          place_id: placeId,
+          foster_id: info.foster_id,
+          branch_id: branchId,
+          owner_id: info.owner_id,
         }}
         placeId={placeId}
         images={imagesToEdit}

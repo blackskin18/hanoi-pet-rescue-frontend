@@ -1,15 +1,15 @@
-import {API_URL} from '../config'
-import axios     from 'axios'
-import moment    from 'moment';
+import { API_URL } from '../config'
+import axios       from 'axios'
+import moment      from 'moment';
 
 
 const API = {
-  CREATE_CASE    : API_URL + 'cases',
-  GET_CASES      : API_URL + 'cases',
+  CREATE_CASE: API_URL + 'cases',
+  GET_CASES: API_URL + 'cases',
   GET_CASE_DETAIL: API_URL + 'cases/{id}',
-  DELETE_CASE    : API_URL + 'cases/{id}',
-  GET_REPORT     : API_URL + 'cases/report',
-  PATCH_CASE     : API_URL + 'cases/{id}',
+  DELETE_CASE: API_URL + 'cases/{id}',
+  GET_REPORT: API_URL + 'cases/report',
+  PATCH_CASE: API_URL + 'cases/{id}',
 }
 
 const createCase = async (data, images) => {
@@ -18,7 +18,7 @@ const createCase = async (data, images) => {
     for (let i in data) {
       if (i === 'receive_date') {
         formData.append(i, data[i].format('YYYY/MM/DD'));
-      } else {
+      } else if (data[i]) {
         formData.append(i, data[i]);
       }
     }
@@ -103,7 +103,7 @@ const getReport = async (type, timeData) => {
     let response = await axios.get(API.GET_REPORT, {
       params: {
         'start_time': startDate,
-        'end_time'  : endDate,
+        'end_time': endDate,
       }
     });
     return response.data;
@@ -120,13 +120,13 @@ const editCase = async (data, images, id) => {
     for (let i in data) {
       if (i === 'receive_date') {
         formData.append(i, data[i].format('YYYY/MM/DD'));
-      } else if(data[i]) {
+      } else if (data[i]) {
         formData.append(i, data[i]);
       }
     }
 
     for (let i in images) {
-      if(images[i].size) {
+      if (images[i].size) {
         formData.append("images_add[]", images[i].originFileObj);
       } else {
         formData.append("old_images[]", images[i].url);

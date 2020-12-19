@@ -3,6 +3,7 @@ import axios from 'axios'
 
 const API     = {
   CREATE_PLACE: API_URL + 'places',
+  EDIT_PLACE: API_URL + 'places/{place_id}',
   GET_PLACES: API_URL + 'places',
   GET_ROOT_HOSPITAL: API_URL + 'places/root-hospitals',
   GET_PLACE_DETAIL: API_URL + 'places/{id}',
@@ -65,8 +66,19 @@ const deletePlace = async (id) => {
   }
 }
 
+const editPlace = async (data, id) => {
+  try {
+    data['_method'] = 'PATCH';
+    let response = await axios.post(API.EDIT_PLACE.replace('{place_id}', id), data);
+    return response.data;
+  } catch (error) {
+    return error.response.data;
+  }
+}
+
 export default {
   createPlace,
+  editPlace,
   getPlaces,
   getRootHospitals,
   getPlaceDetail,
