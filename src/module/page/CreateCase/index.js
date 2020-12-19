@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import './style.scss'
 import {Divider}                    from 'antd';
 import CaseService                  from '../../../service/CaseService';
-import CreateCaseForm               from "../../component/CreateCaseForm"
+import CreateCaseForm               from "../../component/Form/CreateCaseForm"
 import PlaceService                 from "../../../service/PlaceService";
 import {PLACE_TYPE}                 from "../../../config";
 

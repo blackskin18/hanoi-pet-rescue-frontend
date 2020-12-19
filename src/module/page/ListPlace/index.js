@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from 'react'
-import {Divider, Button, Row, Col}            from 'antd';
-import HospitalTable                from '../../component/HospitalTable';
-import PlaceTable                   from '../../component/PlaceTable';
-import {useParams}      from "react-router";
-import {useHistory}    from "react-router-dom";
+import {Divider, Button, Row, Col}  from 'antd';
+import HospitalTable                from '../../component/Table/HospitalTable';
+import PlaceTable                   from '../../component/Table/PlaceTable';
+import {useParams}                  from "react-router";
+import {useHistory}                 from "react-router-dom";
 
 import './style.scss'
 

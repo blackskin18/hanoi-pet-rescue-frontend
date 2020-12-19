@@ -2,9 +2,9 @@ import React, { useState, useEffect }                                          f
 import './style.scss'
 import { Row, Col, Divider, Input, Button, Select, Modal, Upload, DatePicker } from 'antd';
 import { PlusOutlined }                                                        from '@ant-design/icons';
-import CaseService                                                             from '../../../service/CaseService';
-import { CASE_TYPE, PLACE_TYPE_TEXT, GENDER, PLACE_TYPE }                      from "../../../config";
-import PlaceService                                                            from "../../../service/PlaceService";
+import CaseService                                                             from '../../../../service/CaseService';
+import { CASE_TYPE, PLACE_TYPE_TEXT, GENDER, PLACE_TYPE }                      from "../../../../config";
+import PlaceService                                                            from "../../../../service/PlaceService";
 
 const {Option}   = Select;
 const {TextArea} = Input;

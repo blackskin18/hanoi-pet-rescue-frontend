@@ -1,0 +1,15 @@
+@import "../../../styles/abstracts/variables";
+
+.animal-image {
+
+}
+
+.date-save-input {
+  width: 100%
+}
+
+.create-case__input-boxs {
+  &>div {
+    margin-bottom: 1rem;
+  }
+}

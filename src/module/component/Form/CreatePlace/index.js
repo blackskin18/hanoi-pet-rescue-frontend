@@ -1,15 +1,14 @@
-import React, {useState, useEffect}               from 'react'
+import React, {useState}             from 'react'
 import './style.scss'
-import {Row, Col, Input, Button, Select} from 'antd';
-import PlaceService                               from "../../../../service/PlaceService";
-import {PLACE_TYPE, PLACE_TYPE_TEXT}               from "../../../../config/index"
-import {useParams}                                from "react-router";
+import {Row, Col, Input, Button}     from 'antd';
+import {PLACE_TYPE, PLACE_TYPE_TEXT} from "../../../../config/index"
+import {useParams}                   from "react-router";
 
 const CratePlace = (props) => {
-  var {type}                              = useParams()
-  const [dataInsert, setDataInsert]       = useState(props.dataInsert ? props.dataInsert : {});
-  const [isSubmit, setIsSubmit]             = useState(false);
-  const [errors, setErrors]                 = useState(false);
+  var {type}                        = useParams()
+  const [dataInsert, setDataInsert] = useState(props.dataInsert ? props.dataInsert : {});
+  const [isSubmit, setIsSubmit]     = useState(false);
+  const [errors, setErrors]         = useState(false);
 
   const createPlace = async function () {
     setIsSubmit(false)

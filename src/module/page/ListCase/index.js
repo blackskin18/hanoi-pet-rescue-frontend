@@ -1,7 +1,7 @@
-import React, {useState, useEffect}         from 'react'
-import {Divider}     from 'antd';
-import ListCaseTable from '../../component/ListCaseTable';
-import {useParams}   from "react-router";
+import React, {useState, useEffect} from 'react'
+import {Divider}                    from 'antd';
+import ListCaseTable                from '../../component/Table/ListCaseTable';
+import {useParams}                  from "react-router";
 import './style.scss'
 
 

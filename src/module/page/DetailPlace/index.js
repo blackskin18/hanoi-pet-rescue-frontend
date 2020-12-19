@@ -80,7 +80,6 @@ const DetailCase = () => {
         </Descriptions>
       </Col>
     </Row>
-
   </div>)
 }
 

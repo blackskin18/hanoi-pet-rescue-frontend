@@ -4,13 +4,13 @@ import './style.scss'
 import {Modal, Row, Col, Divider, Descriptions, Popconfirm, message} from 'antd';
 import CaseService                                                   from '../../../service/CaseService';
 import { PLACE_TYPE_TEXT, CASE_TYPE_TEXT, GENDER_TEXT, PLACE_TYPE }  from "../../../config";
-import {Link, useHistory}                                            from "react-router-dom";
-import {format_date, detect_age, detect_age_arr}                     from '../../../utils/helper'
-import ImageGallery                                                  from 'react-image-gallery';
-import {useParams}                                                   from "react-router";
+import {Link, useHistory}                        from "react-router-dom";
+import {format_date, detect_age, detect_age_arr} from '../../../utils/helper'
+import ImageGallery                              from 'react-image-gallery';
+import {useParams}                               from "react-router";
 import "react-image-gallery/styles/scss/image-gallery.scss";
-import CreateCaseForm                                                from "../../component/CreateCaseForm"
-import PlaceService                                                  from "../../../service/PlaceService";
+import CreateCaseForm                            from "../../component/Form/CreateCaseForm"
+import PlaceService                              from "../../../service/PlaceService";
 
 const DetailCase = () => {
   const [info, setInfo]                         = useState({});

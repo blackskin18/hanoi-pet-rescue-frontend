@@ -1,6 +1,6 @@
 import React       from 'react'
 import {Divider}   from 'antd';
-import UserTable   from '../../component/UserTable';
+import UserTable   from '../../component/Table/UserTable';
 import {useParams} from "react-router";
 import './style.scss'
 

@@ -2,10 +2,10 @@ import React, {useState, useEffect}                                 from 'react'
 import './style.scss'
 import {Row, Col, Table, Image, Select, Space, Popconfirm, message} from 'antd';
 import {SearchOutlined}                                             from '@ant-design/icons';
-import CaseService                                                  from "../../../service/CaseService";
-import {SearchStatus, SearchText, SearchDateRange, SearchPlace}     from '../../component/SearchInput/index';
+import CaseService                                                  from "../../../../service/CaseService";
+import {SearchStatus, SearchText, SearchDateRange, SearchPlace}     from '../../../component/SearchInput/index';
 import {Link, useHistory}                                           from "react-router-dom";
-import {Button, ButtonLink}                                         from '../../component/Button'
+import {Button, ButtonLink}                                         from '../../../component/Button'
 
 
 const {Option} = Select;

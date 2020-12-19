@@ -2,10 +2,10 @@ import React, {useState, useEffect} from 'react'
 import './style.scss'
 import {Table, Space}               from 'antd';
 import {SearchOutlined}             from '@ant-design/icons';
-import PlaceService                 from "../../../service/PlaceService";
-import {SearchText}                 from '../../component/SearchInput/index';
+import PlaceService                 from "../../../../service/PlaceService";
+import {SearchText}                 from '../../../component/SearchInput/index';
 import {Link, useHistory}           from "react-router-dom";
-import {PLACE_TYPE}                 from "../../../config";
+import {PLACE_TYPE}                 from "../../../../config";
 
 const ListCaseTable = (props) => {
   const [searchParams, setSearchParam] = useState({})

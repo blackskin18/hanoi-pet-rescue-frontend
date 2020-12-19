@@ -2,12 +2,12 @@ import React, {useState, useEffect}    from 'react'
 import './style.scss'
 import {Table, message, Tag, Popconfirm} from 'antd';
 import {SearchOutlined}                from '@ant-design/icons';
-import UserService                     from "../../../service/UserService";
-import {SearchText}                    from '../../component/SearchInput/index';
+import UserService                     from "../../../../service/UserService";
+import {SearchText}                    from '../../../component/SearchInput/index';
 import {Link}                          from "react-router-dom";
-import {ROLE_TAG}                      from '../../../config'
-import {Button, ButtonLink}            from "../Button";
-import CaseService                     from "../../../service/CaseService";
+import {ROLE_TAG}                      from '../../../../config'
+import {Button, ButtonLink}            from "../../Button";
+import CaseService                     from "../../../../service/CaseService";
 
 const ListCaseTable = (props) => {
   const [searchParams, setSearchParam] = useState({})

@@ -2,11 +2,11 @@ import React, { useState, useEffect }      from 'react'
 import './style.scss'
 import {Table, Space, Popconfirm, message} from 'antd';
 import { SearchOutlined }                  from '@ant-design/icons';
-import PlaceService                        from "../../../service/PlaceService";
-import { SearchText }                      from '../../component/SearchInput/index';
+import PlaceService                        from "../../../../service/PlaceService";
+import { SearchText }                      from '../../../component/SearchInput/index';
 import {Link , useHistory}                 from "react-router-dom";
-import {Button, ButtonLink}                from "../Button";
-import UserService                         from "../../../service/UserService";
+import {Button, ButtonLink}                from "../../Button";
+import UserService                         from "../../../../service/UserService";
 
 const ListCaseTable = (props) => {
   const [checkStrictly, setCheckStrictly] = useState(false);
