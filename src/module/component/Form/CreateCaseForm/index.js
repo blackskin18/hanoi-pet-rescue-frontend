@@ -1,8 +1,8 @@
-import React, {useState, useEffect}                         from 'react'
-import {Row, Col, Input, Select, Modal, Upload, DatePicker} from 'antd';
-import {PlusOutlined}                                       from '@ant-design/icons';
-import {CASE_TYPE, PLACE_TYPE_TEXT, GENDER, PLACE_TYPE}     from "../../../../config";
-import {Button}                                             from "../../Button";
+import React, {useState, useEffect}                                  from 'react'
+import {Row, Col, Input, Select, Modal, Upload, DatePicker, message} from 'antd';
+import {PlusOutlined}                                                from '@ant-design/icons';
+import {CASE_TYPE, PLACE_TYPE_TEXT, GENDER, PLACE_TYPE}              from "../../../../config";
+import {Button}                                                      from "../../Button";
 import './style.scss'
 
 const {Option}   = Select;
@@ -77,7 +77,9 @@ const ListCaseTable = (props) => {
     let response = await props.submitAction(data, images)
     if (response.code === 1) {
       props.afterSubmit()
+      setErrors({})
     } else if (response.errors) {
+      message.error('Tạo thất bại');
       setErrors(response.errors)
     }
     setIsSubmit(false)
@@ -306,7 +308,6 @@ const ListCaseTable = (props) => {
                     })
                   }
                 </Select>
-                {errors.place_id && <span className="text-red">{errors.place_id[0]}</span>}
               </Col>
             </Row>
           }
@@ -332,10 +333,16 @@ const ListCaseTable = (props) => {
                     })
                   }
                 </Select>
-                {errors.place_id && <span className="text-red">{errors.place_id[0]}</span>}
               </Col>
             </Row>
           }
+          <Row>
+            <Col span={4}>
+            </Col>
+            <Col span={20}>
+                {errors.place_id && <span className="text-red">{errors.place_id[0]}</span>}
+            </Col>
+          </Row>
 
           <Row>
             <Col span={4}>

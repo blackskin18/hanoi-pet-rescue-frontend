@@ -1,7 +1,7 @@
-import React, {useState, useEffect}   from 'react'
-import {Row, Col, Input, Select, Tag} from 'antd';
-import {getRoles}                     from "../../../../service/RoleService";
-import {Button}                       from "../../Button";
+import React, {useState, useEffect}            from 'react'
+import {Row, Col, Input, Select, Tag, message} from 'antd';
+import {getRoles}                              from "../../../../service/RoleService";
+import {Button}                                from "../../Button";
 import './style.scss'
 
 const {TextArea} = Input;
@@ -23,10 +23,11 @@ const ListCase = (props) => {
   const createUser = async function () {
     setIsSubmit(false)
     let response = await props.submitAction(dataInsert)
-    console.log(response)
     if (response && response.code === 1) {
       props.afterSubmit()
+      setErrors({})
     } else {
+      message.error('Tạo thất bại');
       setErrors(response.errors)
     }
     setIsSubmit(false)

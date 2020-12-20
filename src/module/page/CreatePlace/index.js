@@ -1,17 +1,23 @@
-import React, {useState, useEffect}               from 'react'
+import React, {useState}             from 'react'
+import {Divider, message}            from 'antd';
+import PlaceService                  from "../../../service/PlaceService";
+import CreatePlaceForm               from "../../component/Form/CreatePlace";
+import {useParams}                   from "react-router";
+import {PLACE_TYPE, PLACE_TYPE_TEXT} from "../../../config";
 import './style.scss'
-import {Row, Col, Divider, Input, Button, Select} from 'antd';
-import PlaceService                               from "../../../service/PlaceService";
-import CreatePlaceForm                            from "../../component/Form/CreatePlace";
-import {useParams}                                from "react-router";
-import {PLACE_TYPE, PLACE_TYPE_TEXT}              from "../../../config";
-import CreateHospital                             from "../../component/Form/CreateHospital";
+
 
 const CreatePlace = () => {
-  var {type}                              = useParams()
+  var {type}                        = useParams()
+  const [dataInsert, setDataInsert] = useState({})
 
   const createPlace = async function (data) {
     return await PlaceService.createPlace(data)
+  }
+
+  const afterSubmit = () => {
+    setDataInsert({})
+    message.success('Tạo thành công');
   }
 
   return (<div className="home-page">
@@ -21,9 +27,10 @@ const CreatePlace = () => {
     {
       type != PLACE_TYPE.HOSPITAL &&
       <CreatePlaceForm
-        dataInsert={{}}
+        dataInsert={dataInsert}
         type={type}
         submitAction={createPlace}
+        afterSubmit={afterSubmit}
         buttonText="Tạo địa điểm"
       />
     }

@@ -1,5 +1,5 @@
 import React, {useEffect, useState}  from 'react'
-import {Row, Col, Input}             from 'antd';
+import {Row, Col, Input, message}    from 'antd';
 import {PLACE_TYPE, PLACE_TYPE_TEXT} from "../../../../config/index"
 import {useParams}                   from "react-router";
 import {Button}                      from "../../Button";
@@ -28,7 +28,9 @@ const CratePlace = (props) => {
     let response = await props.submitAction(data)
     if (response && response.code === 1) {
       props.afterSubmit()
+      setErrors({})
     } else {
+      message.error('Tạo thất bại');
       setErrors(response.errors)
     }
     setIsSubmit(false)

@@ -12,7 +12,7 @@ const ListPlace = () => {
   const history = useHistory()
   var {type} = useParams()
   return (<div className="home-page">
-    <Divider orientation="left">
+    <Divider>
       <h4 className="text-primary-green left-align padding-left-xs">
         Danh sách
         {type === '1' && ' Bệnh viện'}

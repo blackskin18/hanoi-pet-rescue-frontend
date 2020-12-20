@@ -1,21 +1,24 @@
-import React, { useState, useEffect }                                  from 'react'
+import React, {useState, useEffect}                                  from 'react'
 import './style.scss'
-import { Row, Col, Divider, Descriptions, Popconfirm, message, Modal } from 'antd';
-import PlaceService                                                 from '../../../service/PlaceService';
-import { PLACE_TYPE_TEXT, CASE_TYPE_TEXT, GENDER_TEXT, PLACE_TYPE } from "../../../config";
-import { Link, useHistory }                                         from "react-router-dom";
+import {Row, Col, Divider, Descriptions, Popconfirm, message, Modal} from 'antd';
+import PlaceService                                                  from '../../../service/PlaceService';
+import {PLACE_TYPE_TEXT, CASE_TYPE_TEXT, GENDER_TEXT, PLACE_TYPE}    from "../../../config";
+import {Link, useHistory}                                            from "react-router-dom";
 
 
-import { useParams }   from "react-router";
-import CreatePlaceForm from "../../component/Form/CreatePlace";
-import CreateHospital  from "../../component/Form/CreateHospital";
-import CreateUser      from "../../component/Form/CreateUser";
+import {useParams}       from "react-router";
+import CreatePlaceForm   from "../../component/Form/CreatePlace";
+import CreateHospital    from "../../component/Form/CreateHospital";
+import CreateUser        from "../../component/Form/CreateUser";
+import PlaceHistoryTable from "../../component/Table/PlaceHistoryTable";
 
 const DetailCase = () => {
-  const [visibleModalEdit, setVisibleModalEdit] = useState(false);
-  const [info, setInfo]                         = useState({});
-  const history                                 = useHistory()
-  var {id}                                      = useParams()
+  const [visibleModalEdit, setVisibleModalEdit]       = useState(false);
+  const [info, setInfo]                               = useState({});
+  const [visibleModalHistory, setVisibleModalHistory] = useState(false);
+  const [historyData, setHistoryData]                 = useState({});
+  const history                                       = useHistory()
+  var {id}                                            = useParams()
 
   useEffect(() => {
     getDetailInfo()
@@ -46,23 +49,33 @@ const DetailCase = () => {
     message.success('Sửa thành công');
   }
 
+  const handleShowPlaceHistory = async () => {
+    let response = await PlaceService.getPlaceHistory(id)
+    if(response.code == 1) {
+      setHistoryData(response.data);
+      setVisibleModalHistory(true);
+    }
+
+  }
 
   return (<div className="detail-case-page">
-    <Divider orientation="left">
+    <Divider>
       <h4 className="text-primary-green left-align padding-left-xs margin-bottom-none">Thông
         tin {info.type && PLACE_TYPE_TEXT[info.type]}</h4>
     </Divider>
-    <Row className="margin-bottom-5">
-      <a className="button-link button-link-edit" onClick={() => setVisibleModalEdit(true)}>Sửa</a>
+    <div className="margin-bottom-md text-center">
+      <a className="button-link margin-right-sm link-orange" onClick={() => setVisibleModalEdit(true)}>Sửa</a>
       <Popconfirm
+        className="margin-right-sm"
         title="Bạn có chắc là muốn xóa phòng khám này"
         onConfirm={confirmDelete}
         okText="Yes"
         cancelText="No"
       >
-        <a className="button-link button-link-delete">Xóa</a>
+        <a className="button-link button-link-delete link-orange">Xóa</a>
       </Popconfirm>
-    </Row>
+      <a className="button-link link-orange" onClick={handleShowPlaceHistory}>Lịch sử case lưu trú</a>
+    </div>
     <Row justify="space-between">
       <Col span={14} offset={5}>
         <Descriptions
@@ -128,7 +141,17 @@ const DetailCase = () => {
             buttonText="Sửa địa điểm"
           />
       }
+    </Modal>
 
+    <Modal
+      title="Lịch sử case lưu trú"
+      visible={visibleModalHistory}
+      width="90vw"
+      okButtonProps={{style: {display: 'none'}}}
+      cancelButtonProps={{style: {display: 'none'}}}
+      onCancel={() => setVisibleModalHistory(false)}
+    >
+      <PlaceHistoryTable historyData={historyData}/>
     </Modal>
   </div>)
 }

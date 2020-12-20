@@ -5,7 +5,8 @@
 }
 
 .count-case {
-  background: lighten($primary_color, 50%);
+  padding: .5rem 1rem;
+  background: lighten($primary_color, 10);
 }
 
 .list-case-table .ant-image-img{
@@ -25,6 +26,12 @@
       z-index: 1000;
     }
   }
+}
 
+.animal-place-name {
+  color: $primary_color
+}
 
+.animal-place-name:hover {
+  color: darken($primary_color,10)
 }

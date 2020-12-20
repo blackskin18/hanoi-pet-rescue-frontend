@@ -1,24 +1,23 @@
-import React, {useState, useEffect}                             from 'react'
+import React, {useState}  from 'react'
+import {Divider, message} from 'antd';
+import UserService        from "../../../service/UserService";
+import CreateUser         from "../../component/Form/CreateUser";
 import './style.scss'
-import {Row, Col, Divider, Input, Button, Select, Tag, message} from 'antd';
-import UserService                                              from "../../../service/UserService";
-import CreateUser                                               from "../../component/Form/CreateUser";
-import CreateHospital                                           from "../../component/Form/CreateHospital";
 
 
 const ListCase = () => {
   const [dataInsert, setDataInsert] = useState({})
-  const createUser = async function (data) {
+  const createUser                  = async function (data) {
     return await UserService.createUser(data)
   }
 
   const afterEdit = () => {
     setDataInsert({})
-    message.success('Sửa thành công');
+    message.success('Tạo thành công');
   }
 
   return (<div className="home-page">
-    <Divider orientation="left">
+    <Divider>
       <h4 className="text-primary-green left-align padding-left-xs">Thêm người dùng</h4>
     </Divider>
     <CreateUser

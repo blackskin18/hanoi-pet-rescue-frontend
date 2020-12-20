@@ -1,9 +1,9 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect}       from 'react'
 import './style.scss'
-import {Row, Col, Input, Select}    from 'antd';
-import PlaceService                 from "../../../../service/PlaceService";
-import {PLACE_TYPE}                 from "../../../../config/index"
-import {Button}                     from "../../Button";
+import {Row, Col, Input, Select, message} from 'antd';
+import PlaceService                       from "../../../../service/PlaceService";
+import {PLACE_TYPE}                       from "../../../../config/index"
+import {Button}                           from "../../Button";
 
 const {Option} = Select;
 
@@ -31,7 +31,9 @@ const CreateHospital = (props) => {
     let response = await props.submitAction(data)
     if (response && response.code === 1) {
       props.afterSubmit()
+      setErrors({})
     } else {
+      message.error('Tạo thất bại');
       setErrors(response.errors)
     }
     setIsSubmit(false)

@@ -118,8 +118,8 @@ const ListCaseTable = (props) => {
   const columns = [
     {
       title    : 'Code',
-      dataIndex: 'code',
-      key      : 'code',
+      dataIndex: 'code_full',
+      key      : 'code_full',
       ...getColumnSearchProps('code'),
     },
     {
@@ -127,8 +127,8 @@ const ListCaseTable = (props) => {
       dataIndex: 'animalImage',
       key      : 'animalImage',
       render   : (images) => {
-        if (images[0]) {
-          return <Image src={images[0].path} width={100} height={100} className="animal-image"/>
+        if(images.length !== 0){
+          return <Image src={images[images.length - 1].path} width={100} height={100} className="animal-image"/>
         } else {
           return ""
         }
@@ -159,6 +159,13 @@ const ListCaseTable = (props) => {
       title    : 'Nơi ở hiện tại',
       dataIndex: 'place',
       key      : 'place',
+      render: (place, object) => {
+        if(place && place.id) {
+          return <Link className="animal-place-name" to={"/detail-place/" + place.id}>{place.name}</Link>
+        } else {
+          return ''
+        }
+      },
       ...getColumnSearchProps('place'),
     },
     {
@@ -192,11 +199,11 @@ const ListCaseTable = (props) => {
   }
 
   return (<div>
-    <Row justify="space-between" className="filter-row">
-      <Col className="count-case">
+    <div className="text-right margin-bottom-sm">
+      <span className="count-case">
         Tổng số case: { total }
-      </Col>
-    </Row>
+      </span>
+    </div>
     <div className="list-case-table">
       <Table
         columns={columns}
@@ -212,7 +219,11 @@ const ListCaseTable = (props) => {
         onRow = {
           (record, rowIndex) => {
             return {
-              onClick: event => history.push('/detail-case/' + record.id), // click row
+              onClick: event => {
+                if(event.target.className === 'ant-table-cell') {
+                  history.push('/detail-case/' + record.id)
+                }
+              }, // click row
             }
           }
         }

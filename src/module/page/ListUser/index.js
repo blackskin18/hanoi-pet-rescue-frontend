@@ -7,7 +7,7 @@ import './style.scss'
 const ListUser = () => {
   var {type} = useParams()
   return (<div className="home-page">
-    <Divider orientation="left">
+    <Divider>
       <h4 className="text-primary-green left-align padding-left-xs">
         Danh sách
         {type === '' && ' Toàn bộ thành viên'}

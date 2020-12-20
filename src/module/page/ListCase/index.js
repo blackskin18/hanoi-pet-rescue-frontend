@@ -10,7 +10,7 @@ const ListCase = () => {
 
 
   return (<div className="home-page">
-    <Divider orientation="left">
+    <Divider>
       <h4 className="text-primary-green left-align padding-left-xs">Danh sách case </h4>
     </Divider>
     <ListCaseTable type={type}/>

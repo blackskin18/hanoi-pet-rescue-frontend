@@ -1,16 +1,17 @@
 import React, {useEffect, useState} from 'react'
-import './style.scss'
-import {Divider}                    from 'antd';
+import {Divider, message}           from 'antd';
 import CaseService                  from '../../../service/CaseService';
 import CreateCaseForm               from "../../component/Form/CreateCaseForm"
 import PlaceService                 from "../../../service/PlaceService";
 import {PLACE_TYPE}                 from "../../../config";
+import './style.scss'
 
 const ListCase = () => {
-  const [fosters, setFosters]               = useState([]);
-  const [owners, setOwners]                 = useState([]);
-  const [hospitals, setHospitals]           = useState([]);
-  const [commonHomes, setCommonHomes]       = useState([]);
+  const [fosters, setFosters]         = useState([]);
+  const [owners, setOwners]           = useState([]);
+  const [hospitals, setHospitals]     = useState([]);
+  const [commonHomes, setCommonHomes] = useState([]);
+  const [dataInsert, setDataInsert]   = useState({})
 
 
   useEffect(() => {
@@ -21,6 +22,8 @@ const ListCase = () => {
   }, [])
 
   const afterSubmit = async () => {
+    setDataInsert({})
+    message.success('Tạo thành công');
   }
 
   const handleCreateCase = async (data, images) => {
@@ -48,12 +51,12 @@ const ListCase = () => {
   }
 
   return (<div className="home-page">
-    <Divider orientation="left">
+    <Divider>
       <h4 className="text-primary-green left-align padding-left-xs">Tạo case</h4>
     </Divider>
 
     <CreateCaseForm
-      dataInsert={{}}
+      dataInsert={dataInsert}
       afterSubmit={afterSubmit}
       submitAction={handleCreateCase}
       fosters={fosters}

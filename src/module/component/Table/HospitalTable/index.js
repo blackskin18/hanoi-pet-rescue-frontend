@@ -2,11 +2,12 @@ import React, { useState, useEffect }      from 'react'
 import './style.scss'
 import { Table, Space, Popconfirm, message, Modal } from 'antd';
 import { SearchOutlined }                           from '@ant-design/icons';
-import PlaceService                        from "../../../../service/PlaceService";
-import { SearchText }                      from '../../../component/SearchInput/index';
-import {Button, ButtonLink}                from "../../Button";
-import CreateHospital                      from "../../Form/CreateHospital";
-import { PLACE_TYPE }                      from "../../../../config";
+import PlaceService                                 from "../../../../service/PlaceService";
+import { SearchText }                               from '../../../component/SearchInput/index';
+import {Button, ButtonLink}                         from "../../Button";
+import CreateHospital                               from "../../Form/CreateHospital";
+import { PLACE_TYPE }                               from "../../../../config";
+import PlaceHistoryTable                            from "../PlaceHistoryTable";
 
 
 const ListCaseTable = (props) => {
@@ -16,7 +17,8 @@ const ListCaseTable = (props) => {
   const [listHospitals, setListHospitals] = useState([])
   const [dataToEdit, setDataToEdit] = useState({})
   const [visibleModalEdit, setVisibleModalEdit] = useState(false);
-
+  const [visibleModalHistory, setVisibleModalHistory] = useState(false);
+  const [historyData, setHistoryData] = useState({});
 
   useEffect(() => {
     getHospitalData()
@@ -157,6 +159,7 @@ const ListCaseTable = (props) => {
       title: 'Hành động',
       dataIndex: 'action',
       key: 'action',
+      className: 'action',
       render   : (text, object) => {
         return <div>
           <ButtonLink className="margin-bottom-5" type="detail" to={"/detail-place/" + object.id}>Chi tiết</ButtonLink><br/>
@@ -174,6 +177,15 @@ const ListCaseTable = (props) => {
     },
   ];
 
+  const handleShowPlaceHistory = async (placeRecord) => {
+    let response = await PlaceService.getPlaceHistory(placeRecord.id)
+    if(response.code == 1) {
+      setHistoryData(response.data);
+      setVisibleModalHistory(true);
+    }
+
+  }
+
   return (<div>
     <div className="list-hospital-table">
       <Table
@@ -186,6 +198,15 @@ const ListCaseTable = (props) => {
             getHospitalData(null, page, size)
             setCurrentPage(page)
           }
+        }}
+        onRow={(record, rowIndex) => {
+          return {
+            onClick: event => {
+              if(event.target.className =='ant-table-cell') {
+                handleShowPlaceHistory(record)
+              }
+            }, // click row
+          };
         }}
       />
     </div>
@@ -205,6 +226,17 @@ const ListCaseTable = (props) => {
         branch={!!dataToEdit.parent_id}
         buttonText="Sửa phòng khám"
       />
+    </Modal>
+
+    <Modal
+      title="Lịch sử case lưu trú"
+      visible={visibleModalHistory}
+      width="90vw"
+      okButtonProps={{style: {display: 'none'}}}
+      cancelButtonProps={{style: {display: 'none'}}}
+      onCancel={() => setVisibleModalHistory(false)}
+    >
+      <PlaceHistoryTable historyData={historyData}/>
     </Modal>
   </div>)
 }

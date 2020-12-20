@@ -21,10 +21,10 @@ function App(props) {
       {
         location.pathname !== '/login' ?
           [
-            <Col xs={{span: 24}} sm={{span: 24}} lg={{span: 7}} xl={5} xxl={4} key={1}>
+            <Col xs={{span: 24}} sm={{span: 24}} lg={{span: 4}} xl={4} xxl={3} key={1}>
               <Header/>
             </Col>,
-            <Col xs={{span: 24}} sm={{span: 24}} md={{span: 24}} lg={{span: 17}} xl={19} xxl={20} key={2}>
+            <Col xs={{span: 24}} sm={{span: 24}} md={{span: 24}} lg={{span: 20}} xl={20} xxl={21} key={2}>
               <div className="main-container">
                 <Switch>
                   {routers.map((e, key) => {

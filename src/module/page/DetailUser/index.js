@@ -61,21 +61,21 @@ const DetailCase = () => {
   }
 
   return (<div className="detail-user-page">
-    <Divider orientation="left">
+    <Divider>
       <h4 className="text-primary-green left-align padding-left-xs margin-bottom-none">Thông tin thành
         viên {info.code_full}</h4>
     </Divider>
-    <Row className="margin-bottom-5">
-      <a className="button-link button-link-edit" onClick={() => setVisibleModalEdit(true)}>Sửa</a>
+    <div className="margin-bottom-md text-center">
+      <a className="button-link margin-right-sm link-orange" onClick={() => setVisibleModalEdit(true)}>Sửa</a>
       <Popconfirm
         title="Are you sure to delete this task?"
         onConfirm={confirmDelete}
         okText="Yes"
         cancelText="No"
       >
-        <a className="button-link button-link-delete">Xóa</a>
+        <a className="button-link button-link-delete link-orange">Xóa</a>
       </Popconfirm>
-    </Row>
+    </div>
     <Row justify="space-between">
       <Col offset={5} span={14} className="padding-left-sm">
         <Descriptions

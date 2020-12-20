@@ -141,29 +141,29 @@ const DetailCase = () => {
   }
 
   return (<div className="detail-case-page">
-    <Divider orientation="left" className="">
+    <Divider>
       <h4 className="text-primary-green left-align padding-left-xs margin-bottom-none">Thông tin
         case {info.code_full}</h4>
     </Divider>
-    <Row className="margin-bottom-5">
-      <a className="button-link button-link-edit"
+    <div className="margin-bottom-md text-center">
+      <a className="button-link margin-right-sm link-orange"
          onClick={handleOpenPopupEdit}>
         Sửa
       </a>
       <Popconfirm
-        className="button-link button-link-edit"
+        className="button-link margin-right-sm"
         title="Are you sure to delete this task?"
         onConfirm={confirmDelete}
         okText="Yes"
         cancelText="No"
       >
-        <a className="button-link button-link-delete">Xóa</a>
+        <a className="button-link button-link-delete link-orange">Xóa</a>
       </Popconfirm>
-      <a className="button-link button-link-edit"
+      <a className="button-link margin-right-sm link-orange"
          onClick={() => setVisibleModalHistories(true)}>
         Lịch sử cập nhập
       </a>
-    </Row>
+    </div>
     <Row justify="space-between">
       {images.length > 0 &&
       <Col span={8}>
