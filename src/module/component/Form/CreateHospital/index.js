@@ -30,12 +30,11 @@ const CreateHospital = (props) => {
 
     let response = await props.submitAction(data)
     if (response && response.code === 1) {
-
+      props.afterSubmit()
     } else {
       setErrors(response.errors)
     }
     setIsSubmit(false)
-    props.afterSubmit()
   }
 
   const editDataInsert = function (key, value) {

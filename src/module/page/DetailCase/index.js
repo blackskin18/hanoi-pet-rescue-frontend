@@ -112,15 +112,12 @@ const DetailCase = () => {
   const handleOpenPopupEdit = () => {
     if (Object.keys(info).length === 0 ||
       hospitals.length === 0 ||
-      owners.length === 0 ||
       commonHomes.length === 0 ||
       fosters.length === 0
     ) {
       message.loading('đang tải thông tin case, vui lòng đợi một chút');
       return;
     }
-
-    console.log('branch', branchId)
 
     setDataToEdit({
       code         : info.code,

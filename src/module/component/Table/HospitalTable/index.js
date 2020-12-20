@@ -167,7 +167,7 @@ const ListCaseTable = (props) => {
             okText="Yes"
             cancelText="No"
           >
-            <Button type="delete">Xóa</Button>s
+            <Button type="delete">Xóa</Button>
           </Popconfirm>
         </div>
       }

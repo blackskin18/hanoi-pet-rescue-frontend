@@ -10,6 +10,7 @@ const API = {
   DELETE_CASE    : API_URL + 'cases/{id}',
   GET_REPORT     : API_URL + 'cases/report',
   PATCH_CASE     : API_URL + 'cases/{id}',
+  EXPORT_REPORT     : API_URL + 'export-report',
 }
 
 const createCase = async (data, images) => {
@@ -181,7 +182,7 @@ const downloadReport = async (type, timeData) => {
     var startDate = startDateMoment.format('YYYY/MM/DD')
     var endDate   = endDateMoment.format('YYYY/MM/DD')
 
-    window.open('http://localhost:8000/api/animal-test/1?start_time=' + startDate + '&end_time=' + endDate)
+    window.open(API.EXPORT_REPORT + '?start_time=' + startDate + '&end_time=' + endDate)
   } catch (error) {
     return error;
   }
@@ -191,7 +192,7 @@ const downloadReportProgressive = async (timeData) => {
   try {
     var endDateMoment = moment(timeData)
     var endDate       = endDateMoment.format('YYYY/MM/DD')
-    window.open('http://localhost:8000/api/animal-test/1?end_time=' + endDate)
+    window.open(API.EXPORT_REPORT + '?end_time=' + endDate)
   } catch (error) {
     return error;
   }

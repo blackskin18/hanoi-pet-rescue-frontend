@@ -23,6 +23,7 @@ const ListCase = (props) => {
   const createUser = async function () {
     setIsSubmit(false)
     let response = await props.submitAction(dataInsert)
+    console.log(response)
     if (response && response.code === 1) {
       props.afterSubmit()
     } else {
@@ -67,6 +68,8 @@ const ListCase = (props) => {
               placeholder="Nhập tên người dùng"
               onChange={(e) => editDataInsert('name', e.target.value)}
             />
+            {errors.name && <span className="text-red">{errors.name[0]}</span>}
+
           </Col>
         </Row>
         <Row>
@@ -79,6 +82,8 @@ const ListCase = (props) => {
               placeholder="Nhập số điện thoại"
               onChange={(e) => editDataInsert('phone', e.target.value)}
             />
+            {errors.phone && <span className="text-red">{errors.phone[0]}</span>}
+
           </Col>
         </Row>
 
@@ -92,6 +97,8 @@ const ListCase = (props) => {
               placeholder="Nhập địa chỉ"
               onChange={(e) => editDataInsert('address', e.target.value)}
             />
+            {errors.address && <span className="text-red">{errors.address[0]}</span>}
+
           </Col>
         </Row>
         <Row>
@@ -104,6 +111,8 @@ const ListCase = (props) => {
               placeholder="Nhập Email"
               onChange={(e) => editDataInsert('email', e.target.value)}
             />
+            {errors.email && <span className="text-red">{errors.email[0]}</span>}
+
           </Col>
         </Row>
 
@@ -124,6 +133,8 @@ const ListCase = (props) => {
               style={{width: '100%'}}
             >
             </Select>
+            {errors.roles && <span className="text-red">{errors.roles[0]}</span>}
+
           </Col>
         </Row>
         <Row>
@@ -136,6 +147,8 @@ const ListCase = (props) => {
               placeholder="Nhập ghi chú"
               onChange={(e) => editDataInsert('note', e.target.value)}
             />
+            {errors.note && <span className="text-red">{errors.note[0]}</span>}
+
           </Col>
         </Row>
       </Col>

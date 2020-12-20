@@ -14,7 +14,7 @@ const createUser = async (data) => {
     let response = await axios.post(API.CREATE_USER, data);
     return response.data;
   } catch (error) {
-    return error.response;
+    return error.response.data;
   }
 }
 
@@ -24,7 +24,7 @@ const editUser = async (data, id) => {
     let response = await axios.post(API.EDIT_USER.replace('{id}', id), data);
     return response.data;
   } catch (error) {
-    return error.response;
+    return error.response.data;
   }
 }
 
