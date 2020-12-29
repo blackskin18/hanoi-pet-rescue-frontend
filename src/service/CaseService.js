@@ -4,13 +4,14 @@ import moment    from 'moment';
 
 
 const API = {
-  CREATE_CASE    : API_URL + 'cases',
-  GET_CASES      : API_URL + 'cases',
-  GET_CASE_DETAIL: API_URL + 'cases/{id}',
-  DELETE_CASE    : API_URL + 'cases/{id}',
-  GET_REPORT     : API_URL + 'cases/report',
-  PATCH_CASE     : API_URL + 'cases/{id}',
+  CREATE_CASE       : API_URL + 'cases',
+  GET_CASES         : API_URL + 'cases',
+  GET_CASE_DETAIL   : API_URL + 'cases/{code}',
+  DELETE_CASE       : API_URL + 'cases/{id}',
+  GET_REPORT        : API_URL + 'cases/report',
+  PATCH_CASE        : API_URL + 'cases/{id}',
   EXPORT_REPORT     : API_URL + 'export-report',
+  GET_CODE_TO_CREATE: API_URL + 'code-to-create',
 }
 
 const createCase = async (data, images) => {
@@ -60,9 +61,9 @@ const getCases = async (searchParams, page, limit = '', type = '') => {
   }
 }
 
-const getCaseDetail = async (id) => {
+const getCaseDetail = async (code) => {
   try {
-    let response = await axios.get(API.GET_CASE_DETAIL.replace('{id}', id));
+    let response = await axios.get(API.GET_CASE_DETAIL.replace('{code}', code));
     return response.data;
   } catch (error) {
     return error.response;
@@ -198,6 +199,15 @@ const downloadReportProgressive = async (timeData) => {
   }
 }
 
+const getCodeToCreate = async () => {
+  try {
+    let response = await axios.get(API.GET_CODE_TO_CREATE);
+    return response.data.data.code;
+  } catch (error) {
+    return error;
+  }
+}
+
 export default {
   createCase,
   getCases,
@@ -207,6 +217,7 @@ export default {
   editCase,
   getReportProgressive,
   downloadReport,
-  downloadReportProgressive
+  downloadReportProgressive,
+  getCodeToCreate
 }
 

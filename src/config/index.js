@@ -1,8 +1,8 @@
-// export const API_URL       = 'http://127.0.0.1:8000/api/';
-export const API_URL       = 'http://khanhpd.xyz/api/';
+export const API_URL       = 'http://127.0.0.1:8000/api/';
+// export const API_URL       = 'http://khanhpd.xyz/api/';
 
-// export const GOOGLE_CLIENT_ID       = '904910057330-6gbn36bltbl6qq89ddvpm5j0lhb6nu4q.apps.googleusercontent.com';
-export const GOOGLE_CLIENT_ID       = '904910057330-52da2pvaas3pl1m6ss2fnr7hja1fv6lq.apps.googleusercontent.com';
+export const GOOGLE_CLIENT_ID       = '904910057330-6gbn36bltbl6qq89ddvpm5j0lhb6nu4q.apps.googleusercontent.com';
+// export const GOOGLE_CLIENT_ID       = '904910057330-52da2pvaas3pl1m6ss2fnr7hja1fv6lq.apps.googleusercontent.com';
 
 export const LIMIT_PRODUCT = 6;
 export const LIMIT_NEWEST_POST = 3;

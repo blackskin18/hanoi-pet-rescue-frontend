@@ -221,7 +221,7 @@ const ListCaseTable = (props) => {
             return {
               onClick: event => {
                 if(event.target.className === 'ant-table-cell') {
-                  history.push('/detail-case/' + record.id)
+                  history.push('/detail-case/' + record.code)
                 }
               }, // click row
             }

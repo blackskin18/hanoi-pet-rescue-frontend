@@ -4,6 +4,7 @@ import {PlusOutlined}                                                from '@ant-
 import {CASE_TYPE, PLACE_TYPE_TEXT, GENDER, PLACE_TYPE}              from "../../../../config";
 import {Button}                                                      from "../../Button";
 import './style.scss'
+import CaseService                                                   from "../../../../service/CaseService";
 
 const {Option}   = Select;
 const {TextArea} = Input;
@@ -36,6 +37,10 @@ const ListCaseTable = (props) => {
   const [branches, setBranches]             = useState([]);
 
   useEffect(() => {
+    generateCode()
+  }, [])
+
+  useEffect(() => {
     setDataInsert(props.dataInsert)
     if (dataInsert.place_type == PLACE_TYPE.HOSPITAL && placeId) {
       detectBranch(placeId)
@@ -53,6 +58,13 @@ const ListCaseTable = (props) => {
     setCodePrefix($year + $type + $gender)
   }, [dataInsert.type, dataInsert.gender, dataInsert.receive_date])
 
+
+  const generateCode = async () => {
+    if(!props.dataInsert.code) {
+      let code = await CaseService.getCodeToCreate()
+      editDataInsert('code', code)
+    }
+  }
 
   const handleCancelPreview = () => setPreviewVisible(false);
 
