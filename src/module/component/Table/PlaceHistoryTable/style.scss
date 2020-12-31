@@ -3,3 +3,17 @@
 .filter-row {
   margin-bottom: 2.5rem;
 }
+
+.place-history-table {
+  & .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+    color: $primary_color;
+  }
+
+  & .ant-tabs-tab:hover {
+    color: $primary_color;
+  }
+
+  & .ant-tabs-ink-bar {
+    background: $primary_color;
+  }
+}

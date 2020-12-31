@@ -28,7 +28,7 @@ const DetailCase = () => {
   const [commonHomes, setCommonHomes]                     = useState([]);
 
   const history = useHistory()
-  var {id}      = useParams()
+  var {code}      = useParams()
 
   useEffect(() => {
     getDetailInfo()
@@ -40,7 +40,7 @@ const DetailCase = () => {
 
 
   const editCase = async (data, images) => {
-    return await CaseService.editCase(data, images, id)
+    return await CaseService.editCase(data, images, info.id)
   }
 
   const afterSubmit = async () => {
@@ -49,7 +49,7 @@ const DetailCase = () => {
   }
 
   const getDetailInfo = async () => {
-    let response = await CaseService.getCaseDetail(id);
+    let response = await CaseService.getCaseDetail(code);
 
     if (response.data.animal_image) {
       let imagesData = response.data.animal_image.map(function (image) {
@@ -80,7 +80,7 @@ const DetailCase = () => {
   const handleCancelEdit = () => setVisibleModalEdit(false)
 
   const confirmDelete = async () => {
-    let response = await CaseService.deleteCase(id);
+    let response = await CaseService.deleteCase(info.id);
     if (response.code === 1) {
       message.success('Xóa thành công');
       history.push('/list-case')
@@ -182,7 +182,7 @@ const DetailCase = () => {
           <Descriptions.Item label="Giới tính">{GENDER_TEXT[info.gender]} </Descriptions.Item>
           <Descriptions.Item label="Tuổi">{detect_age(info.date_of_birth)} </Descriptions.Item>
           <Descriptions.Item label="Nơi ở hiện tại" span={2}>
-            {info.place && <span>{PLACE_TYPE_TEXT[info.place.type]} <Link to="">{info.place.name}</Link></span>}
+            {info.place && <span>{PLACE_TYPE_TEXT[info.place.type]} <Link to={"/detail-place/" + info.place.id} className="link-orange">{info.place.name}</Link></span>}
           </Descriptions.Item>
           <Descriptions.Item label="Mô tả" span={2}>
             <pre className="animal-notes">{info.description}</pre>

@@ -25,7 +25,7 @@ export default [
     page: CreateCase
   },
   {
-    path: '/detail-case/:id',
+    path: '/detail-case/:code',
     page: DetailCase
   },
   {

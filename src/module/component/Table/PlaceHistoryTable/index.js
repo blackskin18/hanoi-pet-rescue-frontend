@@ -34,7 +34,7 @@ const PlaceHistoryTable = (props) => {
       dataIndex: 'code',
       key      : 'code',
       render: (value, object) => {
-        return <Link to={"/detail-case/" + object.animal_id}>{object.animal.code_full}</Link>
+        return <Link to={"/detail-case/" + object.animal_id} className="link-orange">{object.animal.code_full}</Link>
       }
     },
     {
@@ -66,7 +66,7 @@ const PlaceHistoryTable = (props) => {
       dataIndex: 'code',
       key      : 'code',
       render: (value, object) => {
-        return <Link to={"/detail-case/" + object.id}>{object.code_full}</Link>
+        return <Link to={"/detail-case/" + object.id} className="link-orange">{object.code_full}</Link>
       }
     },
     {
@@ -80,7 +80,7 @@ const PlaceHistoryTable = (props) => {
     },
   ];
 
-  return (<div>
+  return (<div className="place-history-table">
       <Tabs defaultActiveKey="1" centered>
         <TabPane tab="Đang lưu trú" key="1">
           <Table
