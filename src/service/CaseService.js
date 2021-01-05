@@ -26,7 +26,7 @@ const createCase = async (data, images) => {
     }
 
     for (let i in images) {
-      formData.append("images", images[i].originFileObj);
+      formData.append("images[]", images[i].originFileObj);
     }
 
     let response = await axios.post(API.CREATE_CASE, formData, {

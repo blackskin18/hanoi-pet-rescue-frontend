@@ -30,6 +30,7 @@ const ListCaseTable = (props) => {
   const [isSubmit, setIsSubmit]             = useState(false);
   const [errors, setErrors]                 = useState(false);
   const [codePrefix, setCodePrefix]         = useState(false);
+  const [maxCode, setMaxCode]         = useState(false);
   const fosters                             = props.fosters;
   const owners                              = props.owners;
   const hospitals                           = props.hospitals;
@@ -60,9 +61,10 @@ const ListCaseTable = (props) => {
 
 
   const generateCode = async () => {
+    let code = await CaseService.getCodeToCreate()
+    setMaxCode(code)
     if(!props.dataInsert.code) {
-      let code = await CaseService.getCodeToCreate()
-      editDataInsert('code', code)
+      setDataInsert({code: code})
     }
   }
 
@@ -90,6 +92,8 @@ const ListCaseTable = (props) => {
     if (response.code === 1) {
       props.afterSubmit()
       setErrors({})
+      generateCode()
+      setImages([])
     } else if (response.errors) {
       message.error('Tạo thất bại');
       setErrors(response.errors)
@@ -149,17 +153,25 @@ const ListCaseTable = (props) => {
         </Col>
         <Col span={16} className="create-case__input-boxs">
           <Row>
-            <Col offset={8} span={2}>CODE</Col>
+            <Col offset={8} span={2}>CODE <span className="text-danger">*</span></Col>
             <Col span={6}>
               <Input addonBefore={codePrefix} value={dataInsert.code}
-                     onChange={(e) => editDataInsert('code', e.target.value)}/>
+                     onChange={(e) => {
+                       if(e.target.value <= maxCode) {
+                         editDataInsert('code', e.target.value)
+                       }
+                     }}/>
               {errors.code && <span className="text-red">{errors.code[0]}</span>}
+              {
+                maxCode &&
+                <p className="text-orange">Code phải nhỏ hơn hoặc bằng {maxCode}</p>
+              }
             </Col>
           </Row>
           <Row>
             <Col span={12}>
               <Row>
-                <Col span={8}>Ngày nhận</Col>
+                <Col span={8}>Ngày nhận <span className="text-danger">*</span></Col>
                 <Col span={16}>
                   <DatePicker
                     placeholder={"Chọn Ngày"}
@@ -173,7 +185,7 @@ const ListCaseTable = (props) => {
             </Col>
             <Col span={12}>
               <Row>
-                <Col span={8} className="padding-left-sm">Nơi nhận</Col>
+                <Col span={8} className="padding-left-sm">Nơi nhận <span className="text-danger">*</span></Col>
                 <Col span={16}>
                   <Input
                     placeholder="Nhập nơi nhận"
@@ -203,7 +215,7 @@ const ListCaseTable = (props) => {
             </Col>
             <Col span={12}>
               <Row>
-                <Col span={8} className="padding-left-sm">Loài</Col>
+                <Col span={8} className="padding-left-sm">Loài <span className="text-danger">*</span></Col>
                 <Col span={16}>
                   <Select className="w-100"
                           placeholder="Chọn Loài"
@@ -221,7 +233,7 @@ const ListCaseTable = (props) => {
           <Row>
             <Col span={12}>
               <Row>
-                <Col span={8}>Giới tính</Col>
+                <Col span={8}>Giới tính <span className="text-danger">*</span></Col>
                 <Col span={16}>
                   <Select className="w-100"
                           placeholder="Chọn giới tính"
@@ -238,30 +250,39 @@ const ListCaseTable = (props) => {
             <Col span={12}>
               <Row>
                 <Col span={8} className="padding-left-sm">Tuổi</Col>
-                <Col span={8}>
+                <Col span={6}>
                   <Input
-                    placeholder="Nhập số tháng"
-                    width="100%"
-                    className="w-100"
-                    value={dataInsert.age_month}
-                    onChange={(e) => editDataInsert('age_month', e.target.value)}/>
-                  {errors.age_month && <span className="text-red">{errors.age_month[0]}</span>}
-                </Col>
-                <Col span={8}>
-                  <Input
-                    placeholder="Nhập số năm"
+                    placeholder="Số năm"
                     width="100%"
                     className="w-100"
                     value={dataInsert.age_year}
                     onChange={(e) => editDataInsert('age_year', e.target.value)}/>
                   {errors.age_year && <span className="text-red">{errors.age_year[0]}</span>}
                 </Col>
+                <Col span={5}>
+                  <Input
+                    placeholder="Số tháng"
+                    width="100%"
+                    className="w-100"
+                    value={dataInsert.age_month}
+                    onChange={(e) => editDataInsert('age_month', e.target.value)}/>
+                  {errors.age_month && <span className="text-red">{errors.age_month[0]}</span>}
+                </Col>
+                <Col span={5}>
+                  <Input
+                    placeholder="Số ngày"
+                    width="100%"
+                    className="w-100"
+                    value={dataInsert.age_date}
+                    onChange={(e) => editDataInsert('age_date', e.target.value)}/>
+                  {errors.age_year && <span className="text-red">{errors.age_date[0]}</span>}
+                </Col>
               </Row>
             </Col>
           </Row>
 
           <Row>
-            <Col span={4}>Nơi ở hiện tại</Col>
+            <Col span={4}>Nơi ở hiện tại <span className="text-danger">*</span></Col>
             <Col span={20}>
               <Select className="w-100"
                       showSearch
@@ -373,7 +394,7 @@ const ListCaseTable = (props) => {
           </Row>
           <Row>
             <Col span={4}>
-              Trạng thái
+              Trạng thái <span className="text-danger">*</span>
             </Col>
             <Col span={20}>
               <Select className="w-100" placeholder="chọn trạng thái" value={dataInsert.status}

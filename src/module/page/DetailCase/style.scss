@@ -17,7 +17,7 @@
     object-fit: contain;
   }
 
-  & .image-gallery-thumbnail + .image-gallery-thumbnail{
+  & .image-gallery-thumbnail{
     height: 100px;
     background: black;
   }
@@ -26,7 +26,9 @@
     height: 100%;
   }
 
-  & .image-gallery-thumbnail .image-gallery-thumbnail-image {
+  & .image-gallery-thumbnail .image-gallery-thumbnail-image,
+  & .image-gallery-thumbnail-inner .image-gallery-thumbnail-image
+  {
     height: 100%;
     object-fit: contain;
   }

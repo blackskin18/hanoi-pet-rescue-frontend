@@ -35,6 +35,7 @@ const detect_age_arr = (birthday) => {
   let abs = (dateNow.getTime() - birthdayObject.getTime()) / 1000
   let year = Math.floor(abs/(60*60*24*365));
   let month = Math.floor((abs%(60*60*24*365))/(60*60*24*30));
+  let days = Math.floor((abs%(60*60*24*365))/(60*60*24*30));
 
   return [year, month];
 }
