@@ -178,7 +178,7 @@ const ListCaseTable = (props) => {
       ...getColumnSearchProps('description'),
     },
     {
-      title    : 'Trạng thai',
+      title    : 'Trạng thái',
       dataIndex: 'status',
       key      : 'status',
       render   : (statusObj) => {

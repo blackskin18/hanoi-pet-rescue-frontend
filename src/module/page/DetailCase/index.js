@@ -145,25 +145,6 @@ const DetailCase = () => {
       <h4 className="text-primary-green left-align padding-left-xs margin-bottom-none">Thông tin
         case {info.code_full}</h4>
     </Divider>
-    <div className="margin-bottom-md text-center">
-      <a className="button-link margin-right-sm link-orange"
-         onClick={handleOpenPopupEdit}>
-        Sửa
-      </a>
-      <Popconfirm
-        className="button-link margin-right-sm"
-        title="Are you sure to delete this task?"
-        onConfirm={confirmDelete}
-        okText="Yes"
-        cancelText="No"
-      >
-        <a className="button-link button-link-delete link-orange">Xóa</a>
-      </Popconfirm>
-      <a className="button-link margin-right-sm link-orange"
-         onClick={() => setVisibleModalHistories(true)}>
-        Lịch sử cập nhập
-      </a>
-    </div>
     <Row justify="space-between">
       {images.length > 0 &&
       <Col span={8}>
@@ -208,8 +189,28 @@ const DetailCase = () => {
             <pre className="animal-notes">{info.note}</pre>
           </Descriptions.Item>
         </Descriptions>
+        <div className="margin-top-sm text-right">
+          <a className="button-link margin-right-sm link-orange"
+             onClick={handleOpenPopupEdit}>
+            Sửa
+          </a>
+          <Popconfirm
+            className="button-link margin-right-sm"
+            title="Are you sure to delete this task?"
+            onConfirm={confirmDelete}
+            okText="Yes"
+            cancelText="No"
+          >
+            <a className="button-link button-link-delete link-orange">Xóa</a>
+          </Popconfirm>
+          <a className="button-link margin-right-sm link-orange"
+             onClick={() => setVisibleModalHistories(true)}>
+            Lịch sử cập nhập
+          </a>
+        </div>
       </Col>
     </Row>
+
     <Modal
       title="Sửa thông tin case"
       visible={visibleModalEdit}

@@ -31,11 +31,12 @@
 }
 
 .report-header {
-  background-color: $green_light_color;
+  //background-color: $green_light_color;
   text-align: center;
 
   &__title {
     font-size: 2.5rem;
+    color: $primary_color;
   }
 
   &__filter {
@@ -52,6 +53,7 @@
   text-decoration: underline;
   cursor: pointer;
   transition: .1s;
+  margin-bottom: 1rem;
 
   &:hover {
     transform: translateY(-1px);

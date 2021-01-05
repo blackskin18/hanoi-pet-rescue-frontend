@@ -24,7 +24,7 @@ const HistoryTable = (props) => {
       }
     },
     {
-      title    : 'Ghi chú',
+      title    : 'Đề mục thay đổi',
       dataIndex: 'note',
       key      : 'note',
     },

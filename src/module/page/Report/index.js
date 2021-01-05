@@ -235,7 +235,7 @@ const Report = () => {
         </table>
       </div>
     </div>
-
+    <hr/>
 
     <div>
       <Row className="report-header">

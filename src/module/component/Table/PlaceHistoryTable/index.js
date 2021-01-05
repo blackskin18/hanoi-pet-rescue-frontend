@@ -86,7 +86,6 @@ const PlaceHistoryTable = (props) => {
           <Table
             columns={columnsNow}
             dataSource={now}
-            pagination={false}
             bordered
           />
         </TabPane>
@@ -94,7 +93,6 @@ const PlaceHistoryTable = (props) => {
           <Table
             columns={columnsAll}
             dataSource={all}
-            pagination={false}
             bordered
           />
         </TabPane>

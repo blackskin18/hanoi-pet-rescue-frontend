@@ -142,7 +142,7 @@ const ListCaseTable = (props) => {
       ...getColumnSearchProps('director_name'),
     },
     {
-      title: 'Số case đang tạm trú',
+      title: 'Tổng case',
       dataIndex: 'animals',
       key: 'animals',
       render: (animals) => {
@@ -153,6 +153,10 @@ const ListCaseTable = (props) => {
       title: 'Ghi chú',
       dataIndex: 'note',
       key: 'note',
+      width: 150,
+      render   : (note) => {
+        return <span>{note && note.length > 50 ? note.slice(0, 50) + '...' : note}</span>
+      },
       ...getColumnSearchProps('note'),
     },
     {
@@ -232,6 +236,7 @@ const ListCaseTable = (props) => {
       title="Lịch sử case lưu trú"
       visible={visibleModalHistory}
       width="90vw"
+      style={{ top: 20}}
       okButtonProps={{style: {display: 'none'}}}
       cancelButtonProps={{style: {display: 'none'}}}
       onCancel={() => setVisibleModalHistory(false)}
