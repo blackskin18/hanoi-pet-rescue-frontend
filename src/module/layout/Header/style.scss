@@ -5,8 +5,12 @@
   display: flex;
   flex-direction: column;
 
-  &-username > a{
+  &-username{
     color: $primary_color;
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 2rem 1rem 2rem;
+    cursor: pointer;
   }
 
    & ul.ant-menu {
@@ -258,7 +262,7 @@
 @media only screen and (min-width: 992px) {
   .header {
     &-username {
-      padding-left: 10px;
+      padding: 1rem 1rem 1rem 2rem;
     }
   }
 }

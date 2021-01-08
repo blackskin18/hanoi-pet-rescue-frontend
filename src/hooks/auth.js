@@ -14,11 +14,13 @@ export function useAuth () {
     if(!token){
       history.push('/login')
       return;
+    } else {
+      let success = await AuthService.verifyToken()
+      if (!success) {
+        history.push('/login')
+      }
     }
 
-    let success = await AuthService.verifyToken()
-    if (!success) {
-        history.push('/login')
-    }
+
   }
 }

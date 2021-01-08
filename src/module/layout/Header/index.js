@@ -1,5 +1,5 @@
 import React, { useEffect, useState }       from 'react';
-import { Menu } from 'antd';
+import { Menu, Popover } from 'antd';
 import { Link, useHistory }                 from "react-router-dom";
 import {
   EnvironmentOutlined,
@@ -7,13 +7,13 @@ import {
   UserOutlined,
   PlusOutlined,
   TableOutlined,
-  TeamOutlined
-}                                           from '@ant-design/icons';
+  TeamOutlined,
+  CaretDownOutlined
+}                           from '@ant-design/icons';
 import './style.scss'
 import "antd/dist/antd.css";
-import logo                                 from "../../../assets/images/logo.png"
-import {useAuth}                            from "../../../hooks/auth";
-
+import logo                 from "../../../assets/images/logo.png"
+import {useAuth}            from "../../../hooks/auth";
 const {SubMenu} = Menu
 
 const Header = () => {
@@ -21,7 +21,12 @@ const Header = () => {
   const [name, setName] = useState('');
   const history = useHistory()
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      await window.gapi.auth2.getAuthInstance().disconnect();
+    } catch (e) {
+      console.log('error when log out google account')
+    }
     localStorage.removeItem('jwt')
     history.push('/login')
   }
@@ -29,6 +34,17 @@ const Header = () => {
   useEffect(() => {
     setName(localStorage.getItem('name'))
   }, [])
+
+  const namePopoverContent = <div>
+    {/*<span className="header-username text-gray">*/}
+    <div>
+      <Link to={"/detail-user/" + localStorage.getItem('id')} className="link-orange">
+        Xem thông tin
+      </Link>
+    {/*</span>*/}
+    </div>
+    <a onClick={logout} className="link-orange">Logout</a>
+  </div>
 
   return (
     <div className="header">
@@ -38,14 +54,17 @@ const Header = () => {
         </Link>
       </div>
       <div className='bottom-vector hide-under-lg'>
-        <div lg={{span: 24}} span={0} className="header-svg">
-          <span><UserOutlined/></span>
-          <span className="header-username text-gray">
-            <Link to={"/detail-user/" + localStorage.getItem('id')}>
-            {name}
-            </Link>
+        <Popover content={namePopoverContent} placement="bottom" trigger="click">
+          <span className="header-username">
+            <span className="header-username__name">
+              <span><UserOutlined/></span>
+              <span className="margin-left-5">{name}</span>
+            </span>
+            <span className="header-username__expand">
+              <CaretDownOutlined />
+            </span>
           </span>
-        </div>
+        </Popover>
       </div>
       <div className="header-menu-box">
         <Menu
@@ -81,10 +100,12 @@ const Header = () => {
               Báo cáo cứu hộ
             </Link>
           </Menu.Item>
+          <Menu.Item key="12" icon={<PieChartOutlined/>}>
+            <Link to="/histories">
+              Lịch sử cập nhật
+            </Link>
+          </Menu.Item>
         </Menu>
-      </div>
-      <div className="logout-box">
-        <a onClick={logout}>Logout</a>
       </div>
     </div>
   );

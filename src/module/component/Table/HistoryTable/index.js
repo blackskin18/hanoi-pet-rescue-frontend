@@ -20,7 +20,7 @@ const HistoryTable = (props) => {
       dataIndex: 'user',
       key      : 'user',
       render: (value, history) => {
-        return <Link to={"/detail-user/" + value.id}>{value.name}</Link>
+        return <Link className="link-orange" to={"/detail-user/" + value.id}>{value.name}</Link>
       }
     },
     {
@@ -40,7 +40,7 @@ const HistoryTable = (props) => {
           return <span>{value}</span>
         }
         if(history.attribute === 'place_id' || history.attribute === 'foster_id' || history.attribute === 'owner_id') {
-           return <Link to={"/detail-place/" + value.id}> {value.name}</Link>
+           return <Link className="link-orange" to={"/detail-place/" + value.id}> {value.name}</Link>
         }
       }
     },
@@ -56,7 +56,7 @@ const HistoryTable = (props) => {
           return <span>{value}</span>
         }
         if(history.attribute === 'place_id' || history.attribute === 'foster_id' || history.attribute === 'owner_id') {
-          return <Link to={"/detail-place/" + value.id}> {value.name}</Link>
+          return <Link className="link-orange" to={"/detail-place/" + value.id}> {value.name}</Link>
         }
       }
     },

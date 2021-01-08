@@ -24,10 +24,12 @@ const login = async (tokenId) => {
 const verifyToken = async () => {
   try {
     var response = await axios.post(API.VERIFY_TOKEN)
-    localStorage.setItem('jwt', response.data.access_token)
-    return true
+    console.log(response)
+    if(response.data.code == 1) {
+      return true
+    }
+    // localStorage.setItem('jwt', response.data.access_token)
   } catch (e) {
-    console.log(e)
     // localStorage.removeItem('jwt')
     return false
   }

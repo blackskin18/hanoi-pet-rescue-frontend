@@ -5,8 +5,10 @@
 }
 
 .count-case {
-  padding: .5rem 1rem;
+  padding: .5rem 3rem;
   background: lighten($primary_color, 10);
+  color: white;
+  font-weight: bold;
 }
 
 .list-case-table .ant-image-img{

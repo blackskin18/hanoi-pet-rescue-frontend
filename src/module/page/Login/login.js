@@ -48,6 +48,7 @@ export default () => {
               onSuccess={responseGoogle}
               onFailure={falseResponseGoogle}
               cookiePolicy={'single_host_origin'}
+              // isSignedIn={true}
             />
             {errorMsg && <p className="center text-red">{errorMsg}</p>}
           </div>

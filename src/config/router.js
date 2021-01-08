@@ -1,15 +1,16 @@
-import ListCase    from '../module/page/ListCase'
-import CreatePlace from '../module/page/CreatePlace'
+import ListCase       from '../module/page/ListCase'
+import CreatePlace    from '../module/page/CreatePlace'
 import CreateHospital from '../module/page/CreateHospital'
-import CreateCase  from '../module/page/CreateCase'
-import CreateUser  from '../module/page/CreateUser'
-import ListPlace   from '../module/page/ListPlace'
-import ListUser    from '../module/page/ListUser'
-import Login       from '../module/page/Login/login'
-import DetailCase  from '../module/page/DetailCase'
-import DetailPlace from '../module/page/DetailPlace'
-import DetailUser  from '../module/page/DetailUser'
-import Report      from '../module/page/Report'
+import CreateCase     from '../module/page/CreateCase'
+import CreateUser     from '../module/page/CreateUser'
+import ListPlace      from '../module/page/ListPlace'
+import ListUser       from '../module/page/ListUser'
+import Login          from '../module/page/Login/login'
+import DetailCase     from '../module/page/DetailCase'
+import DetailPlace    from '../module/page/DetailPlace'
+import DetailUser     from '../module/page/DetailUser'
+import Report         from '../module/page/Report'
+import AllHistories   from '../module/page/AllHistoryTable'
 
 export default [
   {
@@ -59,6 +60,10 @@ export default [
   {
     path: '/report',
     page: Report
+  },
+  {
+    path: '/histories',
+    page: AllHistories
   },
   {
     path: '/',
