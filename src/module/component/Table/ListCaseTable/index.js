@@ -49,7 +49,6 @@ const ListCaseTable = (props) => {
   }
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
-    console.log(selectedKeys, confirm, dataIndex)
     confirm()
     setSearchParam({
       ...searchParams,

@@ -35,7 +35,7 @@ export const SearchText = (props) => {
         size="small"
         style={{width: 90}}
       >
-        Search
+        Tìm kiếm
       </Button>
       <Button onClick={() => props.handleReset(props.clearFilters, props.dataIndex)} size="small" style={{width: 90}}>
         Reset
@@ -163,7 +163,7 @@ export const SearchPlace = (props) => {
         size="small"
         style={{width: 90}}
       >
-        Search
+        Tìm kiếm
       </Button>
       <Button onClick={() => props.handleReset(props.clearFilters, props.dataIndex)} size="small" style={{width: 90}}>
         Reset
@@ -196,7 +196,7 @@ export const SearchDateRange = (props) => {
         size="small"
         style={{width: 90}}
       >
-        Search
+        Tìm kiếm
       </Button>
       <Button onClick={() => props.handleReset(props.clearFilters, props.dataIndex)} size="small" style={{width: 90}}>
         Reset
@@ -250,7 +250,7 @@ export const SearchStatus = (props) => {
         size="small"
         style={{width: 90}}
       >
-        Search
+        Tìm kiếm
       </Button>
       <Button onClick={() => props.handleReset(props.clearFilters, props.dataIndex)} size="small" style={{width: 90}}>
         Reset
