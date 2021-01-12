@@ -7,6 +7,7 @@ const API     = {
   GET_USERS: API_URL + 'users',
   GET_USER_DETAIL: API_URL + 'users/{id}',
   DELETE_USER: API_URL + 'users/{id}',
+  GET_ALL_USERS: API_URL + 'users/get-all',
 }
 
 const createUser = async (data) => {
@@ -63,11 +64,21 @@ const deleteUser = async (id) => {
   }
 }
 
+const getAllUsers = async () => {
+  try {
+    let response = await axios.get(API.GET_ALL_USERS);
+    return response.data;
+  } catch (error) {
+    return error.response.data;
+  }
+}
+
 export default {
   createUser,
   getUsers,
   getUserDetail,
   deleteUser,
-  editUser
+  editUser,
+  getAllUsers
 }
 

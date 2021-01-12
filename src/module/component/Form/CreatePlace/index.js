@@ -1,21 +1,40 @@
-import React, {useEffect, useState}  from 'react'
-import {Row, Col, Input, message}    from 'antd';
-import {PLACE_TYPE, PLACE_TYPE_TEXT} from "../../../../config/index"
-import {useParams}                   from "react-router";
-import {Button}                      from "../../Button";
+import React, { useEffect, useState }       from 'react'
+import { Row, Col, Input, message, Select } from 'antd';
+import { PLACE_TYPE, PLACE_TYPE_TEXT }      from "../../../../config/index"
+import { useParams }                        from "react-router";
+import { Button }                           from "../../Button";
+import UserService                          from "../../../../service/UserService";
 import './style.scss'
 
+const {Option} = Select;
 
 const CratePlace = (props) => {
   var {type}                        = useParams()
   const [dataInsert, setDataInsert] = useState(props.dataInsert ? props.dataInsert : {});
   const [isSubmit, setIsSubmit]     = useState(false);
   const [errors, setErrors]         = useState(false);
+  const [users, setUsers]           = useState([]);
 
   useEffect(() => {
     setDataInsert(props.dataInsert)
-
   }, [props.dataInsert])
+
+  useEffect(() => {
+    getUsers()
+  }, [type])
+
+  const getUsers = async () => {
+    if (type === PLACE_TYPE.COMMON_HOME) {
+      let usersResponse = await UserService.getAllUsers()
+      console.log(usersResponse)
+      if (usersResponse.code == 1) {
+        setUsers(usersResponse.data)
+      } else {
+        message.error('Lỗi không lấy được user, vui lòng liên hệ kỹ thuật')
+      }
+    }
+
+  }
 
   const createPlace = async function () {
     setIsSubmit(false)
@@ -96,27 +115,46 @@ const CratePlace = (props) => {
               Người phụ trách
             </Col>
             <Col span={20}>
-              <Row gutter={30}>
-                <Col span={4}>Tên</Col>
-                <Col span={8}>
-                  <Input
-                    value={dataInsert.directer_name}
-                    placeholder="Nhập tên người phụ trách"
-                    onChange={(e) => editDataInsert('directer_name', e.target.value)}
-                  />
-                  {errors.directer_name && <span className="text-red">{errors.directer_name[0]}</span>}
-                </Col>
-                <Col span={4}>Điện Thoại</Col>
-                <Col span={8}>
-                  <Input
-                    value={dataInsert.directer_phone}
-                    placeholder="Nhập số điện thoại người phụ trách"
-                    onChange={(e) => editDataInsert('directer_phone', e.target.value)}
-                  />
-                  {errors.directer_phone && <span className="text-red">{errors.directer_phone[0]}</span>}
-                </Col>
-              </Row>
+              <Select className="w-100"
+                      showSearch
+                      placeholder={'Chọn người phụ trách'}
+                      value={dataInsert.director_id}
+                      filterOption={(input, option) =>
+                        option.children && option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                      }
+                      onChange={(e) => {
+                        editDataInsert('director_id', e)
+                      }}
+                      style={{width: "100%"}}>
+                {
+                  users.map(function (user, key) {
+                    return <Option value={user.id} key={key}>{user.name}</Option>
+                  })
+                }
+              </Select>
             </Col>
+            {/*<Col span={20}>*/}
+            {/*  <Row gutter={30}>*/}
+            {/*    <Col span={4}>Tên</Col>*/}
+            {/*    <Col span={8}>*/}
+            {/*      <Input*/}
+            {/*        value={dataInsert.directer_name}*/}
+            {/*        placeholder="Nhập tên người phụ trách"*/}
+            {/*        onChange={(e) => editDataInsert('directer_name', e.target.value)}*/}
+            {/*      />*/}
+            {/*      {errors.directer_name && <span className="text-red">{errors.directer_name[0]}</span>}*/}
+            {/*    </Col>*/}
+            {/*    <Col span={4}>Điện Thoại</Col>*/}
+            {/*    <Col span={8}>*/}
+            {/*      <Input*/}
+            {/*        value={dataInsert.directer_phone}*/}
+            {/*        placeholder="Nhập số điện thoại người phụ trách"*/}
+            {/*        onChange={(e) => editDataInsert('directer_phone', e.target.value)}*/}
+            {/*      />*/}
+            {/*      {errors.directer_phone && <span className="text-red">{errors.directer_phone[0]}</span>}*/}
+            {/*    </Col>*/}
+            {/*  </Row>*/}
+            {/*</Col>*/}
           </Row>
         }
         <Row>
