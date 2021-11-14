@@ -113,10 +113,36 @@ const ListCase = (props) => {
               onChange={(e) => editDataInsert('email', e.target.value)}
             />
             {errors.email && <span className="text-red">{errors.email[0]}</span>}
-
           </Col>
         </Row>
-
+        <Row>
+          <Col span={4}>
+            Mật khẩu
+          </Col>
+          <Col span={20}>
+            <Input
+              type='password'
+              value={dataInsert.password}
+              placeholder="Nhập mật khẩu"
+              onChange={(e) => editDataInsert('password', e.target.value)}
+            />
+            {errors.password && <span className="text-red">{errors.password[0]}</span>}
+          </Col>
+        </Row>
+        <Row>
+          <Col span={4}>
+            Xác thực mật khẩu
+          </Col>
+          <Col span={20}>
+            <Input
+              type='password'
+              value={dataInsert.password_confirmation}
+              placeholder="Xác thực mật khẩu"
+              onChange={(e) => editDataInsert('password_confirmation', e.target.value)}
+            />
+            {errors.password_confirmation && <span className="text-red">{errors.password_confirmation[0]}</span>}
+          </Col>
+        </Row>
         <Row>
           <Col span={4}>
             Nhóm chuyên môn

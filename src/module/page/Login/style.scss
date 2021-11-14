@@ -4,6 +4,10 @@
 
 .login,
 .register {
+
+  .mt-1 {
+    margin-top: 1rem;
+  }
   &-logo-box {
     padding-top: 150px;
     text-align: center;
@@ -44,6 +48,7 @@
   }
 
   &-button {
+    margin-top: 2rem;
     height: 38px;
     color: #fff;
     border-radius: 30px;
